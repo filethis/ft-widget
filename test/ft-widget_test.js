@@ -1,16 +1,16 @@
-import {MyElement} from '../my-element.js';
+import {FtWidget} from '../ft-widget.js';
 import {fixture, html} from '@open-wc/testing';
 
 const assert = chai.assert;
 
-suite('my-element', () => {
+suite('ft-widget', () => {
   test('is defined', () => {
-    const el = document.createElement('my-element');
-    assert.instanceOf(el, MyElement);
+    const el = document.createElement('ft-widget');
+    assert.instanceOf(el, FtWidget);
   });
 
   test('renders with default values', async () => {
-    const el = await fixture(html`<my-element></my-element>`);
+    const el = await fixture(html`<ft-widget></ft-widget>`);
     assert.shadowDom.equal(
       el,
       `
@@ -22,7 +22,7 @@ suite('my-element', () => {
   });
 
   test('renders with a set name', async () => {
-    const el = await fixture(html`<my-element name="Test"></my-element>`);
+    const el = await fixture(html`<ft-widget name="Test"></ft-widget>`);
     assert.shadowDom.equal(
       el,
       `
@@ -34,7 +34,7 @@ suite('my-element', () => {
   });
 
   test('handles a click', async () => {
-    const el = await fixture(html`<my-element></my-element>`);
+    const el = await fixture(html`<ft-widget></ft-widget>`);
     const button = el.shadowRoot.querySelector('button');
     button.click();
     await el.updateComplete;

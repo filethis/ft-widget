@@ -2,8 +2,8 @@
   "version": "experimental",
   "tags": [
     {
-      "name": "my-element",
-      "path": "./my-element.js",
+      "name": "ft-widget",
+      "path": "./ft-widget.js",
       "description": "An example element.",
       "attributes": [
         {
