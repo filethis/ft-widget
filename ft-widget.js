@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { LitElement, html, css } from 'lit';
-import './components/connection-list-item/ft-connection-list-item.js'
+import './components/ft-connect-to-your-account/ft-connect-to-your-account.js'
 
 export class FtWidget extends LitElement {
   static get styles() {
@@ -30,38 +30,19 @@ export class FtWidget extends LitElement {
   }
 
   static get properties() {
-    return {
-      /**
-       * The name to say "Hello" to.
-       */
-      name: {type: String},
-
-      /**
-       * The number of times the button has been clicked.
-       */
-      count: {type: Number},
-    };
+    return {}
   }
 
   constructor() {
     super();
-    this.name = 'World';
-    this.count = 0;
   }
 
   render() {
     return html`
-      <h1>Hello, ${this.name}!</h1>
-      <ft-connection-list-item></ft-connection-list-item>
-      <button @click=${this._onClick} part="button">
-        Click Count: ${this.count}
-      </button>
+      <h1>The kitchen sink</h1>
+      <ft-connect-to-your-account></ft-connect-to-your-account>
       <slot></slot>
     `;
-  }
-
-  _onClick() {
-    this.count++;
   }
 }
 

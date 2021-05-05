@@ -97,20 +97,43 @@ export class FtConnectionListItem extends LitElement {
 
     updated(changes)
     {
-        // TODO: Must iterate over the given list
         if (changes.has("selected"))
             this._onSelectedChanged();
         if (changes.has("connection"))
         {
             const newConnection = this.connection;
             const oldConnection = changes.get("connection");
-            const connectionStateChanged = (newConnection.state != oldConnection.state);
-            const connectionDocumentCountChanged = (newConnection.documentCount != oldConnection.documentCount);
-            if (connectionStateChanged || connectionDocumentCountChanged)
+            if (this._propertiesChanged(newConnection, oldConnection, ["state", "documentCount"]))
                 this._onConnectionChanged();
         }
 
         super.update(changes);
+    }
+
+    // TODO: Move this into a utilities class
+    _propertiesChanged(first, second, propertyNames)
+    {
+        const firstIsUndefined = (first === undefined);
+        const secondIsUndefined = (second === undefined);
+
+        const bothAreUndefined = (firstIsUndefined && secondIsUndefined);
+        if (bothAreUndefined)
+            return false;
+        
+        const justOneIsUndefined = (firstIsUndefined || secondIsUndefined);
+        if (justOneIsUndefined)
+            return true;
+
+        // Both are defined
+
+        propertyNames.forEach(propertyName => {
+            var firstValue = first[propertyName];
+            var secondValue = second[propertyName];
+            if (firstValue !== secondValue)
+                return true;
+        });
+
+        return false;
     }
 
     _onSelectedChanged()
@@ -189,14 +212,14 @@ export class FtConnectionListItem extends LitElement {
         }
 
         this._activePanelHidden = !isActive;
-        this.$.activeSpinnerLabel.innerHTML = label;
-        this.$.activeSpinner.active = isActive;
+        // this.$.activeSpinnerLabel.innerHTML = label;
+        // this.$.activeSpinner.active = isActive;
 
         this._quiescentPanelHidden = isActive;
         this._quiescentButtonHidden = !showQuiescentButton;
         this._quiescentSubtextHidden = !showQuiescentSubtext;
-        this.$.quiescentButtonLabel.innerHTML = label;
-        this.$.quiescentButtonIcon.icon = quiescentButtonIcon;
+        // this.$.quiescentButtonLabel.innerHTML = label;
+        // this.$.quiescentButtonIcon.icon = quiescentButtonIcon;
     }
 
     _onQuiescentButtonTapped(event)
