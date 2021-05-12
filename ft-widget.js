@@ -15,7 +15,11 @@ limitations under the License.
 */
 
 import { LitElement, html, css } from 'lit';
-import './components/ft-connect-to-your-account/ft-connect-to-your-account.js'
+import './components/ft-connect-to-your-account/ft-connect-to-your-account.js';
+import './components/ft-select-your-institution/ft-select-your-institution.js';
+import './components/ft-challenge/ft-challenge.js';
+
+import { light, dark, targets } from "@filethis/mx-design-tokens";
 
 export class FtWidget extends LitElement {
   static get styles() {
@@ -25,6 +29,9 @@ export class FtWidget extends LitElement {
         border: solid 1px gray;
         padding: 16px;
         max-width: 800px;
+      }
+      #ft-connect-to-your-account {
+        background-color: red;
       }
     `;
   }
@@ -40,9 +47,16 @@ export class FtWidget extends LitElement {
   render() {
     return html`
       <h1>The kitchen sink</h1>
-      <ft-connect-to-your-account></ft-connect-to-your-account>
-      <slot></slot>
-    `;
+
+      <h2>ft-connect-to-your-account</h2>
+      <ft-connect-to-your-account id="ft-connect-to-your-account"></ft-connect-to-your-account>
+
+      <h2>ft-select-your-institution</h2>
+      <ft-select-your-institution></ft-select-your-institution>
+
+      <h2>ft-challenge</h2>
+      <ft-challenge></ft-challenge>
+`;
   }
 }
 

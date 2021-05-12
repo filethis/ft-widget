@@ -4,7 +4,7 @@ NAME=ft-widget
 
 CDN_DISTRIBUTION_ID=EJ2RMYD38WUXM
 PUBLICATION_DOMAIN=connect.filethis.com
-RELEASE_VERSION=1.0.0
+VERSION=1.0.0
 AWS_VAULT_PROFILE=filethis
 
 
@@ -41,13 +41,13 @@ dist-serve:  ## Serve the distributable locally
 	@npx es-dev-server --app-index dist/index.html --open
 
 dist-deploy:  ## Deploy distributable to CDN
-	@aws-vault exec ${AWS_VAULT_PROFILE} -- aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/; \
+	@aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/; \
 	echo https://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/index.html;
 
 dist-invalidate:  ## Invalidate distributable on CDN
 	@if [ -z "${CDN_DISTRIBUTION_ID}" ]; \
 		then echo "Cannot invalidate distribution. Define CDN_DISTRIBUTION_ID"; \
-		else aws-vault exec ${AWS_VAULT_PROFILE} -- aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/*"; \
+		else aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/*"; \
 	fi
 
 

@@ -17,7 +17,7 @@ limitations under the License.
 import { LitElement, html, css } from 'lit';
 import { Layouts } from 'lit-flexbox-literals';
 import '@material/mwc-button';
-export class FtConnectToYourAccount extends LitElement {
+export class FtChallenge extends LitElement {
 
     static get properties() {
         return {
@@ -43,32 +43,23 @@ export class FtConnectToYourAccount extends LitElement {
                 height: 650px;
                 padding: 25px;
             }
-            #illustration {
+            #logo {
                 margin-top: 30px;
                 width:250px; height:auto;
             }
             #title {
                 margin-top:20px;
             }
-            #explanation {
-                margin-top:20px;
-            }
-            #details {
-                margin-top:20px;
-            }
-            #balances {
-                margin-top:20px;
-            }
-            #protected {
-                margin-top:20px;
-            }
-            #agree {
+            #content {
                 margin-top:20px;
             }
             #button {
                 margin-top:20px;
             }
-            #powered {
+            #help {
+                margin-top:20px;
+            }
+            #thing {
                 margin-top:20px;
             }
         `,
@@ -81,32 +72,16 @@ export class FtConnectToYourAccount extends LitElement {
 
         <div class="layout vertical center">
 
-            <img id="illustration" part="illustration" 
-                src="../ConnectionIllustrationTemp.png"
+            <img id="logo" part="logo"
+                src="../Placeholder.png"
             />
 
             <div id="title" part="title">
-                Connect your account
+                Title
             </div>
 
-            <div id="explanation" part="explanation">
-                Dropbox will have access to the information below unless you choose to disconnect:
-            </div>
-
-            <div id="details" part="details">
-                Account details
-            </div>
-
-            <div id="balances" part="balances">
-                Account balances and transactions
-            </div>
-
-            <div id="protected" part="protected">
-                Your information is protected securely.
-            </div>
-
-            <div id="agree" part="agree">
-                By clicking Continue, you agree to the MX Privacy Policy.
+            <div id="content" part="content">
+                Content
             </div>
 
             <mwc-button id="button" part="button" 
@@ -116,9 +91,13 @@ export class FtConnectToYourAccount extends LitElement {
                 >
             </mwc-button>
 
-            <div id="powered" part="powered">
-                Data access powered by MX
+            <div id="help" part="help">
+                Help
             </div>
+
+            <div id="thing" part="thing">
+                Thing
+           </div>
 
         </div>
 
@@ -126,5 +105,5 @@ export class FtConnectToYourAccount extends LitElement {
     }
 }
 
-window.customElements.define('ft-connect-to-your-account', FtConnectToYourAccount);
+window.customElements.define('ft-challenge', FtChallenge);
 

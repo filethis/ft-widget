@@ -24,7 +24,9 @@
     "checksize": "rollup -c ; cat ft-widget.bundled.js | gzip -9 | wc -c ; rm ft-widget.bundled.js",
     "build": "echo \"This is not a TypeScript project, so no need to build.\"",
     "filethis:open": "open http://127.0.0.1:8000/dev",
-    "filethis:serve": "es-dev-server --node-resolve --watch --open http://127.0.0.1:8000/dev"
+    "filethis:serve": "es-dev-server --node-resolve --watch --open http://127.0.0.1:8000/dev",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "keywords": [
     "web-components",
@@ -35,7 +37,10 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@babel/runtime": "^7.9.6",
+    "@filethis/mx-design-tokens": "^1.0.1",
+    "@material/mwc-button": "^0.21.0",
     "@webcomponents/template": "^1.4.2",
+    "@webcomponents/webcomponentsjs": "^2.5.0",
     "core-js": "^3.6.5",
     "lit": "^2.0.0-rc.1",
     "lit-flexbox-literals": "0.0.7",
@@ -45,14 +50,20 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.10.0",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
+    "@babel/core": "^7.14.0",
     "@open-wc/testing": "^2.5.10",
     "@open-wc/testing-karma": "^3.3.11",
     "@rollup/plugin-replace": "^2.3.1",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/web-components": "^6.2.9",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "@web/rollup-plugin-copy": "^0.2.0",
     "@web/rollup-plugin-html": "^1.6.0",
     "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.2",
     "chai": "^4.2.0",
     "deepmerge": "^4.2.2",
     "es-dev-server": "^1.46.1",

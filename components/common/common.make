@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-dev-serve:  ## Start serving project and open in browser with live update
+serve:  ## Start serving project and open in browser with live update
 	@npx es-dev-server --node-resolve --watch --root-dir ../../ --open components/${NAME}/dev/index.html
 
 
