@@ -1,7 +1,11 @@
 SHELL := /bin/bash
 
 serve:  ## Start serving project and open in browser with live update
-	@npx web-dev-server --node-resolve --watch --root-dir ../../ --open components/${NAME}/dev/index.html
+	@npx web-dev-server \
+		--node-resolve \
+		--watch \
+		--root-dir ../../ \
+		--open components/${NAME}/dev/index.html
 
 
 #------------------------------------------------------------------------------

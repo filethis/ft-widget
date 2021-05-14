@@ -21,6 +21,7 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../styling/index.js";
 import '@material/mwc-textfield';
 import '@material/mwc-icon';
+import '../../components/ft-institution-list/ft-institution-list.js';
 
 export class FtSelectYourInstitution extends LitElement {
 
@@ -31,7 +32,7 @@ export class FtSelectYourInstitution extends LitElement {
 
     constructor() {
         super();
-    }
+   }
 
     static get styles() {
         return [
@@ -72,8 +73,14 @@ export class FtSelectYourInstitution extends LitElement {
                 left: 24px;
                 right: 24px;
                 top: 104px;
+                --mdc-theme-primary: brown;
+                --mdc-text-field-outlined-idle-border-color: red;
+                --mdc-text-field-outlined-hover-border-color: orange;
+                --mdc-text-field-ink-color: green;
+                --mdc-text-field-label-ink-color: blue
+                /* --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)}; */
             }
-            #content {
+            #ft-institution-list {
                 position: absolute;
                 width: 376px;
                 height: 431px;
@@ -105,9 +112,8 @@ export class FtSelectYourInstitution extends LitElement {
                 >
             </mwc-textfield>
 
-            <div id="content" part="content">
-                Content
-            </div>
+            <ft-institution-list id="ft-institution-list" part="ft-institution-list">
+            </ft-institution-list>
 
             <!-- <div id="add" part="add">
                 Add company manually

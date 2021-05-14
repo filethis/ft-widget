@@ -33,7 +33,8 @@ export class FtConnectToYourAccount extends LitElement {
     }
 
     _onContinueButtonClicked(thing) {
-        // alert("yeah");
+        var url = new URL("./illustration.png", import.meta.url);
+        alert(url);
     }
 
     static get styles() {
@@ -187,6 +188,14 @@ export class FtConnectToYourAccount extends LitElement {
             <img id="illustration" part="illustration" 
                 src="./components/ft-connect-to-your-account/illustration.png"
             />
+
+            <!-- <img id="illustration" part="illustration"
+                src="http://localhost:8000/components/ft-connect-to-your-account/illustration.png"
+            /> -->
+            
+            <!-- <img id="illustration" part="illustration"
+                src={new URL("./illustration.png", import.meta.url)}
+            /> -->
 
             <div id="title" part="title">
                 Connect your account
