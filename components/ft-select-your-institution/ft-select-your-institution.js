@@ -86,7 +86,7 @@ export class FtSelectYourInstitution extends LitElement {
                 height: 431px;
                 left: 12px;
                 top: 164px;
-                border: solid 1px gray;
+                /* border: solid 1px gray; */
             }
             #add {
             }
