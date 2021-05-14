@@ -25,8 +25,8 @@ npm-prune-dry-run:
 
 # Development
 
-dev-serve:  ## Serve the application locally for development work
-	@npx es-dev-server --node-resolve --watch --open dev/index.html
+serve:  ## Serve the application locally for development work
+	@npx web-dev-server --node-resolve --watch --open index.html
 
 
 # Production 

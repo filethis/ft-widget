@@ -14,8 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LitElement, html, css } from 'lit';
+// Figma design:
+//  https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=124%3A3278
+//  https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=124%3A3318
+//  https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=124%3A3189
+
+
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { Layouts } from 'lit-flexbox-literals';
+import { light } from "../../styling/index.js";
 import '@material/mwc-button';
 export class FtChallenge extends LitElement {
 
@@ -42,6 +49,7 @@ export class FtChallenge extends LitElement {
                 width: 400px;
                 height: 650px;
                 padding: 25px;
+                font-family: ${unsafeCSS(light.Font.Regular)};
             }
             #logo {
                 margin-top: 30px;
@@ -72,9 +80,9 @@ export class FtChallenge extends LitElement {
 
         <div class="layout vertical center">
 
-            <img id="logo" part="logo"
+            <!-- <img id="logo" part="logo"
                 src="../Placeholder.png"
-            />
+            /> -->
 
             <div id="title" part="title">
                 Title

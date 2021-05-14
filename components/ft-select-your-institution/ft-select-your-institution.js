@@ -14,8 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LitElement, html, css } from 'lit';
+// Figma design: https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=109%3A671
+
+
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { Layouts } from 'lit-flexbox-literals';
+import { light } from "../../styling/index.js";
+
 export class FtSelectYourInstitution extends LitElement {
 
     static get properties() {
@@ -37,9 +42,11 @@ export class FtSelectYourInstitution extends LitElement {
                 width: 400px;
                 height: 650px;
                 padding: 25px;
+                font-family: ${unsafeCSS(light.Font.Regular)};
             }
             #title {
                 margin-top:20px;
+                /* background-color: ${unsafeCSS(light.BackgroundColor.ButtonDestructive)}; */
             }
             #search {
                 margin-top:20px;

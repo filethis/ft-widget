@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import './components/ft-connect-to-your-account/ft-connect-to-your-account.js';
 import './components/ft-select-your-institution/ft-select-your-institution.js';
 import './components/ft-challenge/ft-challenge.js';
-
-import { light, dark, targets } from "@filethis/mx-design-tokens";
+import { light, dark } from "./styling/index.js";
 
 export class FtWidget extends LitElement {
   static get styles() {
@@ -30,13 +29,18 @@ export class FtWidget extends LitElement {
         padding: 16px;
         max-width: 800px;
       }
-      #ft-connect-to-your-account {
+      /* #ft-connect-to-your-account::part(title) {
         background-color: red;
-      }
+      } */
+
+      /* #ft-connect-to-your-account { */
+        /* background-color: ${unsafeCSS(light.BackgroundColor.ButtonDestructiveDisabled)}; */
+        /* background-color: ${unsafeCSS(light.BackgroundColor.ButtonDestructive)}; */
+      /* } */
     `;
   }
 
-  static get properties() {
+  static get properties() { 
     return {}
   }
 
@@ -49,7 +53,7 @@ export class FtWidget extends LitElement {
       <h1>The kitchen sink</h1>
 
       <h2>ft-connect-to-your-account</h2>
-      <ft-connect-to-your-account id="ft-connect-to-your-account"></ft-connect-to-your-account>
+      <ft-connect-to-your-account id="ft-connect-to-your-account" part="foo"></ft-connect-to-your-account>
 
       <h2>ft-select-your-institution</h2>
       <ft-select-your-institution></ft-select-your-institution>
