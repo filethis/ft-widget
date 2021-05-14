@@ -4,7 +4,7 @@ NAME=ft-widget
 
 CDN_DISTRIBUTION_ID=EJ2RMYD38WUXM
 PUBLICATION_DOMAIN=connect.filethis.com
-VERSION=1.0.0
+VERSION=1.0.1
 AWS_VAULT_PROFILE=filethis
 
 
@@ -38,7 +38,7 @@ dist-build:  ## Build the distributable
 	@npx rollup -c
 
 dist-serve:  ## Serve the distributable locally
-	@npx es-dev-server --app-index dist/index.html --open
+	@npx web-dev-server --app-index dist/index.html --open
 
 dist-deploy:  ## Deploy distributable to CDN
 	@aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/; \

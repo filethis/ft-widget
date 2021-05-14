@@ -29,14 +29,15 @@ export class FtWidget extends LitElement {
         padding: 16px;
         max-width: 800px;
       }
+      #ft-connect-to-your-account {
+        border: solid 1px gray;
+      }
+      #ft-select-your-institution {
+        border: solid 1px gray;
+      }
       /* #ft-connect-to-your-account::part(title) {
         background-color: red;
       } */
-
-      /* #ft-connect-to-your-account { */
-        /* background-color: ${unsafeCSS(light.BackgroundColor.ButtonDestructiveDisabled)}; */
-        /* background-color: ${unsafeCSS(light.BackgroundColor.ButtonDestructive)}; */
-      /* } */
     `;
   }
 
@@ -53,13 +54,13 @@ export class FtWidget extends LitElement {
       <h1>The kitchen sink</h1>
 
       <h2>ft-connect-to-your-account</h2>
-      <ft-connect-to-your-account id="ft-connect-to-your-account" part="foo"></ft-connect-to-your-account>
+      <ft-connect-to-your-account id="ft-connect-to-your-account"></ft-connect-to-your-account>
 
       <h2>ft-select-your-institution</h2>
-      <ft-select-your-institution></ft-select-your-institution>
+      <ft-select-your-institution id="ft-select-your-institution"></ft-select-your-institution>
 
-      <h2>ft-challenge</h2>
-      <ft-challenge></ft-challenge>
+      <!-- <h2>ft-challenge</h2>
+      <ft-challenge></ft-challenge> -->
 `;
   }
 }

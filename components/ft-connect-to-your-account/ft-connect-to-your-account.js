@@ -42,7 +42,6 @@ export class FtConnectToYourAccount extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                border: solid 1px gray;
                 width: 400px;
                 height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
@@ -145,25 +144,12 @@ export class FtConnectToYourAccount extends LitElement {
                 left: 24px;
                 right: 24px;
                 top: 436px;
-                /* background-color: ${unsafeCSS(light.Color.Brand300)}; */
-
                 --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
                 --mdc-theme-on-primary: white;
                 --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
                 --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
                 --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
                 --mdc-typography-button-text-transform: none;
-
-
-                /* --mdc-theme-primary:${unsafeCSS(light.Color.Brand300)};
-                --mdc-theme-on-primary:${unsafeCSS(light.Color.Brand300)};
-                --mdc-button-disabled-fill-color:${unsafeCSS(light.ButtonNeutralDisabled)};
-                --mdc-button-disabled-ink-color:${unsafeCSS(light.ButtonNeutral)}; */
-
-                /* --mdc-theme-primary:${unsafeCSS(light.ButtonNeutral)};
-                --mdc-theme-on-primary:${unsafeCSS(light.ButtonNeutral)};
-                --mdc-button-disabled-fill-color:${unsafeCSS(light.ButtonNeutralDisabled)};
-                --mdc-button-disabled-ink-color:${unsafeCSS(light.ButtonNeutral)}; */
             }
             #powered-and-logo {
                 position: absolute;

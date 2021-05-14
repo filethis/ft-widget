@@ -45,7 +45,6 @@ export class FtChallenge extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                border: solid 1px gray;
                 width: 400px;
                 height: 650px;
                 padding: 25px;

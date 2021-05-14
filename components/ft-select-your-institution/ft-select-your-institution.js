@@ -18,8 +18,9 @@ limitations under the License.
 
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { Layouts } from 'lit-flexbox-literals';
 import { light } from "../../styling/index.js";
+import '@material/mwc-textfield';
+import '@material/mwc-icon';
 
 export class FtSelectYourInstitution extends LitElement {
 
@@ -38,50 +39,79 @@ export class FtSelectYourInstitution extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                border: solid 1px gray;
                 width: 400px;
                 height: 650px;
-                padding: 25px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
+            #wrapper {
+                position:relative;
+                width: 100%; height: 100%;
+            }
+            #header{
+                position: absolute;
+                width: 400px;
+                height: 104px;
+                left: 0px;
+                top: 0px;
+            }
             #title {
-                margin-top:20px;
-                /* background-color: ${unsafeCSS(light.BackgroundColor.ButtonDestructive)}; */
+                position: absolute;
+                height: 32px;
+                left: 24px;
+                right: 24px;
+                top: 64px;
+                font-size: ${unsafeCSS(light.FontSize.H2)}px;
+                font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                line-height: ${unsafeCSS(light.LineHeight.H2)}px;
+                text-align: center;
+                color: ${unsafeCSS(light.Color.Neutral900)};
             }
             #search {
-                margin-top:20px;
+                position: absolute;
+                height: 44px;
+                left: 24px;
+                right: 24px;
+                top: 104px;
             }
             #content {
-                margin-top:20px;
+                position: absolute;
+                width: 376px;
+                height: 431px;
+                left: 12px;
+                top: 164px;
+                border: solid 1px gray;
             }
             #add {
-                margin-top:20px;
             }
-        `,
-            Layouts
+        `
         ];
     }
 
     render() {
         return html`
 
-        <div class="layout vertical center">
+        <div id="wrapper" part="wrapper">
 
-            <div id="title" part="title">
-                Select your institution
+            <div id="header" part="header">
+                <div id="title" part="title">
+                    Select your institution
+                </div>
             </div>
 
-            <div id="search" part="search">
-                Search
-            </div>
+            <mwc-textfield id="search" part="search"
+                outlined
+                label="Search"
+                icon="search"
+                >
+            </mwc-textfield>
 
             <div id="content" part="content">
                 Content
             </div>
 
-            <div id="add" part="add">
+            <!-- <div id="add" part="add">
                 Add company manually
-            </div>
+            </div> -->
 
         </div>
 
