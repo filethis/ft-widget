@@ -18,7 +18,7 @@ limitations under the License.
 
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { light } from "../../styling/index.js";
+import { light } from "../../mx-design-tokens/index.js";
 
 export class FtInstitutionListItem extends LitElement {
 

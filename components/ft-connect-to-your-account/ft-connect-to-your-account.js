@@ -18,7 +18,7 @@ limitations under the License.
 
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { light } from "../../styling/index.js";
+import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
 
 export class FtConnectToYourAccount extends LitElement {
@@ -33,8 +33,7 @@ export class FtConnectToYourAccount extends LitElement {
     }
 
     _onContinueButtonClicked(thing) {
-        var url = new URL("./illustration.png", import.meta.url);
-        alert(url);
+        alert("hhh");
     }
 
     static get styles() {
@@ -186,16 +185,8 @@ export class FtConnectToYourAccount extends LitElement {
         <div id="wrapper" part="wrapper">
 
             <img id="illustration" part="illustration" 
-                src="./components/ft-connect-to-your-account/illustration.png"
-            />
-
-            <!-- <img id="illustration" part="illustration"
-                src="http://localhost:8000/components/ft-connect-to-your-account/illustration.png"
-            /> -->
-            
-            <!-- <img id="illustration" part="illustration"
-                src={new URL("./illustration.png", import.meta.url)}
-            /> -->
+                src="./components/ft-connect-to-your-account/assets/illustration.png"
+           />
 
             <div id="title" part="title">
                 Connect your account
@@ -218,7 +209,7 @@ export class FtConnectToYourAccount extends LitElement {
             </div>
 
             <img id="lock" part="lock"
-                src="./components/ft-connect-to-your-account/lock.png"
+                src="./components/ft-connect-to-your-account/assets/lock.png"
             />
 
             <div id="protected" part="protected" class="body">
@@ -241,7 +232,7 @@ export class FtConnectToYourAccount extends LitElement {
                     Data access powered by  
                 </div>
                 <img id="logo" part="logo"
-                    src="./components/ft-connect-to-your-account/mx-logo.png"
+                    src="./components/ft-connect-to-your-account/assets/mx-logo.png"
                 />
             </div>
 

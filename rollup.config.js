@@ -5,6 +5,13 @@ import resolve from '@rollup/plugin-node-resolve';
 import summary from 'rollup-plugin-summary';
 
 export default {
+
+  preserveEntrySignatures: 'strict',
+
+  output: {
+    dir: 'dist',
+  },
+
   plugins: [
 
     // Entry point for application build
@@ -15,18 +22,11 @@ export default {
     // Resolve bare module specifiers to relative paths
     resolve(),
 
-    // Print bundle summary
-    summary(),
-
-    // Optional: copy any static assets to build directory
     copy({
-      patterns: ['images/**/*'],
+      patterns: 'components/**/assets/*'
     }),
-  ],
 
-  output: {
-    dir: 'dist',
-  },
-
-  preserveEntrySignatures: 'strict',
+    // Print bundle summary
+    summary()
+]
 };

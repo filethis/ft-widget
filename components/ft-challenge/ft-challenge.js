@@ -22,7 +22,7 @@ limitations under the License.
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { Layouts } from 'lit-flexbox-literals';
-import { light } from "../../styling/index.js";
+import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
 export class FtChallenge extends LitElement {
 

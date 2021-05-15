@@ -1,4 +1,4 @@
-import { targets } from '../index'
+// import { targets } from '../index'
 // This should probably not be modified
 
 const addPx = (obj) => {
@@ -72,7 +72,7 @@ export default {
     Bold: 'ProximaNovaBold, Helvetica, Arial, sans-serif',
   },
   BoxShadow: (target) => {
-    if (target === targets.REACT) {
+    if (target === target) {
       return {
         Low: ' 0px 2px 8px rgba(106, 115, 129, 0.12)',
         Medium: ' 0px 6px 12px rgba(106, 115, 129, 0.16), 0px 3px 8px rgba(87, 102, 117, 0.06)',
@@ -133,7 +133,7 @@ export default {
       H1: 40,
     }
 
-    if (target === targets.REACT) {
+    if (target === target) {
       return addPx(base)
     }
 
@@ -158,7 +158,7 @@ export default {
     Long: 1000,
   },
   Easing: (target) => {
-    if (target === targets.REACT) {
+    if (target === target) {
       return {
         Default: 'cubic-bezier(.475,.425,0,.995)',
       }

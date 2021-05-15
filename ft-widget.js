@@ -18,7 +18,7 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import './components/ft-connect-to-your-account/ft-connect-to-your-account.js';
 import './components/ft-select-your-institution/ft-select-your-institution.js';
 import './components/ft-challenge/ft-challenge.js';
-import { light, dark } from "./styling/index.js";
+import { light, dark } from "./mx-design-tokens/index.js";
 
 export class FtWidget extends LitElement {
   static get styles() {
@@ -28,6 +28,7 @@ export class FtWidget extends LitElement {
         border: solid 1px gray;
         padding: 16px;
         max-width: 800px;
+        font-family: ${unsafeCSS(light.Font.Regular)};
       }
       #ft-connect-to-your-account {
         border: solid 1px gray;
@@ -51,12 +52,10 @@ export class FtWidget extends LitElement {
 
   render() {
     return html`
-      <h1>The kitchen sink</h1>
-
-      <h2>ft-connect-to-your-account</h2>
+      <h4>&lt;ft-connect-to-your-account&gt;</h4>
       <ft-connect-to-your-account id="ft-connect-to-your-account"></ft-connect-to-your-account>
 
-      <h2>ft-select-your-institution</h2>
+      <h4>&lt;ft-select-your-institution&gt;</h4>
       <ft-select-your-institution id="ft-select-your-institution"></ft-select-your-institution>
 
       <!-- <h2>ft-challenge</h2>
