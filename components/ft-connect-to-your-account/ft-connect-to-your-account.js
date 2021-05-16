@@ -186,7 +186,7 @@ export class FtConnectToYourAccount extends LitElement {
 
             <img id="illustration" part="illustration" 
                 src="./components/ft-connect-to-your-account/assets/illustration.png"
-           />
+            />
 
             <div id="title" part="title">
                 Connect your account
