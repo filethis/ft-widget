@@ -19,6 +19,7 @@ limitations under the License.
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
+import '@material/mwc-list';
 import '../ft-institution-list-item/ft-institution-list-item.js';
 
 
@@ -33,71 +34,28 @@ export class FtInstitutionList extends LitElement {
     constructor() {
         super();
 
-        // this.institutions = ["Bank of America", "Wells Fargo", "American Express"];
-        this.institutions = [{
-            "id": 428,
-            "name": "Gusto",
-            "type": "fina",
-            "state": "live",
-            "homePageUrl": "https:\/\/app.gusto.com\/login",
-            "phone": "(800) 936-0383",
-            "logoPath": "logos\/Logo_Gusto.png",
-            "logo": "Logo_Gusto.png",
-            "logoUrl": "https:\/\/filethis.com\/static\/logos\/72\/Logo_Gusto.png",
-            "note": "",
-            "info": "",
-            "pattern": "",
-            "isNew": false,
-            "isPopular": true
-        },
+        this.institutions = [];
+
+        this._loadFakeInstitutions();
+    } 
+
+    _loadFakeInstitutions()
+    {
+        var path = "./components/ft-institution-list/assets/ft-fake-institutions.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function()
+        {
+            if (request.readyState === 4 &&
+                request.status === 200)
             {
-                "id": 18,
-                "name": "PayPal",
-                "type": "fina",
-                "state": "live",
-                "homePageUrl": "https:\/\/www.paypal.com\/us\/",
-                "phone": "(877) 672-9725",
-                "logoPath": "logos\/Logo_Paypal.png",
-                "logo": "Logo_Paypal.png",
-                "logoUrl": "https:\/\/filethis.com\/static\/logos\/72\/Logo_Paypal.png",
-                "note": "",
-                "info": "",
-                "pattern": "",
-                "isNew": false,
-                "isPopular": false
-            },
-            {
-                "id": 400,
-                "name": "Silicon Valley Bank",
-                "type": "fina",
-                "state": "live",
-                "homePageUrl": "https:\/\/www.svbconnect.com\/auth\/login\/Login.jsp",
-                "phone": "(800) 774-7390",
-                "logoPath": "logos\/Logo_SiliconValleyBank.png",
-                "logo": "Logo_SiliconValleyBank.png",
-                "logoUrl": "https:\/\/filethis.com\/static\/logos\/72\/Logo_SiliconValleyBank.png",
-                "note": "",
-                "info": "",
-                "pattern": "",
-                "isNew": false,
-                "isPopular": false
-            },
-            {
-                "id": 377,
-                "name": "Virgin America Credit Card",
-                "type": "fina",
-                "state": "live",
-                "homePageUrl": "https:\/\/d.comenity.net\/virginamericavisa\/",
-                "phone": "(866) 772-5275",
-                "logoPath": "logos\/Logo_VirginAmericaCreditCard.png",
-                "logo": "Logo_VirginAmericaCreditCard.png",
-                "logoUrl": "https:\/\/filethis.com\/static\/logos\/72\/Logo_VirginAmericaCreditCard.png",
-                "note": "",
-                "info": "",
-                "pattern": "",
-                "isNew": false,
-                "isPopular": false
-            }];
+                var institutions = JSON.parse(request.responseText);
+                this.institutions = institutions;
+            }
+        }.bind(this);
+        request.send();
     }
 
     static get styles() {
@@ -109,13 +67,13 @@ export class FtInstitutionList extends LitElement {
                 width: 400px;
                 height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
+                overscroll-behavior-y: contain;
             }
             #wrapper {
                 position:relative;
                 width: 100%; height: 100%;
-                padding-left: 13px;
+                overflow: auto;
             }
-
         `
         ];
     }
@@ -124,11 +82,14 @@ export class FtInstitutionList extends LitElement {
         return html`
 
         <div id="wrapper" part="wrapper">
-            ${this.institutions.map(institution => html`
-                <ft-institution-list-item
-                    institution=${JSON.stringify(institution)}>
-                </ft-institution-list-item>
-            `)}
+            <mwc-list>
+                ${this.institutions.map(institution => html`
+                    <mwc-list-item>
+                        <ft-institution-list-item institution=${JSON.stringify(institution)}>
+                        </ft-institution-list-item>
+                    </mwc-list-item>
+                `)}
+            </mwc-list>
         </div>
 
         `;
