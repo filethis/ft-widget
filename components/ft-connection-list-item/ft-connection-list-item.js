@@ -258,6 +258,8 @@ export class FtConnectionListItem extends LitElement {
         return "Refreshed " + monthNames[monthIndex] + ' ' + day;
     }
 
+    // TODO: Move styles out of style tag in the render below and into the getStyles() method
+
     render() {
         return html`
 
