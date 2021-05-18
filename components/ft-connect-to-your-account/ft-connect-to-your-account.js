@@ -33,7 +33,6 @@ export class FtConnectToYourAccount extends LitElement {
     }
 
     _onContinueButtonClicked(thing) {
-        alert("hhh");
     }
 
     static get styles() {

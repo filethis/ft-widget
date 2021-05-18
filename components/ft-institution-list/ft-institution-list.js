@@ -16,6 +16,8 @@ limitations under the License.
 
 // Figma design: https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=109%3A671
 
+// List documentation: https://github.com/material-components/material-components-web-components/tree/master/packages/list
+
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
@@ -67,12 +69,21 @@ export class FtInstitutionList extends LitElement {
                 width: 400px;
                 height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
-                overscroll-behavior-y: contain;
             }
             #wrapper {
                 position:relative;
                 width: 100%; height: 100%;
-                overflow: auto;
+                overflow-y: auto;
+                overflow-x: hidden;
+                overscroll-behavior: contain;
+            }
+            mwc-list {
+            }
+            mwc-list-item {
+                width: 376px;
+                height: 72px;
+                --mdc-list-side-padding: 0;
+                --mdc-list-vertical-padding: 0;
             }
         `
         ];

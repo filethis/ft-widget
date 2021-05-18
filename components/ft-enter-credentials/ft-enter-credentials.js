@@ -156,12 +156,11 @@ export class FtEnterCredentials extends LitElement {
                 left: 0px;
                 right: 0px;
                 top: 8px;
-                --mdc-theme-primary: brown;
-                --mdc-text-field-outlined-idle-border-color: red;
-                --mdc-text-field-outlined-hover-border-color: orange;
-                --mdc-text-field-ink-color: green;
-                --mdc-text-field-label-ink-color: blue
-                /* --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)}; */
+                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
             }
             #password-box {
                 position: absolute;
@@ -176,12 +175,11 @@ export class FtEnterCredentials extends LitElement {
                 left: 0px;
                 right: 0px;
                 top: 8px;
-                --mdc-theme-primary: brown;
-                --mdc-text-field-outlined-idle-border-color: red;
-                --mdc-text-field-outlined-hover-border-color: orange;
-                --mdc-text-field-ink-color: green;
-                --mdc-text-field-label-ink-color: blue
-                /* --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)}; */
+                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
             }
             #button {
                 position: absolute;
@@ -271,7 +269,6 @@ export class FtEnterCredentials extends LitElement {
     }
 
     _onConnectButtonClicked(thing) {
-        alert("hhh");
     }
 
     _handleVisibilityClicked(event) {

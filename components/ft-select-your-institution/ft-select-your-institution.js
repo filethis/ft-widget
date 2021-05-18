@@ -72,20 +72,19 @@ export class FtSelectYourInstitution extends LitElement {
                 height: 44px;
                 left: 24px;
                 right: 24px;
-                top: 104px;
-                --mdc-theme-primary: brown;
-                --mdc-text-field-outlined-idle-border-color: red;
-                --mdc-text-field-outlined-hover-border-color: orange;
-                --mdc-text-field-ink-color: green;
-                --mdc-text-field-label-ink-color: blue
-                /* --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)}; */
+                top: 114px;
+                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
             }
             #ft-institution-list {
                 position: absolute;
                 width: 376px;
                 height: 431px;
                 left: 12px;
-                top: 164px;
+                top: 174px;
                 /* border: solid 1px gray; */
             }
             #add {
