@@ -22,16 +22,19 @@ import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-textfield';
 import '@material/mwc-icon';
 import '../../components/ft-connection-list/ft-connection-list.js';
+import '../../components/ft-private-and-secure/ft-private-and-secure.js';
 
 export class FtManageConnections extends LitElement {
 
     static get properties() {
         return {
+            conconnectionCountnections: { type: Number }
         };
     }
 
     constructor() {
         super();
+        this.connectionCount = 0;
     }
 
     static get styles() {
@@ -47,48 +50,57 @@ export class FtManageConnections extends LitElement {
             #wrapper {
                 position:relative;
                 width: 100%; height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
             }
-            #header{
-                position: absolute;
-                width: 400px;
-                height: 104px;
-                left: 0px;
-                top: 0px;
-            }
-            #title {
-                position: absolute;
-                height: 32px;
-                left: 24px;
-                right: 24px;
-                top: 64px;
-                font-size: ${unsafeCSS(light.FontSize.H2)}px;
-                font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                line-height: ${unsafeCSS(light.LineHeight.H2)}px;
-                text-align: center;
-                color: ${unsafeCSS(light.Color.Neutral900)};
-            }
-            #search {
-                position: absolute;
-                height: 44px;
-                left: 24px;
-                right: 24px;
-                top: 114px;
-                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-            }
-            #ft-connection-list {
-                position: absolute;
-                width: 376px;
-                height: 431px;
-                left: 12px;
-                top: 174px;
-                /* border: solid 1px gray; */
-            }
-            #add {
-            }
+                #header{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    margin-top: 24px;
+                    margin-left: 24px;
+                    margin-right: 24px;
+                }
+                    #title {
+                        height: 40px;
+                        font-size: ${unsafeCSS(light.FontSize.H1)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                        line-height: ${unsafeCSS(light.LineHeight.H1)}px;
+                        text-align: left;
+                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    }
+                    #subtitle{
+                        margin-top: 8px;
+                        height: 24px;
+                        font-size: ${unsafeCSS(light.FontSize._loadFakeConnections)}px;
+                        line-height: ${unsafeCSS(light.LineHeight._loadFakeConnections)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Normal)};
+                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    }
+                    #connection-count {
+                        margin-top: 23px;
+                        height: 16px;
+                        font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                        line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    }
+                #ft-connection-list {
+                    margin-left: 12px;
+                    width: 376px;
+                }
+                #footer {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-color: ${unsafeCSS(light.Color.Neutral100)};
+                }
+                    #private-and-secure {
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                    }
         `
         ];
     }
@@ -100,15 +112,23 @@ export class FtManageConnections extends LitElement {
         
             <div id="header" part="header">
                 <div id="title" part="title">
-                    Select your connection
+                    Connections
+                </div>
+                <div id="subtitle" part="subtitle">
+                    Manage connected accounts
+                </div>
+                <div id="connection-count" part="connection-count">
+                    ${this.connectionCount} connected institutions
                 </div>
             </div>
         
-            <mwc-textfield id="search" part="search" outlined label="Search" icon="search">
-            </mwc-textfield>
-        
             <ft-connection-list id="ft-connection-list" part="ft-connection-list">
             </ft-connection-list>
+
+            <div id="footer" part="footer">
+                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
+                </ft-private-and-secure>
+            </div>
         
         </div>
 

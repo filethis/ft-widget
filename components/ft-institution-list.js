@@ -67,7 +67,6 @@ export class FtInstitutionList extends LitElement {
                 display: block;
                 overflow: hidden;
                 width: 400px;
-                height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
             #wrapper {

@@ -24,6 +24,7 @@ import '@material/mwc-icon';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '../ft-institution-list-item/ft-institution-list-item.js';
+import '../ft-private-and-secure/ft-private-and-secure.js';
 
 export class FtEnterCredentials extends LitElement {
 
@@ -100,25 +101,8 @@ export class FtEnterCredentials extends LitElement {
                         text-align: center;
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
-                    #lock-and-private {
-                        margin-top: 3px;
-                        height: 16px;
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
+                    #private-and-secure {
                     }
-                        #lock {
-                            width: 12px;
-                            height: 16px;
-                        }
-                        #private {
-                            width: 120px;
-                            height: 16px;
-                            margin-left: 6px;
-                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                            color: ${unsafeCSS(light.Color.Neutral900)};
-                        }
                 #card {
                     position: absolute;
                     width: 400px;
@@ -226,7 +210,6 @@ export class FtEnterCredentials extends LitElement {
                                 color: ${unsafeCSS(light.Color.Neutral900)};
                             }
                         #bottom-icon {
-
                         }
         `
         ];
@@ -241,14 +224,8 @@ export class FtEnterCredentials extends LitElement {
                 <div id="title" part="title">
                     Enter Credentials
                 </div>
-                <div id="lock-and-private" part="lock-and-private">
-                    <img id="lock" part="lock" 
-                        src="./components/ft-enter-credentials/assets/lock.png"
-                    />
-                    <div id="private" part="private">
-                        Private and secure
-                    </div>
-                </div>
+                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
+                </ft-private-and-secure>
             </div>
 
             <div id="card" part="card">
