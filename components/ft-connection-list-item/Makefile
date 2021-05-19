@@ -1,4 +1,4 @@
 NAME=ft-connection-list-item
 
-include ../common.make
+include ../common/common.make
 

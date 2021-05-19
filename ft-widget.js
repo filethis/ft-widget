@@ -18,12 +18,13 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import './components/ft-connect-to-your-account/ft-connect-to-your-account.js';
 import './components/ft-select-your-institution/ft-select-your-institution.js';
 import './components/ft-enter-credentials/ft-enter-credentials.js';
+import './components/ft-manage-connections/ft-manage-connections.js';
 import './components/ft-challenge/ft-challenge.js';
 import './ft-component-panel.js';
-import { light, dark } from "./mx-design-tokens/index.js";
+import { light } from "./mx-design-tokens/index.js";
 
 export class FtWidget extends LitElement {
-  static get styles() {
+	static get styles() {
     return css`
       :host {
         display: block;
@@ -37,7 +38,7 @@ export class FtWidget extends LitElement {
         align-items: center;
       }
       ft-component-panel {
-        margin-top: 45px;
+        margin-top: 50px;
       }
       .screen {
         background: #FFFFFF;
@@ -45,6 +46,10 @@ export class FtWidget extends LitElement {
         box-shadow: 0px 6px 12px rgba(87, 102, 117, 0.14), 0px 3px 8px rgba(87, 102, 117, 0.06);
         border-radius: 8px;
       }
+      /* .floating {
+        border: solid 1px gray;
+        border-radius: 8px;
+      } */
       /* #ft-connect-to-your-account::part(title) {
         background-color: red;
       } */
@@ -62,31 +67,41 @@ export class FtWidget extends LitElement {
   render() {
     return html`
         <ft-component-panel name="ft-connect-to-your-account">
-          <ft-connect-to-your-account
-            id="ft-connect-to-your-account" 
-            class="screen" 
-            slot="component"
-          >
-          </ft-connect-to-your-account>
+			<ft-connect-to-your-account
+				id="ft-connect-to-your-account" 
+				class="screen" 
+				slot="component"
+			>
+			</ft-connect-to-your-account>
         </ft-component-panel>
 
         <ft-component-panel name="ft-select-your-institution">
-          <ft-select-your-institution
-            id="ft-select-your-institution"
-            class="screen" 
-            slot="component"
-          >
-          </ft-select-your-institution>
+			<ft-select-your-institution
+				id="ft-select-your-institution"
+				class="screen" 
+				slot="component"
+			>
+        	</ft-select-your-institution>
         </ft-component-panel>
 
         <ft-component-panel name="ft-connect-to-your-account">
-          <ft-enter-credentials 
-            id="ft-enter-credentials"
-            slot="component"
-          >
-          </ft-enter-credentials>
-        
-        </ft-component-panel>
+			<ft-enter-credentials 
+				id="ft-enter-credentials"
+				class="floating"
+				slot="component"
+			>
+          	</ft-enter-credentials>
+		</ft-component-panel>
+
+        <ft-component-panel name="ft-manage-connections">
+			<ft-manage-connections
+				id="ft-manage-connections"
+				class="screen"
+				slot="component"
+			>
+			</ft-manage-connections>
+      	</ft-component-panel>
+
     `;
   }
 }

@@ -22,6 +22,7 @@ import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-textfield';
 import '@material/mwc-icon';
 import '@material/mwc-button';
+import '@material/mwc-icon-button';
 import '../ft-institution-list-item/ft-institution-list-item.js';
 
 export class FtEnterCredentials extends LitElement {
@@ -77,132 +78,156 @@ export class FtEnterCredentials extends LitElement {
                 position:relative;
                 width: 100%; height: 100%;
                 display: flex;
+                flex-direction: column;
                 align-items: center;
             }
-            #top {
-                position: absolute;
-                width: 400px;
-                height: 64px;
-                left: calc(50% - 400px/2);
-                top: 0;
-                background-color: ${unsafeCSS(light.Color.Neutral100)};
-            }
-            #title {
-                position: absolute;
-                width: 154px;
-                height: 24px;
-                left: calc(50% - 154px/2);
-                top: calc(50% - 24px/2 - 8px);
-            }
-            #lock-and-private {
-                position: absolute;
-                height: 16px;
-                left: 134.5px;
-                right: 134.5px;
-                top: calc(50% - 16px/2 + 12px);
-            }
-            #lock {
-                position: static;
-                width: 12px;
-                height: 16px;
-                left: 0px;
-                top: 0px;
-            }
-            #private {
-                position: static;
-                width: 115px;
-                height: 16px;
-                left: 16px;
-                top: 0px;
-            }
-            #card {
-                position: absolute;
-                width: 400px;
-                height: 348px;
-                left: calc(50% - 400px/2);
-                top: 64px;
-                background-color: ${unsafeCSS(light.BackgroundColor.Card)};
-                border-radius: ${unsafeCSS(light.BorderRadius.Card)};
-                /* box-shadow: ${unsafeCSS(light.BoxShadow.Card)}; */
-                /* margin: ${unsafeCSS(light.Spacing.CardSidePadding)}; */
-                /* margin: 10px; */
-                /* border: solid 1px gray; */
-            }
-            #bottom {
-                position: absolute;
-                width: 400px;
-                height: 64px;
-                left: calc(50% - 400px/2);
-                top: 412px;
-                background-color: ${unsafeCSS(light.Color.Neutral100)};
-            }
-            #institution {
-                position: absolute;
-                height: 64px;
-                left: 24px;
-                right: 24px;
-                top: 24px;
-            }
-            #username-box {
-                position: absolute;
-                height: 80px;
-                left: 24px;
-                right: 24px;
-                top: 112px;
-            }
-            #username {
-                position: absolute;
-                height: 48px;
-                left: 0px;
-                right: 0px;
-                top: 8px;
-                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-            }
-            #password-box {
-                position: absolute;
-                height: 80px;
-                left: 24px;
-                right: 24px;
-                top: 192px;
-            }
-            #password {
-                position: absolute;
-                height: 48px;
-                left: 0px;
-                right: 0px;
-                top: 8px;
-                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-            }
-            #button {
-                position: absolute;
-                height: 44px;
-                left: 24px;
-                right: 24px;
-                top: 280px;
-                --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
-                --mdc-theme-on-primary: white;
-                --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
-                --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
-                --mdc-typography-button-text-transform: none;
-            }
+                #top {
+                    position: absolute;
+                    width: 400px;
+                    height: 64px;
+                    left: calc(50% - 400px/2);
+                    top: 0;
+                    background-color: ${unsafeCSS(light.Color.Neutral100)};
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                    #title {
+                        width: 170px;
+                        font-size: ${unsafeCSS(light.FontSize.H3)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                        line-height: ${unsafeCSS(light.LineHeight.H3)}px;
+                        text-align: center;
+                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    }
+                    #lock-and-private {
+                        margin-top: 3px;
+                        height: 16px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+                        #lock {
+                            width: 12px;
+                            height: 16px;
+                        }
+                        #private {
+                            width: 120px;
+                            height: 16px;
+                            margin-left: 6px;
+                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
+                #card {
+                    position: absolute;
+                    width: 400px;
+                    height: 348px;
+                    left: calc(50% - 400px/2);
+                    top: 64px;
+                    background-color: ${unsafeCSS(light.BackgroundColor.Card)};
+                    border-radius: ${unsafeCSS(light.BorderRadius.Card)}px;
+                }
+                    #institution {
+                        position: absolute;
+                        width:353px;
+                        height: 64px;
+                        left: 24px;
+                        top: 24px;
+                    }
+                    #username-box {
+                        position: absolute;
+                        height: 80px;
+                        left: 24px;
+                        right: 24px;
+                        top: 112px;
+                    }
+                        #username {
+                            position: absolute;
+                            height: 48px;
+                            left: 0px;
+                            right: 0px;
+                            top: 8px;
+                            --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                            --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                            --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                            --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                            --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
+                        }
+                    #password-box {
+                        position: absolute;
+                        height: 80px;
+                        left: 24px;
+                        right: 24px;
+                        top: 192px;
+                    }
+                        #password {
+                            position: absolute;
+                            height: 48px;
+                            left: 0px;
+                            right: 0px;
+                            top: 8px;
+                            --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                            --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                            --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                            --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                            --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
+                        }
+                    #button {
+                        position: absolute;
+                        height: 44px;
+                        left: 24px;
+                        right: 24px;
+                        top: 280px;
+                        --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                        --mdc-theme-on-primary: white;
+                        --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
+                        --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                        --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
+                        --mdc-typography-button-text-transform: none;
+                    }
+                #bottom {
+                    position: absolute;
+                    width: 400px;
+                    height: 64px;
+                    left: calc(50% - 400px/2);
+                    top: 412px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: stretch;
+                }
+                    #bottom-inner {
+                        margin-left: 25px;
+                        margin-right: 10px;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                        #bottom-text {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                        }
+                            #go-to-site {
+                                font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                                font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                                line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                                max-width:300px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                            #check-site {
+                                margin-top: 2px;
+                                font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
+                                line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
+                                color: ${unsafeCSS(light.Color.Neutral900)};
+                            }
+                        #bottom-icon {
 
-            #go-to-site {
-                position: absolute;
-                width: 400px;
-                height: 64px;
-                left: calc(50% - 400px/2);
-                top: 469px;
-                background-color:green;
-            }
+                        }
         `
         ];
     }
@@ -217,9 +242,9 @@ export class FtEnterCredentials extends LitElement {
                     Enter Credentials
                 </div>
                 <div id="lock-and-private" part="lock-and-private">
-                    <div id="lock" part="lock">
-                        lock
-                    </div>
+                    <img id="lock" part="lock" 
+                        src="./components/ft-enter-credentials/assets/lock.png"
+                    />
                     <div id="private" part="private">
                         Private and secure
                     </div>
@@ -260,11 +285,22 @@ export class FtEnterCredentials extends LitElement {
             </div>
 
             <div id="bottom" part="bottom">
-                bottom
-            </bottom>
-
+                <div id="bottom-inner" part="bottom-inner">
+                    <div id="bottom-text" part="bottom-text">
+                        <div id="go-to-site" part="go-to-site">
+                            Go to ${this.institution.name} website
+                        </div>
+                        <div id="check-site" part="check-site">
+                            Check or reset your account access
+                        </div>
+                    </div>
+                    <mwc-icon-button id="bottom-icon" part="bottom-icon"
+                        icon="open_in_new"
+                    >
+                    </mwc-icon-button>
+                </div>
             </div>
-
+         </div>
         `;
     }
 

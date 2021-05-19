@@ -46,8 +46,8 @@ export class FtConnectToYourAccount extends LitElement {
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
             div.body {
-                font-size: ${unsafeCSS(light.FontSize.Paragraph)};
-                line-height: ${unsafeCSS(light.LineHeight.Paragraph)};
+                font-size: ${unsafeCSS(light.FontSize.Paragraph)}px;
+                line-height: ${unsafeCSS(light.LineHeight.Paragraph)}px;
                 color: ${unsafeCSS(light.Color.Neutral900)};
             }
             #wrapper {
@@ -145,9 +145,9 @@ export class FtConnectToYourAccount extends LitElement {
                 top: 436px;
                 --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
                 --mdc-theme-on-primary: white;
-                --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
+                --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)}px;
                 --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
+                --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                 --mdc-typography-button-text-transform: none;
             }
             #powered-and-logo {

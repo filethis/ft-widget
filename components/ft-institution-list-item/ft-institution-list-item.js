@@ -51,14 +51,19 @@ export class FtInstitutionListItem extends LitElement {
             #wrapper {
                 position:relative;
                 width: 100%; height: 100%;
+                padding-left:12px;
+                padding-right:12px;
                 display: flex;
+                flex-direction: row;
                 align-items: center;
             }
             #logo {
                 width: 100px;
                 height: 50px;
+                min-width: 100px;
                 /* cursor: pointer; */
                 display: flex;
+                flex-direction: row;
                 align-items: center;
                 /* border: 1px solid #DEDEDE; */
             }
@@ -78,9 +83,13 @@ export class FtInstitutionListItem extends LitElement {
                 left: 0px;
                 right: 0px;
                 top: calc(50% - 20px/2 - 8px);
-                font-size: ${unsafeCSS(light.FontSize.Body)};
+                font-size: ${unsafeCSS(light.FontSize.Body)}px;
                 font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                line-height: ${unsafeCSS(light.LineHeight.Body)};
+                line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                max-width:300px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             #address {
                 position: static;

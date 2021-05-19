@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { light, dark } from "./mx-design-tokens/index.js";
+import { light } from "./mx-design-tokens/index.js";
 
 export class FtComponentPanel extends LitElement {
     static get styles() {
@@ -31,7 +31,7 @@ export class FtComponentPanel extends LitElement {
                 font-family: "courier";
                 font-size: 12pt;
                 font-weight: 600;
-                margin-bottom: 14px;
+                margin-bottom: 25px;
             }
         `;
     }
