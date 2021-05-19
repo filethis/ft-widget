@@ -20,7 +20,6 @@ limitations under the License.
 */
 import '@filethis/ft-confirmation-dialog/ft-confirmation-dialog.js';
 
-import '@polymer/polymer/polymer-legacy.js';
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<template>
@@ -31,9 +30,6 @@ $_documentContainer.innerHTML = `<template>
 </template>`;
 
 document.head.appendChild($_documentContainer.content);
-
-// Make sure the "FileThis" namespace exists
-window.FileThis = window.FileThis || {};
 
 /**
  * `<ft-error-behavior>`

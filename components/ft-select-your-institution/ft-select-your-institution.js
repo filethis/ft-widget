@@ -27,11 +27,14 @@ export class FtSelectYourInstitution extends LitElement {
 
     static get properties() {
         return {
+            institutions: { type: Array }
         };
     }
 
     constructor() {
         super();
+
+        this.institutions = [];
    }
 
     static get styles() {
@@ -47,32 +50,27 @@ export class FtSelectYourInstitution extends LitElement {
             #wrapper {
                 position:relative;
                 width: 100%; height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
             }
             #header{
-                position: absolute;
-                width: 400px;
-                height: 104px;
-                left: 0px;
-                top: 0px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 24px;
+                margin-left: 24px;
+                margin-right: 24px;
             }
-            #title {
-                position: absolute;
-                height: 32px;
-                left: 24px;
-                right: 24px;
-                top: 64px;
-                font-size: ${unsafeCSS(light.FontSize.H2)}px;
-                font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                line-height: ${unsafeCSS(light.LineHeight.H2)}px;
-                text-align: center;
-                color: ${unsafeCSS(light.Color.Neutral900)};
-            }
+                #title {
+                    height: 32px;
+                    font-size: ${unsafeCSS(light.FontSize.H2)}px;
+                    font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                    line-height: ${unsafeCSS(light.LineHeight.H2)}px;
+                    text-align: center;
+                    color: ${unsafeCSS(light.Color.Neutral900)};
+                }
             #search {
-                position: absolute;
-                height: 44px;
-                left: 24px;
-                right: 24px;
-                top: 114px;
                 --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
                 --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
                 --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
@@ -80,15 +78,19 @@ export class FtSelectYourInstitution extends LitElement {
                 --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
             }
             #ft-institution-list {
-                position: absolute;
+                margin-left: 12px;
                 width: 376px;
-                height: 431px;
-                left: 12px;
-                top: 174px;
-                /* border: solid 1px gray; */
             }
-            #add {
+            #footer {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: ${unsafeCSS(light.Color.Neutral100)};
             }
+                #add {
+                }
+
         `
         ];
     }
@@ -111,12 +113,16 @@ export class FtSelectYourInstitution extends LitElement {
                 >
             </mwc-textfield>
 
-            <ft-institution-list id="ft-institution-list" part="ft-institution-list">
+            <ft-institution-list id="ft-institution-list" part="ft-institution-list"
+                institutions=${JSON.stringify(this.institutions)}
+            >
             </ft-institution-list>
 
-            <!-- <div id="add" part="add">
-                Add company manually
-            </div> -->
+            <div id="footer" part="footer">
+                <!-- <div id="add" part="add">
+                    Add company manually
+                </div> -->
+            </div>
 
         </div>
 

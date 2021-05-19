@@ -37,28 +37,7 @@ export class FtConnectionList extends LitElement {
         super();
 
         this.connections = [];
-
-        this._loadFakeConnections();
     } 
-
-    _loadFakeConnections()
-    {
-        var path = "./components/ft-connection-list/assets/ft-fake-connections.json";
-
-        var request = new XMLHttpRequest();
-        request.overrideMimeType("application/json");
-        request.open('GET', path, true);
-        request.onreadystatechange = function()
-        {
-            if (request.readyState === 4 &&
-                request.status === 200)
-            {
-                var connections = JSON.parse(request.responseText);
-                this.connections = connections;
-            }
-        }.bind(this);
-        request.send();
-    }
 
     static get styles() {
         return [

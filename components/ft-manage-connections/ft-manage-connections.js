@@ -28,13 +28,15 @@ export class FtManageConnections extends LitElement {
 
     static get properties() {
         return {
-            conconnectionCountnections: { type: Number }
+            connectionCount: { type: Number },
+            connections: { type: Array }
         };
     }
 
     constructor() {
         super();
         this.connectionCount = 0;
+        this.connections = [];
     }
 
     static get styles() {
@@ -122,7 +124,9 @@ export class FtManageConnections extends LitElement {
                 </div>
             </div>
         
-            <ft-connection-list id="ft-connection-list" part="ft-connection-list">
+            <ft-connection-list id="ft-connection-list" part="ft-connection-list"
+                connections=${JSON.stringify(this.connections)}
+            >
             </ft-connection-list>
 
             <div id="footer" part="footer">

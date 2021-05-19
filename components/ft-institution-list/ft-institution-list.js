@@ -37,28 +37,7 @@ export class FtInstitutionList extends LitElement {
         super();
 
         this.institutions = [];
-
-        this._loadFakeInstitutions();
     } 
-
-    _loadFakeInstitutions()
-    {
-        var path = "./components/ft-institution-list/assets/ft-fake-institutions.json";
-
-        var request = new XMLHttpRequest();
-        request.overrideMimeType("application/json");
-        request.open('GET', path, true);
-        request.onreadystatechange = function()
-        {
-            if (request.readyState === 4 &&
-                request.status === 200)
-            {
-                var institutions = JSON.parse(request.responseText);
-                this.institutions = institutions;
-            }
-        }.bind(this);
-        request.send();
-    }
 
     static get styles() {
         return [
@@ -95,7 +74,8 @@ export class FtInstitutionList extends LitElement {
             <mwc-list>
                 ${this.institutions.map(institution => html`
                     <mwc-list-item>
-                        <ft-institution-list-item institution=${JSON.stringify(institution)}>
+                        <ft-institution-list-item
+                            institution=${JSON.stringify(institution)}>
                         </ft-institution-list-item>
                     </mwc-list-item>
                 `)}
