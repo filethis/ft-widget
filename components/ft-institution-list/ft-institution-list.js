@@ -39,6 +39,23 @@ export class FtInstitutionList extends LitElement {
         this.institutions = [];
     } 
 
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+            <mwc-list>
+                ${this.institutions.map(institution => html`
+                <mwc-list-item>
+                    <ft-institution-list-item institution=${JSON.stringify(institution)}>
+                    </ft-institution-list-item>
+                </mwc-list-item>
+                `)}
+            </mwc-list>
+        </div>
+
+        `;
+    }
+
     static get styles() {
         return [
             css`
@@ -65,24 +82,6 @@ export class FtInstitutionList extends LitElement {
             }
         `
         ];
-    }
-
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-            <mwc-list>
-                ${this.institutions.map(institution => html`
-                    <mwc-list-item>
-                        <ft-institution-list-item
-                            institution=${JSON.stringify(institution)}>
-                        </ft-institution-list-item>
-                    </mwc-list-item>
-                `)}
-            </mwc-list>
-        </div>
-
-        `;
     }
 }
 

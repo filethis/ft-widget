@@ -37,6 +37,35 @@ export class FtSelectYourInstitution extends LitElement {
         this.institutions = [];
    }
 
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+        
+            <div id="header" part="header">
+                <div id="title" part="title">
+                    Select your institution
+                </div>
+            </div>
+        
+            <mwc-textfield id="search" part="search" outlined label="Search" icon="search">
+            </mwc-textfield>
+        
+            <ft-institution-list id="ft-institution-list" part="ft-institution-list"
+                institutions=${JSON.stringify(this.institutions)}>
+            </ft-institution-list>
+        
+            <div id="footer" part="footer">
+                <!-- <div id="add" part="add">
+                            Add company manually
+                        </div> -->
+            </div>
+        
+        </div>
+
+        `;
+    }
+
     static get styles() {
         return [
             css`
@@ -93,40 +122,6 @@ export class FtSelectYourInstitution extends LitElement {
 
         `
         ];
-    }
-
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-
-            <div id="header" part="header">
-                <div id="title" part="title">
-                    Select your institution
-                </div>
-            </div>
-
-            <mwc-textfield id="search" part="search"
-                outlined
-                label="Search"
-                icon="search"
-                >
-            </mwc-textfield>
-
-            <ft-institution-list id="ft-institution-list" part="ft-institution-list"
-                institutions=${JSON.stringify(this.institutions)}
-            >
-            </ft-institution-list>
-
-            <div id="footer" part="footer">
-                <!-- <div id="add" part="add">
-                    Add company manually
-                </div> -->
-            </div>
-
-        </div>
-
-        `;
     }
 }
 

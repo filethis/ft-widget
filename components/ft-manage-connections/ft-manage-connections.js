@@ -39,6 +39,37 @@ export class FtManageConnections extends LitElement {
         this.connections = [];
     }
 
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+        
+            <div id="header" part="header">
+                <div id="title" part="title">
+                    Connections
+                </div>
+                <div id="subtitle" part="subtitle">
+                    Manage connected accounts
+                </div>
+                <div id="connection-count" part="connection-count">
+                    ${this.connectionCount} connected institutions
+                </div>
+            </div>
+        
+            <ft-connection-list id="ft-connection-list" part="ft-connection-list"
+                connections=${JSON.stringify(this.connections)}>
+            </ft-connection-list>
+        
+            <div id="footer" part="footer">
+                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
+                </ft-private-and-secure>
+            </div>
+        
+        </div>
+
+        `;
+    }
+
     static get styles() {
         return [
             css`
@@ -105,38 +136,6 @@ export class FtManageConnections extends LitElement {
                     }
         `
         ];
-    }
-
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-        
-            <div id="header" part="header">
-                <div id="title" part="title">
-                    Connections
-                </div>
-                <div id="subtitle" part="subtitle">
-                    Manage connected accounts
-                </div>
-                <div id="connection-count" part="connection-count">
-                    ${this.connectionCount} connected institutions
-                </div>
-            </div>
-        
-            <ft-connection-list id="ft-connection-list" part="ft-connection-list"
-                connections=${JSON.stringify(this.connections)}
-            >
-            </ft-connection-list>
-
-            <div id="footer" part="footer">
-                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
-                </ft-private-and-secure>
-            </div>
-        
-        </div>
-
-        `;
     }
 }
 

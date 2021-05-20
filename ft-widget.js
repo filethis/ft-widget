@@ -20,58 +20,11 @@ import './components/ft-select-your-institution/ft-select-your-institution.js';
 import './components/ft-enter-credentials/ft-enter-credentials.js';
 import './components/ft-manage-connections/ft-manage-connections.js';
 import './components/ft-challenge/ft-challenge.js';
-import { FtHttpMixin } from './components/ft-http-mixin/ft-http-mixin.js';
+import { FtClientMixin } from './components/ft-client-mixin/ft-client-mixin.js';
 import './ft-component-panel.js';
 import { light } from "./mx-design-tokens/index.js";
 
-export class FtWidget extends FtHttpMixin(LitElement) {
-
-	static get styles()
-    {
-        return [
-            super.styles || [],
-            css`
-            :host {
-                display: block;
-                border: solid 1px gray;
-                padding: 16px;
-                max-width: 800px;
-                font-family: ${unsafeCSS(light.Font.Regular)};
-                background-color: ${unsafeCSS(light.Color.Neutral100)};
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            ft-component-panel {
-                margin-top: 50px;
-            }
-            .screen {
-                background: #FFFFFF;
-                border: solid 1px gray;
-                box-shadow: 0px 6px 12px rgba(87, 102, 117, 0.14), 0px 3px 8px rgba(87, 102, 117, 0.06);
-                border-radius: 8px;
-            }
-            /* .floating {
-                border: solid 1px gray;
-                border-radius: 8px;
-            } */
-            /* #ft-connect-to-your-account::part(title) {
-                background-color: red;
-            } */
-        `];
-    }
-
-    _getSources()
-    {
-        var url = "https://filethis.com/api/v1/sources";
-        var options = {};
-        return this.httpGet(url, options)
-            .then(function (institutions)
-            {
-                this.institutions = institutions;
-                return institutions;
-            }.bind(this));
-    }
+export class FtWidget extends FtClientMixin(LitElement) {
 
     static get properties()
     { 
@@ -85,12 +38,14 @@ export class FtWidget extends FtHttpMixin(LitElement) {
     {
         super();
 
-        this.institutions = [];
-        this.connections = [];
+        // this.institutions = [];
+        // this.connections = [];
 
-        // this._getSources();
-        this._loadFakeInstitutions();
-        this._loadFakeConnections();
+        // this._loadFakeInstitutions();
+        // this._loadFakeConnections();
+
+        this.userAccountId = "123";
+        this.token = "123";
     }
 
     render()
@@ -135,6 +90,40 @@ export class FtWidget extends FtHttpMixin(LitElement) {
             </ft-component-panel>
 
         `;
+    }
+
+    static get styles() {
+        return [
+            super.styles || [],
+            css`
+            :host {
+                display: block;
+                border: solid 1px gray;
+                padding: 16px;
+                max-width: 800px;
+                font-family: ${unsafeCSS(light.Font.Regular)};
+                background-color: ${unsafeCSS(light.Color.Neutral100)};
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            ft-component-panel {
+                margin-top: 50px;
+            }
+            .screen {
+                background: #FFFFFF;
+                border: solid 1px gray;
+                box-shadow: 0px 6px 12px rgba(87, 102, 117, 0.14), 0px 3px 8px rgba(87, 102, 117, 0.06);
+                border-radius: 8px;
+            }
+            /* .floating {
+                border: solid 1px gray;
+                border-radius: 8px;
+            } */
+            /* #ft-connect-to-your-account::part(title) {
+                background-color: red;
+            } */
+        `];
     }
 
     _loadFakeInstitutions() {

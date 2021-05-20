@@ -32,7 +32,56 @@ export class FtConnectToYourAccount extends LitElement {
         super();
     }
 
-    _onContinueButtonClicked(thing) {
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+        
+            <img id="illustration" part="illustration" src="./components/ft-connect-to-your-account/assets/illustration.png" />
+        
+            <div id="title" part="title">
+                Connect your account
+            </div>
+        
+            <div id="explanation" part="explanation" class="body">
+                Dropbox will have access to the information below unless you choose to disconnect:
+            </div>
+        
+            <div id="bullet1" part="bullet1" class="bullet"></div>
+        
+            <div id="details" part="details" class="body">
+                Account details
+            </div>
+        
+            <div id="bullet2" part="bullet2" class="bullet"></div>
+        
+            <div id="balances" part="balances" class="body">
+                Account balances and transactions
+            </div>
+        
+            <img id="lock" part="lock" src="./components/ft-connect-to-your-account/assets/lock.png" />
+        
+            <div id="protected" part="protected" class="body">
+                Your information is protected securely.
+            </div>
+        
+            <div id="agree" part="agree">
+                By clicking Continue, you agree to the MX Privacy Policy.
+            </div>
+        
+            <mwc-button id="button" part="button" unelevated label="Continue" @click=${this._onContinueButtonClicked}>
+            </mwc-button>
+        
+            <div id="powered-and-logo" part="powered-and-logo">
+                <div id="powered" part="powered">
+                    Data access powered by
+                </div>
+                <img id="logo" part="logo" src="./components/ft-connect-to-your-account/assets/mx-logo.png" />
+            </div>
+        
+        </div>
+
+        `;
     }
 
     static get styles() {
@@ -178,67 +227,6 @@ export class FtConnectToYourAccount extends LitElement {
         ];
     }
 
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-
-            <img id="illustration" part="illustration" 
-                src="./components/ft-connect-to-your-account/assets/illustration.png"
-            />
-
-            <div id="title" part="title">
-                Connect your account
-            </div>
-
-            <div id="explanation" part="explanation" class="body">
-                Dropbox will have access to the information below unless you choose to disconnect:
-            </div>
-
-            <div id="bullet1" part="bullet1" class="bullet"></div>
-
-            <div id="details" part="details" class="body">
-                Account details
-            </div>
-
-            <div id="bullet2" part="bullet2" class="bullet"></div>
-
-            <div id="balances" part="balances" class="body">
-                Account balances and transactions
-            </div>
-
-            <img id="lock" part="lock"
-                src="./components/ft-connect-to-your-account/assets/lock.png"
-            />
-
-            <div id="protected" part="protected" class="body">
-                Your information is protected securely.
-            </div>
-
-            <div id="agree" part="agree">
-                By clicking Continue, you agree to the MX Privacy Policy.
-            </div>
-
-            <mwc-button id="button" part="button" 
-                unelevated
-                label="Continue"
-                @click=${this._onContinueButtonClicked}
-                >
-            </mwc-button>
-
-            <div id="powered-and-logo" part="powered-and-logo">
-                <div id="powered" part="powered">
-                    Data access powered by  
-                </div>
-                <img id="logo" part="logo"
-                    src="./components/ft-connect-to-your-account/assets/mx-logo.png"
-                />
-            </div>
-
-        </div>
-
-        `;
-    }
 }
 
 window.customElements.define('ft-connect-to-your-account', FtConnectToYourAccount);

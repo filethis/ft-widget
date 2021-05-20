@@ -35,8 +35,38 @@ export class FtChallenge extends LitElement {
         super();
     }
 
-    _onContinueButtonClicked(thing) {
-        alert("yeah");
+    render() {
+        return html`
+
+        <div class="layout vertical center">
+        
+            <!-- <img id="logo" part="logo"
+                        src="../Placeholder.png"
+                    /> -->
+        
+            <div id="title" part="title">
+                Title
+            </div>
+        
+            <div id="content" part="content">
+                Content
+            </div>
+        
+            <mwc-button id="button" part="button" outlined label="Continue" part="button"
+                @click=${this._onContinueButtonClicked}>
+            </mwc-button>
+        
+            <div id="help" part="help">
+                Help
+            </div>
+        
+            <div id="thing" part="thing">
+                Thing
+            </div>
+        
+        </div>
+
+        `;
     }
 
     static get styles() {
@@ -74,42 +104,10 @@ export class FtChallenge extends LitElement {
         ];
     }
 
-    render() {
-        return html`
-
-        <div class="layout vertical center">
-
-            <!-- <img id="logo" part="logo"
-                src="../Placeholder.png"
-            /> -->
-
-            <div id="title" part="title">
-                Title
-            </div>
-
-            <div id="content" part="content">
-                Content
-            </div>
-
-            <mwc-button id="button" part="button" 
-                outlined label="Continue"
-                part="button"
-                @click=${this._onContinueButtonClicked}
-                >
-            </mwc-button>
-
-            <div id="help" part="help">
-                Help
-            </div>
-
-            <div id="thing" part="thing">
-                Thing
-           </div>
-
-        </div>
-
-        `;
+    _onContinueButtonClicked(thing) {
+        alert("yeah");
     }
+
 }
 
 window.customElements.define('ft-challenge', FtChallenge);

@@ -20,6 +20,21 @@ import { light } from "../../mx-design-tokens/index.js";
 
 export class FtPrivateAndSecure extends LitElement {
 
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+            <div id="lock-and-private" part="lock-and-private">
+                <img id="lock" part="lock" src="./components/ft-enter-credentials/assets/lock.png" />
+                <div id="private" part="private">
+                    Private and secure
+                </div>
+            </div>
+        </div>
+
+        `;
+    }
+
     static get styles() {
         return [
             css`
@@ -58,23 +73,6 @@ export class FtPrivateAndSecure extends LitElement {
 
         `
         ];
-    }
-
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-            <div id="lock-and-private" part="lock-and-private">
-                <img id="lock" part="lock"
-                    src="./components/ft-enter-credentials/assets/lock.png" 
-                />
-                <div id="private" part="private">
-                    Private and secure
-                </div>
-            </div>
-        </div>
-
-        `;
     }
 }
 

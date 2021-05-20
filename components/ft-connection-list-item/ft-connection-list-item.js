@@ -34,8 +34,31 @@ export class FtConnectionListItem extends LitElement {
         this.connection = {};
     }
 
-    _getDomain() {
-        return new URL(this.connection.homePageUrl).hostname;
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+        
+            <div id="logo" part="logo" on-tap="_onSourceClicked">
+                <img id="logo-image" part="logo-image" src="${this.connection.logoUrl}">
+            </div>
+        
+            <div id="text" part="text">
+        
+                <div id="name" part="name">
+                    ${this.connection.name}
+                </div>
+        
+                <!-- onclick="location.href='${this.connection.homePageUrl}';" -->
+                <div id="address" part="address">
+                    ${this._getDomain()}
+                </div>
+        
+            </div>
+        
+        </div>
+
+        `;
     }
 
     static get styles() {
@@ -106,33 +129,8 @@ export class FtConnectionListItem extends LitElement {
         ];
     }
 
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-
-            <div id="logo" part="logo" on-tap="_onSourceClicked">
-                <img id="logo-image" part="logo-image"
-                    src="${this.connection.logoUrl}"
-                >
-            </div>
-
-            <div id="text" part="text">
-
-                <div id="name" part="name">
-                    ${this.connection.name}
-                </div>
-
-                <!-- onclick="location.href='${this.connection.homePageUrl}';" -->
-                <div id="address" part="address">
-                    ${this._getDomain()}
-                </div>
-
-            </div>
-            
-        </div>
-
-        `;
+    _getDomain() {
+        return new URL(this.connection.homePageUrl).hostname;
     }
 }
 

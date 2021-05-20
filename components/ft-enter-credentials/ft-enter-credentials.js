@@ -65,6 +65,58 @@ export class FtEnterCredentials extends LitElement {
         // this.addEventListener('click', this._handleVisibilityClicked.bind(this));
     }
 
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+        
+            <div id="top" part="top">
+                <div id="title" part="title">
+                    Enter Credentials
+                </div>
+                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
+                </ft-private-and-secure>
+            </div>
+        
+            <div id="card" part="card">
+        
+                <ft-institution-list-item id="institution" part="institution" institution=${JSON.stringify(this.institution)}>
+                </ft-institution-list-item>
+        
+                <div id="username-box" part="username-box">
+                    <mwc-textfield id="username" part="username" outlined label="Username">
+                    </mwc-textfield>
+                </div>
+        
+                <div id="password-box" part="password-box">
+                    <mwc-textfield id="password" part="password" outlined type="password" label="Password"
+                        iconTrailing="visibility">
+                    </mwc-textfield>
+                </div>
+        
+                <mwc-button id="button" part="button" unelevated label="Connect" @click=${this._onConnectButtonClicked}>
+                </mwc-button>
+        
+            </div>
+        
+            <div id="bottom" part="bottom">
+                <div id="bottom-inner" part="bottom-inner">
+                    <div id="bottom-text" part="bottom-text">
+                        <div id="go-to-site" part="go-to-site">
+                            Go to ${this.institution.name} website
+                        </div>
+                        <div id="check-site" part="check-site">
+                            Check or reset your account access
+                        </div>
+                    </div>
+                    <mwc-icon-button id="bottom-icon" part="bottom-icon" icon="open_in_new">
+                    </mwc-icon-button>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
     static get styles() {
         return [
             css`
@@ -213,72 +265,6 @@ export class FtEnterCredentials extends LitElement {
                         }
         `
         ];
-    }
-
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-
-            <div id="top" part="top">
-                <div id="title" part="title">
-                    Enter Credentials
-                </div>
-                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
-                </ft-private-and-secure>
-            </div>
-
-            <div id="card" part="card">
-
-                <ft-institution-list-item id="institution" part="institution"
-                    institution=${JSON.stringify(this.institution)}>
-                </ft-institution-list-item>
-                
-                <div id="username-box" part="username-box">
-                    <mwc-textfield id="username" part="username"
-                        outlined 
-                        label="Username"
-                    >
-                    </mwc-textfield>
-                </div>
-
-                <div id="password-box" part="password-box">
-                    <mwc-textfield id="password" part="password"
-                        outlined
-                        type="password"
-                        label="Password" 
-                        iconTrailing="visibility"
-                    >
-                    </mwc-textfield>
-                </div>
-
-                <mwc-button id="button" part="button"
-                    unelevated
-                    label="Connect"
-                    @click=${this._onConnectButtonClicked}
-                >
-                </mwc-button>
-
-            </div>
-
-            <div id="bottom" part="bottom">
-                <div id="bottom-inner" part="bottom-inner">
-                    <div id="bottom-text" part="bottom-text">
-                        <div id="go-to-site" part="go-to-site">
-                            Go to ${this.institution.name} website
-                        </div>
-                        <div id="check-site" part="check-site">
-                            Check or reset your account access
-                        </div>
-                    </div>
-                    <mwc-icon-button id="bottom-icon" part="bottom-icon"
-                        icon="open_in_new"
-                    >
-                    </mwc-icon-button>
-                </div>
-            </div>
-         </div>
-        `;
     }
 
     _onConnectButtonClicked(thing) {

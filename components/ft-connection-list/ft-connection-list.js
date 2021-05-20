@@ -39,6 +39,23 @@ export class FtConnectionList extends LitElement {
         this.connections = [];
     } 
 
+    render() {
+        return html`
+
+        <div id="wrapper" part="wrapper">
+            <mwc-list>
+                ${this.connections.map(connection => html`
+                <mwc-list-item>
+                    <ft-connection-list-item connection=${JSON.stringify(connection)}>
+                    </ft-connection-list-item>
+                </mwc-list-item>
+                `)}
+            </mwc-list>
+        </div>
+
+        `;
+    }
+
     static get styles() {
         return [
             css`
@@ -65,23 +82,6 @@ export class FtConnectionList extends LitElement {
             }
         `
         ];
-    }
-
-    render() {
-        return html`
-
-        <div id="wrapper" part="wrapper">
-            <mwc-list>
-                ${this.connections.map(connection => html`
-                    <mwc-list-item>
-                        <ft-connection-list-item connection=${JSON.stringify(connection)}>
-                        </ft-connection-list-item>
-                    </mwc-list-item>
-                `)}
-            </mwc-list>
-        </div>
-
-        `;
     }
 }
 
