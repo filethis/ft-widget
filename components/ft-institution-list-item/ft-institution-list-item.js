@@ -46,18 +46,16 @@ export class FtInstitutionListItem extends LitElement {
             <div id="text" part="text">
         
                 <div id="name" part="name">
-                    ${this.institution.name}
+                    ${!this.institution ? '' : this.institution.name}
                 </div>
         
                 <!-- onclick="location.href='${this.institution.homePageUrl}';" -->
                 <div id="address" part="address">
-                    ${this._getDomain()}
+                    ${!this.institution ? '' : this._getDomain()}
                 </div>
         
             </div>
-        
         </div>
-
         `;
     }
 

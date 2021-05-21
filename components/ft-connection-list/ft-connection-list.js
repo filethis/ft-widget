@@ -44,7 +44,7 @@ export class FtConnectionList extends LitElement {
 
         <div id="wrapper" part="wrapper">
             <mwc-list>
-                ${this.connections.map(connection => html`
+                ${!this.connections ? '' : this.connections.map(connection => html`
                 <mwc-list-item>
                     <ft-connection-list-item connection=${JSON.stringify(connection)}>
                     </ft-connection-list-item>

@@ -286,7 +286,8 @@ export class FtConnectionListItem extends LitElement {
         event.stopPropagation(); // So that we don't toggle the item selection when the button is clicked
         event.preventDefault();
 
-        this.fire('action-command', this.connection);
+        const commandEvent = new CustomEvent('action-command', { detail: this.connection, bubbles: true });
+        this.dispatchEvent(commandEvent);
     }
 
     _getRefreshDateString(connection)

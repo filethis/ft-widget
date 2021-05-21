@@ -46,18 +46,16 @@ export class FtConnectionListItem extends LitElement {
             <div id="text" part="text">
         
                 <div id="name" part="name">
-                    ${this.connection.name}
+                    ${!this.connection ? '' : this.connection.name}
                 </div>
         
                 <!-- onclick="location.href='${this.connection.homePageUrl}';" -->
                 <div id="address" part="address">
-                    ${this._getDomain()}
+                    ${!this.connection ? '' : this._getDomain()}
                 </div>
         
             </div>
-        
         </div>
-
         `;
     }
 
@@ -127,7 +125,8 @@ export class FtConnectionListItem extends LitElement {
     }
 
     _getDomain() {
-        return new URL(this.connection.homePageUrl).hostname;
+        // return new URL(this.connection.homePageUrl).hostname;
+        return "fixme";
     }
 }
 

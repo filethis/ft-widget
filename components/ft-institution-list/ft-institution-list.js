@@ -44,11 +44,11 @@ export class FtInstitutionList extends LitElement {
 
         <div id="wrapper" part="wrapper">
             <mwc-list>
-                ${this.institutions.map(institution => html`
-                <mwc-list-item>
-                    <ft-institution-list-item institution=${JSON.stringify(institution)}>
-                    </ft-institution-list-item>
-                </mwc-list-item>
+                ${!this.institutions ? '' : this.institutions.map(institution => html`
+                    <mwc-list-item>
+                        <ft-institution-list-item institution=${JSON.stringify(institution)}>
+                        </ft-institution-list-item>
+                    </mwc-list-item>
                 `)}
             </mwc-list>
         </div>

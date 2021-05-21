@@ -23,15 +23,6 @@ import '@material/mwc-button';
 
 export class FtConnectToYourAccount extends LitElement {
 
-    static get properties() {
-        return {
-        };
-    }
-
-    constructor() {
-        super();
-    }
-
     render() {
         return html`
 

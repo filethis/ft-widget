@@ -41,11 +41,8 @@ export class FtWidget extends FtClientMixin(LitElement) {
         // this.institutions = [];
         // this.connections = [];
 
-        // this._loadFakeInstitutions();
-        // this._loadFakeConnections();
-
-        this.userAccountId = "123";
-        this.token = "123";
+        this._loadFakeInstitutions();
+        this._loadFakeConnections();
     }
 
     render()

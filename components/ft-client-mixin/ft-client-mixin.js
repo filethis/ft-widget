@@ -1461,7 +1461,8 @@ export const FtClientMixin = (base) =>
         {
             // Let our parents figure out what to do. They will probably ground us by setting our
             // "live" property to false.
-            this.fire("ft-connect-error", error);
+            const event = new CustomEvent('ft-connect-error', { detail: error, bubbles: true });
+            this.dispatchEvent(event);
         }
 
 
