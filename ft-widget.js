@@ -19,12 +19,13 @@ import './components/ft-connect-to-your-account/ft-connect-to-your-account.js';
 import './components/ft-select-your-institution/ft-select-your-institution.js';
 import './components/ft-enter-credentials/ft-enter-credentials.js';
 import './components/ft-manage-connections/ft-manage-connections.js';
+import './components/ft-connect/ft-connect.js';
+import './components/ft-manage/ft-manage.js';
 import './components/ft-challenge/ft-challenge.js';
-import { FtClientMixin } from './components/ft-client-mixin/ft-client-mixin.js';
 import './ft-component-panel.js';
 import { light } from "./mx-design-tokens/index.js";
 
-export class FtWidget extends FtClientMixin(LitElement) {
+export class FtWidget extends LitElement {
 
     static get properties()
     { 
@@ -48,6 +49,24 @@ export class FtWidget extends FtClientMixin(LitElement) {
     render()
     {
         return html`
+            <ft-component-panel name="ft-connect">
+                <ft-connect
+                    id="ft-connect"
+                    class="screen" 
+                    slot="component"
+                >
+                </ft-connect>
+            </ft-component-panel> 
+
+            <ft-component-panel name="ft-manage">
+                <ft-manage
+                    id="ft-manage"
+                    class="screen" 
+                    slot="component"
+                >
+                </ft-manage>
+            </ft-component-panel> 
+
             <ft-component-panel name="ft-connect-to-your-account">
                 <ft-connect-to-your-account
                     id="ft-connect-to-your-account" 
