@@ -71,60 +71,58 @@ export class FtInstitutionListItem extends LitElement {
                 width: 376px;
                 height: 72px;
             }
-            #wrapper {
-                position:relative;
-                width: 100%; height: 100%;
-                padding-left:12px;
-                padding-right:12px;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-            }
-            #logo {
-                width: 100px;
-                height: 50px;
-                min-width: 100px;
-                /* cursor: pointer; */
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                /* border: 1px solid #DEDEDE; */
-            }
-            #logo-image {
-                width:auto;
-                max-width:100%;
-                /* border: 1px solid #DEDEDE; */
-           }
-            #text {
-                height: 36px;
-                top: calc(50% - 36px/2);
-                margin-left: 12px;
-            }
-            #name {
-                position: static;
-                height: 20px;
-                left: 0px;
-                right: 0px;
-                top: calc(50% - 20px/2 - 8px);
-                font-size: ${unsafeCSS(light.FontSize.Body)}px;
-                font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                line-height: ${unsafeCSS(light.LineHeight.Body)}px;
-                max-width:300px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            #address {
-                position: static;
-                height: 16px;
-                left: 0px;
-                right: 0px;
-                top: calc(50% - 16px/2 + 10px);
-                /* cursor: pointer; */
-                font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                color: ${unsafeCSS(light.Color.Neutral700)};
-            }
+                #wrapper {
+                    position:relative;
+                    width: 100%; height: 100%;
+                    padding-left:12px;
+                    padding-right:12px;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                }
+                    #logo {
+                        width: 100px;
+                        height: 50px;
+                        min-width: 100px;
+                        /* cursor: pointer; */
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+                        #logo-image {
+                            width:auto;
+                            max-width:100%;
+                        }
+                #text {
+                    height: 36px;
+                    top: calc(50% - 36px/2);
+                    margin-left: 12px;
+                }
+                    #name {
+                        position: static;
+                        height: 20px;
+                        left: 0px;
+                        right: 0px;
+                        top: calc(50% - 20px/2 - 8px);
+                        font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                        line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                        max-width:300px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    #address {
+                        position: static;
+                        height: 16px;
+                        left: 0px;
+                        right: 0px;
+                        top: calc(50% - 16px/2 + 10px);
+                        /* cursor: pointer; */
+                        font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                        line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                        color: ${unsafeCSS(light.Color.Neutral700)};
+                    }
         `
         ];
     }

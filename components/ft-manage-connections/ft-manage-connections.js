@@ -80,60 +80,60 @@ export class FtManageConnections extends LitElement {
                 height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
-            #wrapper {
-                position:relative;
-                width: 100%; height: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-            }
-                #header{
+                #wrapper {
+                    position:relative;
+                    width: 100%; height: 100%;
                     display: flex;
                     flex-direction: column;
-                    align-items: flex-start;
-                    margin-top: 24px;
-                    margin-left: 24px;
-                    margin-right: 24px;
+                    align-items: stretch;
                 }
-                    #title {
-                        height: 40px;
-                        font-size: ${unsafeCSS(light.FontSize.H1)}px;
-                        font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                        line-height: ${unsafeCSS(light.LineHeight.H1)}px;
-                        text-align: left;
-                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    #header{
+                        margin-top: 24px;
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
                     }
-                    #subtitle{
-                        margin-top: 8px;
-                        height: 24px;
-                        font-size: ${unsafeCSS(light.FontSize._loadFakeConnections)}px;
-                        line-height: ${unsafeCSS(light.LineHeight._loadFakeConnections)}px;
-                        font-weight: ${unsafeCSS(light.FontWeight.Normal)};
-                        color: ${unsafeCSS(light.Color.Neutral900)};
+                        #title {
+                            height: 40px;
+                            font-size: ${unsafeCSS(light.FontSize.H1)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                            line-height: ${unsafeCSS(light.LineHeight.H1)}px;
+                            text-align: left;
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
+                        #subtitle{
+                            margin-top: 8px;
+                            height: 24px;
+                            font-size: ${unsafeCSS(light.FontSize._loadFakeConnections)}px;
+                            line-height: ${unsafeCSS(light.LineHeight._loadFakeConnections)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Normal)};
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
+                        #connection-count {
+                            margin-top: 23px;
+                            height: 16px;
+                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
+                    #ft-connection-list {
+                        margin-left: 12px;
+                        width: 376px;
                     }
-                    #connection-count {
-                        margin-top: 23px;
-                        height: 16px;
-                        font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                        font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                        line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    #footer {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        background-color: ${unsafeCSS(light.Color.Neutral100)};
                     }
-                #ft-connection-list {
-                    margin-left: 12px;
-                    width: 376px;
-                }
-                #footer {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    background-color: ${unsafeCSS(light.Color.Neutral100)};
-                }
-                    #private-and-secure {
-                        margin-top: 20px;
-                        margin-bottom: 20px;
-                    }
+                        #private-and-secure {
+                            margin-top: 20px;
+                            margin-bottom: 20px;
+                        }
         `
         ];
     }

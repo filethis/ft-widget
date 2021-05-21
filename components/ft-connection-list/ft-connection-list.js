@@ -65,21 +65,21 @@ export class FtConnectionList extends LitElement {
                 width: 400px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
-            #wrapper {
-                position:relative;
-                width: 100%; height: 100%;
-                overflow-y: auto;
-                overflow-x: hidden;
-                overscroll-behavior: contain;
-            }
-            mwc-list {
-            }
-            mwc-list-item {
-                width: 376px;
-                height: 72px;
-                --mdc-list-side-padding: 0;
-                --mdc-list-vertical-padding: 0;
-            }
+                #wrapper {
+                    position:relative;
+                    width: 100%; height: 100%;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    overscroll-behavior: contain;
+                }
+                    mwc-list {
+                    }
+                        mwc-list-item {
+                            width: 376px;
+                            height: 72px;
+                            --mdc-list-side-padding: 0;
+                            --mdc-list-vertical-padding: 0;
+                        }
         `
         ];
     }

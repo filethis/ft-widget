@@ -15,46 +15,17 @@ limitations under the License.
 */
 
 // import 'log4javascript/log4javascript.js';
-// import { FtErrorMixin } from '../components/ft-error-mixin/ft-error-mixin.js';
 import { FtHttpMixin } from '../ft-http-mixin/ft-http-mixin.js';
 
 
 export const FtClientMixin = (base) =>
-    class FtClient extends FtHttpMixin(base) {
-
-        // observers: [
-        //     '_onInteractionRequestsListChanged(_interactionRequests)',
-        //     '_onInteractionRequestsSplicesChanged(_interactionRequests.splices)'
-        // ],
-
-        static _lastChangeNotificationHandledOrdinal = null;
-
-        // Connection changes
-        static _createdDocuments = {};
-        static _deletedDocuments = {};
-        static _createdDerivatives = {};
-        static _createdConnections = {};
-        static _deletedConnections = {};
-        static _updatedConnections = {};
-        static _updatedConnectionStateProperties = {};
-        static _updatedConnectionValidationProperties = {};
-        static _updatedConnectionDocumentCountProperties = {};
-
-        // User interaction request changes
-        static _createdInteractionRequests = {};
-        static _deletedInteractionRequests = {};
-
+    class FtClient extends FtHttpMixin(base)
+    {
         static get properties() {
             return {
 
-                /**
-                 * When true, the element is "live" and will communicate with the FileThis service.
-                 *
-                 * Note that you can provide the strings "true" and "false" as attribute values.
-                 *
-                 * @type {boolean}
-                 */
-                live:{ type: Object, observer: "_onLiveChanged" },
+                /** When true, the element is "live" and will communicate with the FileThis service. */
+                live: { type: Boolean },
 
                 /** The "base" URL for requests. For example: "https://filethis.com". Note that you should __not__ use a trailing slash. */
                 server: { type: String },
@@ -75,7 +46,7 @@ export const FtClientMixin = (base) =>
                 sources: { type: Array },
 
                 /** The id of the currently-selected filter. */
-                selectedFilterId: { type: String, observer: "_onSelectedFilterIdChanged" },
+                selectedFilterId: { type: String },
 
                 /** The list of all the user's FileThis connection resources. */
                 connections: { type: Array },
@@ -83,44 +54,26 @@ export const FtClientMixin = (base) =>
                 /** The list of all the user's FileThis fetched document resources. */
                 documents: { type: Array },
 
-                /** Version of user interaction schema to use. */
-                interactionVersion: { type: Object }, // JSON
+                /** The list of all pending user interaction request resources. */
+                interactionRequests: { type: Array },
 
-                /** The list of all pending user interaction resources. */
-                _interactionRequests: { type: Array },
+                /** Version of user interaction schema to use. */
+                interactionVersion: { type: Object },  /* JSON */
 
                 /** When set, various debugging options are enabled, including the display of a log4javascript log window. */
-                debug: { type: Object },
+                debug: { type: Boolean },
 
                 /** When set, the fake institutions are injected into the list of sources. */
-                fakeSources: { type: Object },
+                fakeSources: { type: Boolean },
 
                 /** When set, fake local data is used. Note that many functions that operate on FileThis resources will not work with this fake data. This is useful for rendering the UI in a quiescent state so that it "looks good". */
-                fakeData: { type: Object },
+                fakeData: { type: Boolean },
 
                 /** The relative path where fake data can be found. Must have trailing slash. */
                 fakeDataPath: { type: String },
 
-                _uploadableFileTypes: { type: String },
-
-                /** The current user interaction request being handled. */
-                _interactionRequest: { type: Object },
-
-                /** The URL for the current document download. */
-                _downloadUrl: { type: String },
-
-                /** The filename for the current document download. */
-                _downloadFilename: { type: String },
-
-                _interactionResponse: { type: Object },
-
-                /**
-                 * A flag that controls whether this component should poll the FileThis service for new pending change notification resources.
-                 *
-                 * Note that this property will likely go away once the component supports websockets.
-                 */
+                /** A flag that controls whether this component should poll the FileThis service for new pending change notification resources. */
                 pollForChangeNotifications: { type: Boolean }
-
             };
         }
 
@@ -128,6 +81,7 @@ export const FtClientMixin = (base) =>
         {
             super();
 
+            // Reactive property initialization
             this.live = true;
             this.server = "https://filethis.com";
             this.apiPath = "/api/v1";
@@ -135,37 +89,137 @@ export const FtClientMixin = (base) =>
             this.account = null;
             this.sources = [];
             this.selectedFilterId = null;
+            this.interactionRequests = [];
             this.connections = [];
             this.documents = [];
             this.interactionVersion = "1.0.0";
-            this._interactionRequests = [];
             this.debug = false;
             this.fakeSources = false;
             this.fakeData = false;
             this.fakeDataPath = "../node_modules/ft-connect-behavior/demo/data/";
-            this._uploadableFileTypes = "application/pdf";
-            this._interactionRequest = null;
-            this._downloadUrl = "";
-            this._downloadFilename = "";
-            this._interactionResponse = null;
             this.pollForChangeNotifications = true;
 
+            // Non-reactive instance variable initialization
+            this._interactionRequest = null;  // The current user interaction request being handled
+            this._uploadableFileTypes = "application/pdf";
+            this._downloadUrl = "";  // The URL for the current document download
+            this._downloadFilename = "";  // The filename for the current document download
+            this._lastChangeNotificationHandledOrdinal = null;
+            this._createdDocuments = {};
+            this._deletedDocuments = {};
+            this._createdDerivatives = {};
+            this._createdConnections = {};
+            this._deletedConnections = {};
+            this._updatedConnections = {};
+            this._updatedConnectionStateProperties = {};
+            this._updatedConnectionValidationProperties = {};
+            this._updatedConnectionDocumentCountProperties = {};
+            this._connectionPattern = /^\/connections\/([a-zA-Z0-9]+)$/;
+            this._connectionStatePattern = /^\/connections\/([a-zA-Z0-9]+)\/state\/([a-zA-Z]+)$/;
+            this._connectionValidationPattern = /^\/connections\/([a-zA-Z0-9]+)\/validation\/([a-zA-Z]+)$/;
+            this._connectionDocumentCountPattern = /^\/connections\/([a-zA-Z0-9]+)\/documentCount\/([0-9]+)$/;
+            this._interactionPattern = /^\/connections\/([a-zA-Z0-9]+)\/interactions\/([a-zA-Z0-9]+)$/;
+            this._documentPattern = /^\/documents\/([a-zA-Z0-9]+)$/;
+            this._derivativePattern = /^\/documents\/([a-zA-Z0-9]+)\/derivatives\/(thumbnail-medium)$/;  // TODO: For now
+            this._createdInteractionRequests = {};
+            this._deletedInteractionRequests = {};
+
+            // Command event listeners
             this.addEventListener('create-connection-command', this._onCreateConnectionCommandInternal);
             this.addEventListener('download-documents-command', this._onDownloadDocumentsCommand);
             this.addEventListener('upload-documents-command', this._onUploadDocumentsCommand);
             this.addEventListener('delete-connection-command', this._onDeleteConnectionCommand);
             this.addEventListener('delete-document-command', this._onDeleteDocumentCommand);
             this.addEventListener('action-command', this._onActionCommand);
-            this.addEventListener('visit-source-site-command', this._onVisitSourceSiteCommand);
-            this.addEventListener('is-this-safe-command', this._onIsThisSafeCommand);
         }
 
         connectedCallback()
         {
+            // TODO: Is this really the best place to put this?
+
             super.connectedCallback();
 
             setInterval(this._changeNotificationPoller.bind(this), 1000);  // Poll for change notifications
         }
+
+        updated(changedProperties)
+        {
+            if (changedProperties.has('selectedFilterId'))
+                this._onSelectedFilterIdChanged();
+            if (changedProperties.has('live'))
+                this._onLiveChanged();
+        }
+
+        _onLiveChanged()
+        {
+            this._lastChangeNotificationHandledOrdinal = null;
+            this._processingChangeNotifications = false;
+
+            if (this.live)
+                this.getAllData();
+        }
+
+        // TODO: Move this outside of the client !!!
+        /**
+         * Poses dialog window for the next pending user interaction request, if there is one.
+         */
+        // poseNextPendingInteractionRequest() {
+        //     if (this.interactionRequests.length === 0)
+        //         return;
+
+        //     // If we already have a dialog posed
+        //     if (this.$.modalInteractionDialog.opened)
+        //         return;
+
+        //     // Pose the first request
+        //     var interactionRequest = this.interactionRequests[0];
+        //     this._interactionRequest = interactionRequest;
+        //     this.$.modalInteractionDialog.open();
+        //     return interactionRequest;
+        // }
+        // _poseNextPendingInteractionRequest() {
+        //     return this.poseNextPendingInteractionRequest();
+        // }
+        // _poseInteractionForConnection(connection) {
+        //     var count = this.interactionRequests.length;
+        //     if (count === 0)
+        //         return;
+
+        //     // If we already have a dialog posed
+        //     if (this.$.modalInteractionDialog.opened) {
+        //         this.logInfo("There is already a user interaction request dialog posed");
+        //         return;
+        //     }
+
+        //     var connectionId = connection.id;
+
+        //     var interactionRequestForConnection = null;
+        //     for (var index = 0; index < count; index++) {
+        //         var interactionRequest = this.interactionRequests[index];
+        //         if (interactionRequest.connectionId === connectionId) {
+        //             interactionRequestForConnection = interactionRequest;
+        //             break;
+        //         }
+        //     }
+        //     if (interactionRequestForConnection === null)
+        //         return;
+
+        //     this._interactionRequest = interactionRequestForConnection;
+        //     this.$.modalInteractionDialog.open();
+        // }
+        // _onInteractionRequestsListChanged(to, from) {
+        //     var alreadyInitialized = (from !== undefined);
+        //     if (alreadyInitialized)
+        //         this._poseNextPendingInteractionRequest();
+        // }
+        // _onInteractionRequestsSplicesChanged(changeRecord) {
+        //     if (!changeRecord)
+        //         return;
+
+        //     var alreadyInitialized = (changeRecord !== undefined);
+        //     if (alreadyInitialized)
+        //         this._poseNextPendingInteractionRequest();
+        // }
 
         _changeNotificationPoller()
         {
@@ -179,37 +233,9 @@ export const FtClientMixin = (base) =>
             this._processChangeNotifications();
         }
 
-        _onLiveChanged(to, from)
-        {
-            this._lastChangeNotificationHandledOrdinal = null;
-            this._processingChangeNotifications = false;
-
-            if (this.live)
-                this.getAllData();
-        }
-
-        _onSelectedFilterIdChanged(to, from)
+        _onSelectedFilterIdChanged()
         {
             this._getSources();
-        }
-
-        // Interaction request list changes
-
-        _onInteractionRequestsListChanged(to, from)
-        {
-            var alreadyInitialized = (from !== undefined);
-            if (alreadyInitialized)
-                this._poseNextPendingInteractionRequest();
-        }
-
-        _onInteractionRequestsSplicesChanged(changeRecord)
-        {
-            if (!changeRecord)
-                return;
-
-            var alreadyInitialized = (changeRecord !== undefined);
-            if (alreadyInitialized)
-                this._poseNextPendingInteractionRequest();
         }
 
 
@@ -292,7 +318,7 @@ export const FtClientMixin = (base) =>
                 }.bind(this));
         }
 
-        _onUploadDocumentsCommand(event)
+        _onUploadDocumentsCommand()
         {
             this._chooseFilesToUpload();
         }
@@ -387,22 +413,6 @@ export const FtClientMixin = (base) =>
             this._handleConnectionAction(connection);
         }
 
-        _onVisitSourceSiteCommand(event)
-        {
-            var source = event.detail;
-            var url = source.homePageUrl;
-            var win = window.open(url, '_blank');
-            if (win)
-                win.focus();
-            else
-                this.$.confirmationDialog.alert("Please allow popups for this site");
-        }
-
-        _onIsThisSafeCommand(event)
-        {
-            this.$.confirmationDialog.alert("We use bank-level encryption to keep your credentials safe.");
-        }
-
         _handleConnectionAction(connection)
         {
             switch (connection.state) {
@@ -433,35 +443,6 @@ export const FtClientMixin = (base) =>
             var options = this._buildHttpOptions();
 
             return this.httpPost(url, null, options);
-        }
-
-        _poseInteractionForConnection(connection)
-        {
-            var count = this._interactionRequests.length;
-            if (count === 0)
-                return;
-
-            // If we already have a dialog posed
-            if (this.$.modalInteractionDialog.opened) {
-                this.logInfo("There is already a user interaction request dialog posed");
-                return;
-            }
-
-            var connectionId = connection.id;
-
-            var interactionRequestForConnection = null;
-            for (var index = 0; index < count; index++) {
-                var interactionRequest = this._interactionRequests[index];
-                if (interactionRequest.connectionId === connectionId) {
-                    interactionRequestForConnection = interactionRequest;
-                    break;
-                }
-            }
-            if (interactionRequestForConnection === null)
-                return;
-
-            this._interactionRequest = interactionRequestForConnection;
-            this.$.modalInteractionDialog.open();
         }
 
         /**
@@ -651,7 +632,7 @@ export const FtClientMixin = (base) =>
 
         _getInteractionRequests()
         {
-            this._interactionRequests = [];
+            this.interactionRequests = [];
 
             if (this.fakeData) {
                 var version = this.interactionVersion;
@@ -675,7 +656,7 @@ export const FtClientMixin = (base) =>
             return Promise.all(promises)
                 .then(function (interactionRequestsPerConnection) {
                     interactionRequestsPerConnection.forEach(function (interactionRequests) {
-                        this._interactionRequests = this._interactionRequests.concat(interactionRequests);
+                        this.interactionRequests = this.interactionRequests.concat(interactionRequests);
                     }.bind(this))
                 }.bind(this));
         }
@@ -718,30 +699,6 @@ export const FtClientMixin = (base) =>
 
                     return interactionRequests;
                 }.bind(this));
-        }
-
-        /**
-         * Poses dialog window for the next pending user interaction request, if there is one.
-         */
-        poseNextPendingInteractionRequest()
-        {
-            if (this._interactionRequests.length === 0)
-                return;
-
-            // If we already have a dialog posed
-            if (this.$.modalInteractionDialog.opened)
-                return;
-
-            // Pose the first request
-            var interactionRequest = this._interactionRequests[0];
-            this._interactionRequest = interactionRequest;
-            this.$.modalInteractionDialog.open();
-            return interactionRequest;
-        }
-
-        _poseNextPendingInteractionRequest()
-        {
-            return this.poseNextPendingInteractionRequest();
         }
 
         _createConnection(username, password, source)
@@ -872,14 +829,6 @@ export const FtClientMixin = (base) =>
 
                 }.bind(this));
         }
-
-        static _connectionPattern = /^\/connections\/([a-zA-Z0-9]+)$/;
-        static _connectionStatePattern = /^\/connections\/([a-zA-Z0-9]+)\/state\/([a-zA-Z]+)$/;
-        static _connectionValidationPattern = /^\/connections\/([a-zA-Z0-9]+)\/validation\/([a-zA-Z]+)$/;
-        static _connectionDocumentCountPattern = /^\/connections\/([a-zA-Z0-9]+)\/documentCount\/([0-9]+)$/;
-        static _interactionPattern = /^\/connections\/([a-zA-Z0-9]+)\/interactions\/([a-zA-Z0-9]+)$/;
-        static _documentPattern = /^\/documents\/([a-zA-Z0-9]+)$/;
-        static _derivativePattern = /^\/documents\/([a-zA-Z0-9]+)\/derivatives\/(thumbnail-medium)$/;  // TODO: For now
         
         _getAllChangeNotifications()
         {
@@ -1202,21 +1151,21 @@ export const FtClientMixin = (base) =>
             // Remove deleted connections
             var deletedConnectionIds = Object.keys(this._deletedConnections);
             deletedConnectionIds.forEach(function (connectionId) {
-                this._removeObjectWithIdFromListProperty(connectionId, this.connections, "connections");
+                this.connections = this._removeObjectWithIdFromList(connectionId, this.connections);
             }.bind(this));
             this._deletedConnections = {};
 
             // Remove deleted documents
             var deletedDocumentIds = Object.keys(this._deletedDocuments);
             deletedDocumentIds.forEach(function (documentId) {
-                this._removeObjectWithIdFromListProperty(documentId, this.documents, "documents");
+                this.documents = this._removeObjectWithIdFromList(documentId, this.documents);
             }.bind(this));
             this._deletedDocuments = {};
 
             // Remove deleted user interaction requests
             var deletedInteractionRequestIds = Object.keys(this._deletedInteractionRequests);
             deletedInteractionRequestIds.forEach(function (interactionRequestId) {
-                this._removeObjectWithIdFromListProperty(interactionRequestId, this._interactionRequests, "_interactionRequests");
+                this.interactionRequests = this._removeObjectWithIdFromList(interactionRequestId, this.interactionRequests);
             }.bind(this));
             this._deletedInteractionRequests = {};
 
@@ -1225,7 +1174,7 @@ export const FtClientMixin = (base) =>
             updatedConnectionStateProperties.forEach(function (connectionId) {
                 var newState = this._updatedConnectionStateProperties[connectionId];
                 var connection = this._findObjectWithIdInList(connectionId, this.connections);
-                this._setPropertyOfObjectInListProperty("state", newState, connection, this.connections, "connections");
+                this.connections = this._setPropertyOfObjectInListProperty("state", newState, connection, this.connections);
             }.bind(this));
             this._updatedConnectionStateProperties = {};
 
@@ -1234,7 +1183,7 @@ export const FtClientMixin = (base) =>
             updatedConnectionValidationProperties.forEach(function (connectionId) {
                 var newValidation = this._updatedConnectionValidationProperties[connectionId];
                 var connection = this._findObjectWithIdInList(connectionId, this.connections);
-                this._setPropertyOfObjectInListProperty("validation", newValidation, connection, this.connections, "connections");
+                this.connections = this._setPropertyOfObjectInListProperty("validation", newValidation, connection, this.connections);
             }.bind(this));
             this._updatedConnectionValidationProperties = {};
 
@@ -1243,7 +1192,7 @@ export const FtClientMixin = (base) =>
             updatedConnectionDocumentCountProperties.forEach(function (connectionId) {
                 var newDocumentCount = this._updatedConnectionDocumentCountProperties[connectionId];
                 var connection = this._findObjectWithIdInList(connectionId, this.connections);
-                this._setPropertyOfObjectInListProperty("documentCount", newDocumentCount, connection, this.connections, "connections");
+                this.connections = this._setPropertyOfObjectInListProperty("documentCount", newDocumentCount, connection, this.connections);
             }.bind(this));
             this._updatedConnectionValidationProperties = {};
         }
@@ -1260,7 +1209,7 @@ export const FtClientMixin = (base) =>
             var promises = createdDocumentIds.map(this._getDocument.bind(this));
             return Promise.all(promises)
                 .then(function (documents) {
-                    this._addObjectListToListProperty(documents, this.documents, "documents");
+                    this.documents = this._addObjectListToList(documents, this.documents);
                 }.bind(this));
         }
 
@@ -1276,7 +1225,7 @@ export const FtClientMixin = (base) =>
             var promises = createdDerivativeIds.map(this._getDocument.bind(this));
             return Promise.all(promises)
                 .then(function (documents) {
-                    this._addObjectListToListProperty(documents, this.documents, "documents");
+                    this.documents = this._addObjectListToList(documents, this.documents);
                 }.bind(this));
         }
 
@@ -1292,7 +1241,7 @@ export const FtClientMixin = (base) =>
             var promises = createdConnectionIds.map(this._getConnection.bind(this));
             return Promise.all(promises)
                 .then(function (connections) {
-                    this._addObjectListToListProperty(connections, this.connections, "connections");
+                    this.connections = this._addObjectListToList(connections, this.connections);
                 }.bind(this));
         }
 
@@ -1315,7 +1264,7 @@ export const FtClientMixin = (base) =>
             // Get all the created interaction requests and add them to our local list
             return Promise.all(promises)
                 .then(function (interactionRequests) {
-                    this._addObjectListToListProperty(interactionRequests, this._interactionRequests, "_interactionRequests");
+                    this.interactionRequests = this._addObjectListToList(interactionRequests, this.interactionRequests);
                 }.bind(this));
         }
 
@@ -1353,24 +1302,30 @@ export const FtClientMixin = (base) =>
 
         // Create
 
-        _addObjectToListProperty(object, list, listPath)
+        _addObjectToList(object, list)
         {
             // Short-circuit if object is already in the list
             if (this._objectIsInList(object, list))
-                return;
+                return list;
 
-            this.push(listPath, object);
+            var newList = [...list];
+
+            newList.push(object);
+
+            return newList;
         }
 
-        _addObjectListToListProperty(objectList, list, listPath)
+        _addObjectListToList(objectList, list)
         {
             if (objectList.length === 0)
-                return;
+                return list;
+
+            var newList = [...list];
 
             // Build a new list of objects that are not already in the target list
             var uniqueObjectList = [];
             objectList.forEach(function (object) {
-                if (!this._objectIsInList(object, list))
+                if (!this._objectIsInList(object, newList))
                     uniqueObjectList.push(object);
             }.bind(this));
 
@@ -1380,15 +1335,15 @@ export const FtClientMixin = (base) =>
             var count = uniqueObjectList.length;
             for (var index = 0; index < count; index++) {
                 var object = uniqueObjectList[index];
-                this.splice(listPath, insertIndexAtStart, removeCountZero, object);
+                newList.splice(insertIndexAtStart, removeCountZero, object);
             }
-            //                var spliceObjectList = this.splice.bind(this, listPath, insertIndexAtStart, removeCountZero);
-            //                spliceObjectList.apply(this, uniqueObjectList);
+
+            return newList;
         }
 
         // Update
 
-        _setPropertyOfObjectInListProperty(objectPropertyName, objectPropertyValue, object, list, listPath)
+        _setPropertyOfObjectInListProperty(objectPropertyName, objectPropertyValue, object, list)
         {
             // Make sure the object really is in the list
             var objectId = object.id;
@@ -1398,23 +1353,31 @@ export const FtClientMixin = (base) =>
                 return;
             }
 
+            var newList = [...list];
+
             // Set the property of the object
-            var path = [listPath, objectIndexInList.toString(), objectPropertyName];
-            this.set(path, objectPropertyValue);
+            var objectInList = newList[objectIndexInList];
+            objectInList[objectPropertyName] = objectPropertyValue;
+
+            return newList;
         }
 
         // Delete
 
-        _removeObjectWithIdFromListProperty(id, list, listPath)
+        _removeObjectWithIdFromList(id, list)
         {
             // Short-circuit if object is not in the list
             var index = this._indexOfObjectWithIdInList(id, list);
             if (index === -1)
-                return;
+                return list;
+
+            var newList = [...list];
 
             // Splice the object out of the list property array
             var removeCountOne = 1;
-            this.splice(listPath, index, removeCountOne);
+            newList.splice(index, removeCountOne);
+
+            return newList;
         }
 
         _buildHttpOptions()
@@ -1545,6 +1508,7 @@ export const FtClientMixin = (base) =>
 
         logInfo(message)
         {
+            message;
             // var logger = this._getLogger();
             // if (!logger)
             //   return;
@@ -1553,7 +1517,8 @@ export const FtClientMixin = (base) =>
 
         logWarn(message)
         {
-            // var logger = this._getLogger();
+            message;
+           // var logger = this._getLogger();
             // if (!logger)
             //   return;
             // logger.warn(message);
@@ -1561,6 +1526,7 @@ export const FtClientMixin = (base) =>
 
         logError(message)
         {
+            message;
             // var logger = this._getLogger();
             // if (!logger)
             //   return;

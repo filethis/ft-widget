@@ -26,15 +26,6 @@ import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
 export class FtChallenge extends LitElement {
 
-    static get properties() {
-        return {
-        };
-    }
-
-    constructor() {
-        super();
-    }
-
     render() {
         return html`
 
@@ -80,25 +71,25 @@ export class FtChallenge extends LitElement {
                 padding: 25px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
-            #logo {
-                margin-top: 30px;
-                width:250px; height:auto;
-            }
-            #title {
-                margin-top:20px;
-            }
-            #content {
-                margin-top:20px;
-            }
-            #button {
-                margin-top:20px;
-            }
-            #help {
-                margin-top:20px;
-            }
-            #thing {
-                margin-top:20px;
-            }
+                #logo {
+                    margin-top: 30px;
+                    width:250px; height:auto;
+                }
+                #title {
+                    margin-top:20px;
+                }
+                #content {
+                    margin-top:20px;
+                }
+                #button {
+                    margin-top:20px;
+                }
+                #help {
+                    margin-top:20px;
+                }
+                #thing {
+                    margin-top:20px;
+                }
         `,
             Layouts
         ];

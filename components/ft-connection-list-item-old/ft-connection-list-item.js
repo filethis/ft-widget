@@ -19,6 +19,126 @@ import { Layouts } from 'lit-flexbox-literals';
 
 export class FtConnectionListItem extends LitElement {
 
+    static get properties() {
+        return {
+            connection: { type: Object },
+
+            /** Whether the item should appear selected, or not. */
+            selected: { type: Boolean },
+
+            /** True when the active panel is hidden. */
+            _activePanelHidden: { type: Boolean, state: true },
+
+            /** True when the quiescent panel is hidden. */
+            _quiescentPanelHidden: { type: Boolean, state: true },
+
+            /** True when the quiescent button is hidden. */
+            _quiescentButtonHidden: { type: Boolean, state: true },
+
+            /** True when the quiescent subtext is hidden. */
+            _quiescentSubtextHidden: { type: Boolean, state: true }
+        };
+    }
+
+    constructor() {
+        super();
+
+        // Non-reactive instance variable initialization
+        this._activePanelHidden = true;  // True when the active panel is hidden
+        this._quiescentPanelHidden = false;
+        this._quiescentButtonHidden = false;
+        this._quiescentSubtextHidden = false;
+
+        // Reactive property initialization
+        this.selected = false;
+        this.connection =
+            {
+                id: "1",
+                accountId: "1",
+                attemptDate: "2016-03-15T01:05:34+00:00",
+                checkedDate: "2016-04-15T01:05:24+00:00",
+                documentCount: 1,
+                enabled: true,
+                fetchAll: false,
+                historicalPeriod: "30",
+                info: "",
+                logoUrl: "https://filethis.com/static/logos/72/Logo_FileThisHosted.png",
+                name: "Untitled",
+                period: "2d",
+                sourceId: "1",
+                state: "waiting",
+                successDate: "2016-03-15T01:05:14+00:00",
+                tries: 0,
+                validation: "done"
+            };
+    }
+    // TODO: Move styles out of style tag in the render below and into the getStyles() method
+
+    render() {
+        return html`
+
+        <style>
+            :host {
+                display: block;
+                overflow: hidden;
+                height: 70px;
+                @apply --layout-vertical;
+            }
+            #name {
+                width: 150px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 15px;
+            }
+            #quiescentButton {
+                width: 100px;
+                height: 32px;
+                background-color: white;
+            }
+            #quiescentButtonLabel {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+            }
+            #quiescentSubtext {
+                margin-top: 6px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: small;
+                font-style: italic;
+            }
+            #activePanel {
+            }
+            #activeSpinner {
+            }
+            #activeSpinnerLabel {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                text-transform: uppercase;
+                padding-top: 2px;
+            }
+        </style>
+
+        <custom-style>
+            <style>
+                paper-spinner-lite.spinner
+                {
+                    --paper-spinner-color: black;
+                    --paper-spinner-stroke-width: 2px;
+                    width: 17px;
+                    height: 17px;
+                }
+            </style>
+        </custom-style>
+
+        <!-- Root -->
+        <div id="root" class="flex layout horizontal center">
+            <!-- Name -->
+            <div id="name">
+                ${this.connection.name}
+            </div>
+
+        </div>
+        `;
+    }
+
     static get styles() {
         return [
             css`
@@ -30,69 +150,7 @@ export class FtConnectionListItem extends LitElement {
             }
             `,
             Layouts
-            ];
-    }
-
-    static get properties() {
-        return {
-            connection: {
-                type: Object
-            },
-
-            /** Whether the item should appear selected, or not. */
-            selected: {
-                type: Boolean
-            },
-
-            /** True when the active panel is hidden. */
-            _activePanelHidden: {
-                type: Boolean
-            },
-
-            /** True when the quiescent panel is hidden. */
-            _quiescentPanelHidden: {
-                type: Boolean
-            },
-
-            /** True when the quiescent button is hidden. */
-            _quiescentButtonHidden: {
-                type: Boolean
-            },
-
-            /** True when the quiescent subtext is hidden. */
-            _quiescentSubtextHidden: {
-                type: Boolean
-            }
-        };
-    }
-
-    constructor() {
-        super();
-        this.selected = false;
-        this._activePanelHidden = true; 
-        this._quiescentPanelHidden = false;
-        this._quiescentButtonHidden = false;
-        this._quiescentSubtextHidden = false;
-        this.connection =
-        {
-            id: "1",
-            accountId: "1",
-            attemptDate: "2016-03-15T01:05:34+00:00",
-            checkedDate: "2016-04-15T01:05:24+00:00",
-            documentCount: 1,
-            enabled: true,
-            fetchAll: false,
-            historicalPeriod: "30",
-            info: "",
-            logoUrl: "https://filethis.com/static/logos/72/Logo_FileThisHosted.png",
-            name: "Untitled",
-            period: "2d",
-            sourceId: "1",
-            state: "waiting",
-            successDate: "2016-03-15T01:05:14+00:00",
-            tries: 0,
-            validation: "done"
-        };
+        ];
     }
 
     updated(changes)
@@ -258,72 +316,6 @@ export class FtConnectionListItem extends LitElement {
         return "Refreshed " + monthNames[monthIndex] + ' ' + day;
     }
 
-    // TODO: Move styles out of style tag in the render below and into the getStyles() method
-
-    render() {
-        return html`
-
-        <style>
-            :host {
-                display: block;
-                overflow: hidden;
-                height: 70px;
-                @apply --layout-vertical;
-            }
-            #name {
-                width: 150px;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 15px;
-            }
-            #quiescentButton {
-                width: 100px;
-                height: 32px;
-                background-color: white;
-            }
-            #quiescentButtonLabel {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 12px;
-            }
-            #quiescentSubtext {
-                margin-top: 6px;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: small;
-                font-style: italic;
-            }
-            #activePanel {
-            }
-            #activeSpinner {
-            }
-            #activeSpinnerLabel {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 12px;
-                text-transform: uppercase;
-                padding-top: 2px;
-            }
-        </style>
-
-        <custom-style>
-            <style>
-                paper-spinner-lite.spinner
-                {
-                    --paper-spinner-color: black;
-                    --paper-spinner-stroke-width: 2px;
-                    width: 17px;
-                    height: 17px;
-                }
-            </style>
-        </custom-style>
-
-        <!-- Root -->
-        <div id="root" class="flex layout horizontal center">
-            <!-- Name -->
-            <div id="name">
-                ${this.connection.name}
-            </div>
-
-        </div>
-        `;
-    }
 }
 
 window.customElements.define('ft-connection-list-item', FtConnectionListItem);

@@ -76,50 +76,49 @@ export class FtSelectYourInstitution extends LitElement {
                 height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
-            #wrapper {
-                position:relative;
-                width: 100%; height: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-            }
-            #header{
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                margin-top: 24px;
-                margin-left: 24px;
-                margin-right: 24px;
-            }
-                #title {
-                    height: 32px;
-                    font-size: ${unsafeCSS(light.FontSize.H2)}px;
-                    font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                    line-height: ${unsafeCSS(light.LineHeight.H2)}px;
-                    text-align: center;
-                    color: ${unsafeCSS(light.Color.Neutral900)};
+                #wrapper {
+                    position:relative;
+                    width: 100%; height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: stretch;
                 }
-            #search {
-                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-            }
-            #ft-institution-list {
-                margin-left: 12px;
-                width: 376px;
-            }
-            #footer {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                background-color: ${unsafeCSS(light.Color.Neutral100)};
-            }
-                #add {
+                #header{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    margin-top: 24px;
+                    margin-left: 24px;
+                    margin-right: 24px;
                 }
-
+                    #title {
+                        height: 32px;
+                        font-size: ${unsafeCSS(light.FontSize.H2)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                        line-height: ${unsafeCSS(light.LineHeight.H2)}px;
+                        text-align: center;
+                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    }
+                #search {
+                    --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                    --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                    --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                    --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                    --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
+                }
+                #ft-institution-list {
+                    margin-left: 12px;
+                    width: 376px;
+                }
+                #footer {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-color: ${unsafeCSS(light.Color.Neutral100)};
+                }
+                    #add {
+                    }
         `
         ];
     }

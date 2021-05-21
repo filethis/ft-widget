@@ -44,32 +44,32 @@ export class FtPrivateAndSecure extends LitElement {
                 font-family: ${unsafeCSS(light.Font.Regular)};
                 height: 16px;
             }
-            #wrapper {
-                position:relative;
-                width: 100%; height: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-                #lock-and-private {
-                    margin-top: 3px;
-                    height: 16px;
+                #wrapper {
+                    position:relative;
+                    width: 100%; height: 100%;
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
                     align-items: center;
                 }
-                    #lock {
-                        width: 12px;
+                    #lock-and-private {
+                        margin-top: 3px;
                         height: 16px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
                     }
-                    #private {
-                        width: 120px;
-                        height: 16px;
-                        margin-left: 6px;
-                        font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                        line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                        color: ${unsafeCSS(light.Color.Neutral900)};
-                    }
+                        #lock {
+                            width: 12px;
+                            height: 16px;
+                        }
+                        #private {
+                            margin-left: 6px;
+                            width: 120px;
+                            height: 16px;
+                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
 
         `
         ];
