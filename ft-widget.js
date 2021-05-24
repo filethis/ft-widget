@@ -33,7 +33,8 @@ export class FtWidget extends LitElement {
     { 
         return {
             institutions: { type: Array },
-            connections: { type: Array }
+            connections: { type: Array },
+            _selectedTabIndex: { type: Number }
         }
     }
 
@@ -43,6 +44,11 @@ export class FtWidget extends LitElement {
 
         // this.institutions = [];
         // this.connections = [];
+
+        var selectedTabIndex = localStorage.getItem('tabIndex');
+        if (selectedTabIndex == null)
+            selectedTabIndex = 0;
+        this._selectedTabIndex = selectedTabIndex
 
         this._loadFakeInstitutions();
         this._loadFakeConnections();
@@ -56,9 +62,9 @@ export class FtWidget extends LitElement {
     render()
     {
         return html`
-            <mwc-tab-bar id="tab-bar" part="tab-bar">
+            <mwc-tab-bar id="tab-bar" part="tab-bar" activeIndex=${this._selectedTabIndex}>
                 <mwc-tab label="Start"></mwc-tab>
-                <mwc-tab label="SDK"></mwc-tab>
+                <mwc-tab label="Fixture"></mwc-tab>
                 <mwc-tab label="Gallery"></mwc-tab>
             </mwc-tab-bar>
 
@@ -68,8 +74,8 @@ export class FtWidget extends LitElement {
                     Start
                 </div>
 
-                <div id="sdk-panel" part="sdk-panel">
-                    SDK
+                <div id="fixture-panel" part="fixture-panel">
+                    Fixture
                 </div>
 
                 <div id="gallery-panel" part="gallery-panel">
@@ -156,7 +162,7 @@ export class FtWidget extends LitElement {
                 }
                     #start-panel {
                     }
-                    #sdk-panel {
+                    #fixture-panel {
                     }
                     #gallery-panel {
                     }
@@ -227,7 +233,7 @@ export class FtWidget extends LitElement {
             case 0:  // start-panel
                 showFirst = true;
                 break;
-            case 1:  //sdk-panel
+            case 1:  //fixture-panel
                 showSecond = true;
                 break;
             case 2:  // gallery-panel
@@ -236,8 +242,10 @@ export class FtWidget extends LitElement {
         }
 
         this._setPanelShown("start-panel", showFirst);
-        this._setPanelShown("sdk-panel", showSecond);
+        this._setPanelShown("fixture-panel", showSecond);
         this._setPanelShown("gallery-panel", showThird);
+
+        localStorage.setItem('tabIndex', index);
     }
 
     _setPanelShown(panelId, show) {
