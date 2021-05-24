@@ -18,7 +18,6 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import '@material/mwc-button';
 import { light } from "../../mx-design-tokens/index.js";
-import '../ft-fixture/ft-fixture.js';
 import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
@@ -40,20 +39,6 @@ export class FtConnect extends FtClientMixin(LitElement) {
         return html`
 
         <div id="wrapper" part="wrapper">
-
-            <div id="fixture-panel" part="fixture-panel">
-
-                <ft-fixture id="ft-fixture" part="ft-fixture">
-                </ft-fixture>
-
-                <mwc-button id="button" part="button"
-                    unelevated
-                    label="Continue"
-                    @click=${this._onContinueButtonClicked}
-                >
-                </mwc-button>
-
-            </div>
 
             <ft-connect-to-your-account id="ft-connect-to-your-account" part="ft-connect-to-your-account">
             </ft-connect-to-your-account>
@@ -82,17 +67,8 @@ export class FtConnect extends FtClientMixin(LitElement) {
                     position: relative;
                     width: 100%; height: 100%;
                 }
-                    #fixture-panel {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-start;
-                    }
-                        #ft-fixture {
-                        }
-                        #button {
-                        }
                     #ft-connect-to-your-account {
-                        display: none;
+                        display: block;
                     }
                     #ft-select-your-institution {
                         display: none;
@@ -102,11 +78,6 @@ export class FtConnect extends FtClientMixin(LitElement) {
                     }
         `
         ];
-    }
-
-    _onContinueButtonClicked()
-    {
-        this._goToPanel("ft-connect-to-your-account");
     }
 
     _onConnectToYourAccountContinueCommand()
@@ -119,28 +90,23 @@ export class FtConnect extends FtClientMixin(LitElement) {
         var showFirst = false;
         var showSecond = false;
         var showThird = false;
-        var showFourth = false;
 
         switch (name)
         {
-            case "fixture-panel":
+            case "ft-connect-to-your-account":
                 showFirst = true;
                 break;
-            case "ft-connect-to-your-account":
+            case "ft-select-your-institution":
                 showSecond = true;
                 break;
-            case "ft-select-your-institution":
-                showThird = true;
-                break;
             case "ft-enter-credentials":
-                showFourth = true;
+                showThird = true;
                 break;
         }
 
-        this._setPanelShown("fixture-panel", showFirst);
-        this._setPanelShown("ft-connect-to-your-account", showSecond);
-        this._setPanelShown("ft-select-your-institution", showThird);
-        this._setPanelShown("ft-enter-credentials", showFourth);
+        this._setPanelShown("ft-connect-to-your-account", showFirst);
+        this._setPanelShown("ft-select-your-institution", showSecond);
+        this._setPanelShown("ft-enter-credentials", showThird);
     }
 
     _setPanelShown(panelId, show) {

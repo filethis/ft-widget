@@ -17,14 +17,8 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import '@material/mwc-tab-bar';
 import '@material/mwc-tab';
-import './components/ft-connect-to-your-account/ft-connect-to-your-account.js';
-import './components/ft-select-your-institution/ft-select-your-institution.js';
-import './components/ft-enter-credentials/ft-enter-credentials.js';
-import './components/ft-manage-connections/ft-manage-connections.js';
-import './components/ft-connect/ft-connect.js';
-import './components/ft-manage/ft-manage.js';
+import './components/ft-fixture/ft-fixture.js';
 import './components/ft-gallery/ft-gallery.js';
-import './components/ft-challenge/ft-challenge.js';
 import { light } from "./mx-design-tokens/index.js";
 
 
@@ -77,9 +71,8 @@ export class FtWidget extends LitElement {
                     Start
                 </div>
 
-                <div id="fixture-panel" part="fixture-panel">
-                    Fixture
-                </div>
+                <ft-fixture id="fixture-panel" part="fixture-panel">
+                </ft-fixture>
 
                 <ft-gallery id="gallery-panel" part="gallery-panel">
                 </ft-gallery>

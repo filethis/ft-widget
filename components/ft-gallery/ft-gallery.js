@@ -19,6 +19,14 @@ limitations under the License.
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
+import './ft-component-panel.js'
+import '../ft-connect/ft-connect.js'
+import '../ft-manage/ft-manage.js'
+import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
+import '../ft-select-your-institution/ft-select-your-institution.js'
+import '../ft-enter-credentials/ft-enter-credentials.js'
+import '../ft-manage-connections/ft-manage-connections.js'
+import '../ft-challenge/ft-challenge.js'
 
 
 export class FtGallery extends LitElement {

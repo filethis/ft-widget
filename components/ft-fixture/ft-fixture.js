@@ -77,6 +77,13 @@ export class FtFixture extends LitElement {
             >
             </mwc-textfield>
 
+            <mwc-button id="button" part="button"
+                unelevated 
+                label="Continue" 
+                @click=${this._onContinueButtonClicked}
+            >
+            </mwc-button>
+
         </div>
 
         `;
@@ -98,8 +105,14 @@ export class FtFixture extends LitElement {
                     flex-direction: column;
                     align-items: flex-start
                 }
+                #button {
+                }
         `
         ];
+    }
+
+    _onContinueButtonClicked()
+    {
     }
 
 }
