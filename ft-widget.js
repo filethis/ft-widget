@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
+import '@material/mwc-tab-bar';
+import '@material/mwc-tab';
 import './components/ft-connect-to-your-account/ft-connect-to-your-account.js';
 import './components/ft-select-your-institution/ft-select-your-institution.js';
 import './components/ft-enter-credentials/ft-enter-credentials.js';
@@ -46,64 +48,91 @@ export class FtWidget extends LitElement {
         this._loadFakeConnections();
     }
 
+    firstUpdated()
+    {
+        this.shadowRoot.addEventListener('MDCTabBar:activated', this._onTabBarActivated.bind(this));
+    }
+
     render()
     {
         return html`
-            <ft-component-panel name="ft-connect">
-                <ft-connect
-                    id="ft-connect"
-                    class="screen" 
-                    slot="component"
-                >
-                </ft-connect>
-            </ft-component-panel> 
+            <mwc-tab-bar id="tab-bar" part="tab-bar">
+                <mwc-tab label="Start"></mwc-tab>
+                <mwc-tab label="SDK"></mwc-tab>
+                <mwc-tab label="Gallery"></mwc-tab>
+            </mwc-tab-bar>
 
-            <ft-component-panel name="ft-manage">
-                <ft-manage
-                    id="ft-manage"
-                    class="screen" 
-                    slot="component"
-                >
-                </ft-manage>
-            </ft-component-panel> 
+            <div id="content" part="content">
 
-            <ft-component-panel name="ft-connect-to-your-account">
-                <ft-connect-to-your-account
-                    id="ft-connect-to-your-account" 
-                    class="screen" 
-                    slot="component"
-                >
-                </ft-connect-to-your-account>
-            </ft-component-panel> 
+                <div id="start-panel" part="start-panel">
+                    Start
+                </div>
 
-            <ft-component-panel name="ft-select-your-institution">
-                <ft-select-your-institution
-                    id="ft-select-your-institution"
-                    class="screen" 
-                    slot="component"
-                    institutions=${JSON.stringify(this.institutions)}
-                >
-                </ft-select-your-institution>
-            </ft-component-panel>
+                <div id="sdk-panel" part="sdk-panel">
+                    SDK
+                </div>
 
-            <ft-component-panel name="ft-connect-to-your-account">
-                <ft-enter-credentials 
-                    id="ft-enter-credentials"
-                    class="floating"
-                    slot="component"
-                >
-                </ft-enter-credentials>
-            </ft-component-panel>
+                <div id="gallery-panel" part="gallery-panel">
 
-            <ft-component-panel name="ft-manage-connections">
-                <ft-manage-connections
-                    id="ft-manage-connections"
-                    class="screen"
-                    slot="component"
-                    connections=${JSON.stringify(this.connections)}
-                >
-                </ft-manage-connections>
-            </ft-component-panel>
+                    <ft-component-panel name="ft-connect">
+                        <ft-connect
+                            id="ft-connect"
+                            class="screen" 
+                            slot="component"
+                        >
+                        </ft-connect>
+                    </ft-component-panel> 
+
+                    <ft-component-panel name="ft-manage">
+                        <ft-manage
+                            id="ft-manage"
+                            class="screen" 
+                            slot="component"
+                        >
+                        </ft-manage>
+                    </ft-component-panel> 
+
+                    <ft-component-panel name="ft-connect-to-your-account">
+                        <ft-connect-to-your-account
+                            id="ft-connect-to-your-account" 
+                            class="screen" 
+                            slot="component"
+                        >
+                        </ft-connect-to-your-account>
+                    </ft-component-panel> 
+
+                    <ft-component-panel name="ft-select-your-institution">
+                        <ft-select-your-institution
+                            id="ft-select-your-institution"
+                            class="screen" 
+                            slot="component"
+                            institutions=${JSON.stringify(this.institutions)}
+                        >
+                        </ft-select-your-institution>
+                    </ft-component-panel>
+
+                    <ft-component-panel name="ft-connect-to-your-account">
+                        <ft-enter-credentials 
+                            id="ft-enter-credentials"
+                            class="floating"
+                            slot="component"
+                        >
+                        </ft-enter-credentials>
+                    </ft-component-panel>
+
+                    <ft-component-panel name="ft-manage-connections">
+                        <ft-manage-connections
+                            id="ft-manage-connections"
+                            class="screen"
+                            slot="component"
+                            connections=${JSON.stringify(this.connections)}
+                        >
+                        </ft-manage-connections>
+                    </ft-component-panel>
+
+                </div>
+
+            </div>
 
         `;
     }
@@ -123,9 +152,17 @@ export class FtWidget extends LitElement {
                 flex-direction: column;
                 align-items: center;
             }
-            ft-component-panel {
-                margin-top: 50px;
-            }
+                #content {
+                }
+                    #start-panel {
+                    }
+                    #sdk-panel {
+                    }
+                    #gallery-panel {
+                    }
+                        ft-component-panel {
+                            margin-top: 50px;
+                        }
             .screen {
                 background: #FFFFFF;
                 border: solid 1px gray;
@@ -174,6 +211,42 @@ export class FtWidget extends LitElement {
         request.send();
     }
 
+    _onTabBarActivated(event)
+    {
+        this._goToPanel(event.detail.index);
+    }
+
+    _goToPanel(index)
+    {
+        var showFirst = false;
+        var showSecond = false;
+        var showThird = false;
+
+        switch (index)
+        {
+            case 0:  // start-panel
+                showFirst = true;
+                break;
+            case 1:  //sdk-panel
+                showSecond = true;
+                break;
+            case 2:  // gallery-panel
+                showThird = true;
+                break;
+        }
+
+        this._setPanelShown("start-panel", showFirst);
+        this._setPanelShown("sdk-panel", showSecond);
+        this._setPanelShown("gallery-panel", showThird);
+    }
+
+    _setPanelShown(panelId, show) {
+        var panel = this.shadowRoot.getElementById(panelId)
+        if (show)
+            panel.style.display = "block";
+        else
+            panel.style.display = "none";
+    }
 }
 
 window.customElements.define('ft-widget', FtWidget);

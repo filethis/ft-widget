@@ -53,16 +53,13 @@ export class FtEnterCredentials extends LitElement {
             "isNew": false,
             "isPopular": true
         };
+    }
 
-        // TODO: Figure out how to get the click on the icon...
-        // See: https://github.com/material-components/material-components-web/blob/a41c48519f4bdc58d748a26f7aeacd6ea8dc432f/packages/mdc-textfield/icon/component.ts#L53
-        //      MDCTextFieldIconFoundation.strings.ICON_EVENT
-        //            notifyIconAction: () => this.emit(
-        //            MDCTextFieldIconFoundation.strings.ICON_EVENT, {} /* evtData */, true /* shouldBubble */),
-        // https://github.com/material-components/material-components-web/blob/master/packages/mdc-textfield/icon/constants.ts
-        //      ICON_EVENT: 'MDCTextField:icon'
-        this.addEventListener('MDCTextField:icon', this._handleVisibilityClicked.bind(this));
-        // this.addEventListener('click', this._handleVisibilityClicked.bind(this));
+    firstUpdated()
+    {
+        // TODO: This still doesn't work
+        // See: https://lit-element.polymer-project.org/guide/events
+        this.shadowRoot.addEventListener('MDCTextField:icon', this._handleVisibilityClicked.bind(this));
     }
 
     render() {
@@ -271,7 +268,7 @@ export class FtEnterCredentials extends LitElement {
     }
 
     _handleVisibilityClicked(event) {
-        console.log(event);
+        alert("_handleVisibilityClicked");
     }
 
 }
