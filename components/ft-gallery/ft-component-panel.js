@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { light } from "./mx-design-tokens/index.js";
+import { light } from "../../mx-design-tokens/index.js";
 
 export class FtComponentPanel extends LitElement {
     static get styles() {

@@ -23,9 +23,10 @@ import './components/ft-enter-credentials/ft-enter-credentials.js';
 import './components/ft-manage-connections/ft-manage-connections.js';
 import './components/ft-connect/ft-connect.js';
 import './components/ft-manage/ft-manage.js';
+import './components/ft-gallery/ft-gallery.js';
 import './components/ft-challenge/ft-challenge.js';
-import './ft-component-panel.js';
 import { light } from "./mx-design-tokens/index.js";
+
 
 export class FtWidget extends LitElement {
 
@@ -62,7 +63,9 @@ export class FtWidget extends LitElement {
     render()
     {
         return html`
-            <mwc-tab-bar id="tab-bar" part="tab-bar" activeIndex=${this._selectedTabIndex}>
+            <mwc-tab-bar id="tab-bar" part="tab-bar"
+                activeIndex=${this._selectedTabIndex}
+            >
                 <mwc-tab label="Start"></mwc-tab>
                 <mwc-tab label="Fixture"></mwc-tab>
                 <mwc-tab label="Gallery"></mwc-tab>
@@ -78,65 +81,8 @@ export class FtWidget extends LitElement {
                     Fixture
                 </div>
 
-                <div id="gallery-panel" part="gallery-panel">
-
-                    <ft-component-panel name="ft-connect">
-                        <ft-connect
-                            id="ft-connect"
-                            class="screen" 
-                            slot="component"
-                        >
-                        </ft-connect>
-                    </ft-component-panel> 
-
-                    <ft-component-panel name="ft-manage">
-                        <ft-manage
-                            id="ft-manage"
-                            class="screen" 
-                            slot="component"
-                        >
-                        </ft-manage>
-                    </ft-component-panel> 
-
-                    <ft-component-panel name="ft-connect-to-your-account">
-                        <ft-connect-to-your-account
-                            id="ft-connect-to-your-account" 
-                            class="screen" 
-                            slot="component"
-                        >
-                        </ft-connect-to-your-account>
-                    </ft-component-panel> 
-
-                    <ft-component-panel name="ft-select-your-institution">
-                        <ft-select-your-institution
-                            id="ft-select-your-institution"
-                            class="screen" 
-                            slot="component"
-                            institutions=${JSON.stringify(this.institutions)}
-                        >
-                        </ft-select-your-institution>
-                    </ft-component-panel>
-
-                    <ft-component-panel name="ft-connect-to-your-account">
-                        <ft-enter-credentials 
-                            id="ft-enter-credentials"
-                            class="floating"
-                            slot="component"
-                        >
-                        </ft-enter-credentials>
-                    </ft-component-panel>
-
-                    <ft-component-panel name="ft-manage-connections">
-                        <ft-manage-connections
-                            id="ft-manage-connections"
-                            class="screen"
-                            slot="component"
-                            connections=${JSON.stringify(this.connections)}
-                        >
-                        </ft-manage-connections>
-                    </ft-component-panel>
-
-                </div>
+                <ft-gallery id="gallery-panel" part="gallery-panel">
+                </ft-gallery>
 
             </div>
 
@@ -158,6 +104,10 @@ export class FtWidget extends LitElement {
                 flex-direction: column;
                 align-items: center;
             }
+                mwc-tab-bar {
+                }
+                    mwc-tab {
+                    }
                 #content {
                 }
                     #start-panel {
@@ -166,21 +116,9 @@ export class FtWidget extends LitElement {
                     }
                     #gallery-panel {
                     }
-                        ft-component-panel {
-                            margin-top: 50px;
-                        }
-            .screen {
-                background: #FFFFFF;
-                border: solid 1px gray;
-                box-shadow: 0px 6px 12px rgba(87, 102, 117, 0.14), 0px 3px 8px rgba(87, 102, 117, 0.06);
-                border-radius: 8px;
-            }
             /* .floating {
                 border: solid 1px gray;
                 border-radius: 8px;
-            } */
-            /* #ft-connect-to-your-account::part(title) {
-                background-color: red;
             } */
         `];
     }
