@@ -20,6 +20,7 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import '@material/mwc-textfield';
 import { light } from "../../mx-design-tokens/index.js";
+import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 
 
 export class FtFixture extends LitElement {
@@ -44,6 +45,7 @@ export class FtFixture extends LitElement {
 
     render() {
         return html`
+
 
         <div id="wrapper" part="wrapper">
 
@@ -83,6 +85,9 @@ export class FtFixture extends LitElement {
                 @click=${this._onContinueButtonClicked}
             >
             </mwc-button>
+
+            <ft-labeled-icon-button>
+            </ft-labeled-icon-button>
 
         </div>
 
