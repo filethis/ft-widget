@@ -89,19 +89,18 @@ export class FtWidget extends LitElement {
             :host {
                 display: block;
                 border: solid 1px gray;
-                padding: 16px;
-                max-width: 800px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
                 background-color: ${unsafeCSS(light.Color.Neutral100)};
                 display: flex;
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
             }
                 mwc-tab-bar {
                 }
                     mwc-tab {
                     }
                 #content {
+                    flex: 1;
                 }
                     #start-panel {
                     }

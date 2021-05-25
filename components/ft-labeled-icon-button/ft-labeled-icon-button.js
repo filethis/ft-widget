@@ -15,32 +15,37 @@ limitations under the License.
 */
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import '@material/mwc-icon-button';
+import '@material/mwc-icon';
 import { light } from "../../mx-design-tokens/index.js";
 
 export class FtLabeledIconButton extends LitElement {
 
     static get properties() {
         return {
-            label: { type: String }
+            icon: { type: String },
+            label: { type: String },
+            disabled: { type: Boolean }
         }
     }
 
     constructor() {
         super();
+
+        this.icon = "arrow_back";
         this.label = "Hello";
+        this.disabled = false;
     }
 
     render() {
         return html`
-            <mwc-icon-button id="icon-button"
-                icon="code"
-                label="foo"
-            >
+            <div id="wrapper" part="wrapper">
+
+                <mwc-icon id="icon">${this.icon}</mwc-icon>
+                
                 <div id="label">
                     ${this.label}
                 </div>
-            </mwc-icon-button>
+            </div>
     `;
     }
 
@@ -51,21 +56,33 @@ export class FtLabeledIconButton extends LitElement {
                 background-color: white;
                 border: solid 1px gray;
                 border-radius: 8px;
+                width: 45px;
+                height: 45px;
+                cursor: pointer;
             }
             :host([disabled]) {
                 pointer-events: none;
             }
-            #icon-button {
-                height: 45px;
-                --mdc-icon-size: 20px;
-            }
-                #label {
-                    position: absolute;
-                    top: 10px;
-                    font-family:Arial;
-                    font-size: 8pt;
-                    text-transform:none;
+                #wrapper {
+                    position:relative;
+                    width: 100%; height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    user-select: none;
                 }
+                #wrapper:active {
+                    background-color: lightgray;
+                }
+                    #icon {
+                        margin-top: 3px;
+                    }
+                    #label {
+                        margin-top: 3px;
+                        font-family:Arial;
+                        font-size: 8pt;
+                        text-transform:none;
+                    }
         `;
     }
 

@@ -21,15 +21,23 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import '@material/mwc-textfield';
 import { light } from "../../mx-design-tokens/index.js";
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
+import '../ft-form-panel/ft-form-panel.js'
+import '../ft-accordion-item/ft-accordion-item.js'
 
 
 export class FtFixture extends LitElement {
 
     static get properties() {
         return {
+            server: { type: String },
+
+            apiPath: { type: String },
+
             apiKey: { type: String },
             apiSecret: { type: String },
+
             accountId: { type: String },
+
             userAccessToken: { type: String }
         };
     }
@@ -37,6 +45,8 @@ export class FtFixture extends LitElement {
     constructor() {
         super();
 
+        this.server = "";
+        this.apiPath = "";
         this.apiKey = "";
         this.apiSecret = "";
         this.accountId = "";
@@ -46,10 +56,35 @@ export class FtFixture extends LitElement {
     render() {
         return html`
 
-
         <div id="wrapper" part="wrapper">
 
-            <mwc-textfield id="api-key" part="api-key"
+            <ft-accordion-item id="accordion"
+                heading="Fixture"
+            >
+
+                <div id="sidebar" slot="content">
+
+                    <ft-form-panel id="server-panel" heading="FileThis Server">
+
+                        <!-- Summary -->
+                        <div slot="summary">${this._getDomain()}</div>
+                    
+                        <!-- Test Server button -->
+                        <div slot="controls">Test Server button</div>
+                    
+                        <!-- Content -->
+                        <div slot="content">Content</div>
+                    
+                    </ft-form-panel>
+                </div>
+
+            </ft-accordion-item>
+
+            <div id="main">
+                Main
+            </div>
+
+            <!-- <mwc-textfield id="api-key" part="api-key"
                 outlined
                 type="password"
                 label="API Key"
@@ -87,7 +122,7 @@ export class FtFixture extends LitElement {
             </mwc-button>
 
             <ft-labeled-icon-button>
-            </ft-labeled-icon-button>
+            </ft-labeled-icon-button> -->
 
         </div>
 
@@ -100,24 +135,30 @@ export class FtFixture extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                width: 400px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
                 #wrapper {
-                    position:relative;
-                    width: 100%; height: 100%;
                     display: flex;
-                    flex-direction: column;
-                    align-items: flex-start
+                    flex-direction: row;
+                    align-items: stretch;
                 }
-                #button {
-                }
+                    #sidebar {
+                        width: 410px;
+                    }
+                    #main {
+                        flex: 1;
+                    }
         `
         ];
     }
 
     _onContinueButtonClicked()
     {
+    }
+
+    _getDomain() {
+        // return new URL(this.server).hostname;
+        return "kkkk";
     }
 
 }

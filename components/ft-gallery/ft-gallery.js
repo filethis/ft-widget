@@ -112,7 +112,6 @@ export class FtGallery extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                width: 410px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
                 #wrapper {
@@ -120,7 +119,7 @@ export class FtGallery extends LitElement {
                     width: 100%; height: 100%;
                     display: flex;
                     flex-direction: column;
-                    align-items: flex-start
+                    align-items: center;
                 }
                     ft-component-panel {
                         margin-top: 50px;
