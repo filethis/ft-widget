@@ -234,14 +234,20 @@ export class FtFixture extends LitElement {
                 </div>
 
                 <div id="live-or-dead">
+
                     <div id="live">
                         <ft-connect id="ft-connect">
                         </ft-connect>
                     </div>
+
                     <div id="dead">
-                        <div id="dotted">
+                        <div id="dotted-ft-connect">
+                        </div>
+
+                        <div id="dotted-ft-manage">
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -297,15 +303,13 @@ export class FtFixture extends LitElement {
                             }
                         #live-or-dead {
                             flex: 1;
-                            width:100%;
-                            box-sizing:border-box;
                         }
                             #live {
                                 width:100%;
                                 height: 100%;
                                 /* display: flex; */
                                 display: none;
-                                flex-direction: vertical;
+                                flex-direction: column;
                                 align-items: center;
                             }
                                 #ft-connect {
@@ -313,20 +317,31 @@ export class FtFixture extends LitElement {
                             #dead {
                                 width:100%;
                                 height: 100%;
-                                box-sizing:border-box;
                                 display: flex;
-                                flex-direction: vertical;
+                                flex-direction: row;
                                 align-items: center;
+                                background-color: tan;
                             }
-                                #dotted {
-                                    width: 800px; height: 500px;
+                                #dotted-ft-connect {
+                                    width: 400px;
+                                    height: 650px;
                                     border-style:dashed;
                                     border-color:black;
                                     border-width:2px;
                                     padding:10px;
-                                    box-sizing:border-box;
                                     display: flex;
-                                    flex-direction: vertical;
+                                    flex-direction: column;
+                                    align-items: center;
+                                }
+                                #dotted-ft-manage {
+                                    width: 400px;
+                                    height: 650px;
+                                    border-style:dashed;
+                                    border-color:black;
+                                    border-width:2px;
+                                    padding:10px;
+                                    display: flex;
+                                    flex-direction: column;
                                     align-items: center;
                                 }
         `
