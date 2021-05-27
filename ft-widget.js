@@ -57,24 +57,26 @@ export class FtWidget extends LitElement {
     render()
     {
         return html`
-            <mwc-tab-bar id="tab-bar" part="tab-bar"
-                activeIndex=${this._selectedTabIndex}
-            >
-                <mwc-tab label="Start"></mwc-tab>
-                <mwc-tab label="Fixture"></mwc-tab>
-                <mwc-tab label="Gallery"></mwc-tab>
-            </mwc-tab-bar>
+            <div id="header">
+                <mwc-tab-bar id="tab-bar"
+                    activeIndex=${this._selectedTabIndex}
+                >
+                    <mwc-tab label="Start"></mwc-tab>
+                    <mwc-tab label="Fixture"></mwc-tab>
+                    <mwc-tab label="Gallery"></mwc-tab>
+                </mwc-tab-bar>
+            </div>
 
-            <div id="content" part="content">
+            <div id="content">
 
-                <div id="start-panel" part="start-panel">
+                <div id="start-panel">
                     Start
                 </div>
 
-                <ft-fixture id="fixture-panel" part="fixture-panel">
+                <ft-fixture id="fixture-panel">
                 </ft-fixture>
 
-                <ft-gallery id="gallery-panel" part="gallery-panel">
+                <ft-gallery id="gallery-panel">
                 </ft-gallery>
 
             </div>
@@ -94,10 +96,20 @@ export class FtWidget extends LitElement {
                 flex-direction: column;
                 align-items: stretch;
             }
-                mwc-tab-bar {
+                #header {
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    /* border-bottom: 2px solid ${unsafeCSS(light.Color.Neutral800)}; */
+                    border-bottom: 2px solid #DDD;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
                 }
-                    mwc-tab {
+                    mwc-tab-bar {
+                        width: 400px;
                     }
+                        mwc-tab {
+                        }
                 #content {
                     flex: 1;
                 }

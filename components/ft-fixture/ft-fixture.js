@@ -23,6 +23,7 @@ import { light } from "../../mx-design-tokens/index.js";
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
+import '../ft-connect/ft-connect.js'
 
 
 export class FtFixture extends LitElement {
@@ -51,6 +52,7 @@ export class FtFixture extends LitElement {
 
     constructor() {
         super();
+
         this._isOpen = ("true" == localStorage.getItem("isOpen"));
 
         this.server = localStorage.getItem("server") || "";
@@ -215,11 +217,32 @@ export class FtFixture extends LitElement {
                         </div>
                     </ft-form-panel>
                 </div>
-
             </ft-accordion-item>
 
-            <div id="main">
-                hello
+            <div id="instance-panel">
+
+                <div id="instance-header">
+
+                    <div id="instance-title">Instance</div>
+
+                    <ft-labeled-icon-button id="power-button"
+                        icon="power_settings_new"
+                        label="Power"
+                        @click="${this._onPowerButtonClicked}">
+                    </ft-labeled-icon-button>
+
+                </div>
+
+                <div id="live-or-dead">
+                    <div id="live">
+                        <ft-connect id="ft-connect">
+                        </ft-connect>
+                    </div>
+                    <div id="dead">
+                        <div id="dotted">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -240,18 +263,72 @@ export class FtFixture extends LitElement {
                     flex-direction: row;
                     align-items: stretch;
                 }
-                    #sidebar {
-                        width: 410px;
+                    #accordion {
+                        border-right: 2px solid #DDD;
                     }
-                        #server-panel {
+                        #sidebar {
+                            width: 410px;
                         }
-                            #kkk {
-
+                            #server-panel {
                             }
-                    #main {
+                    #instance-panel {
                         flex: 1;
-                        background-color: lightgray;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: stretch;
                     }
+                        #instance-header {
+                            height: 60px;
+                            border-bottom: 1px solid #DDD;
+                            padding-left: 20px;
+                            padding-right: 10px;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                        }
+                            #instance-title {
+                                flex: 1;
+                                font-size: 16pt;
+                            }
+                            #power-button {
+                                margin-left:30px;
+                                margin-right: 16px;
+                                margin-top: 3px;
+                            }
+                        #live-or-dead {
+                            flex: 1;
+                            width:100%;
+                            box-sizing:border-box;
+                        }
+                            #live {
+                                width:100%;
+                                height: 100%;
+                                /* display: flex; */
+                                display: none;
+                                flex-direction: vertical;
+                                align-items: center;
+                            }
+                                #ft-connect {
+                                }
+                            #dead {
+                                width:100%;
+                                height: 100%;
+                                box-sizing:border-box;
+                                display: flex;
+                                flex-direction: vertical;
+                                align-items: center;
+                            }
+                                #dotted {
+                                    width: 800px; height: 500px;
+                                    border-style:dashed;
+                                    border-color:black;
+                                    border-width:2px;
+                                    padding:10px;
+                                    box-sizing:border-box;
+                                    display: flex;
+                                    flex-direction: vertical;
+                                    align-items: center;
+                                }
         `
         ];
     }
@@ -305,6 +382,24 @@ export class FtFixture extends LitElement {
         const oldValue = this[propertyName];
         if (oldValue != newValue)
             this[propertyName] = newValue;
+    }
+
+    _onLiveChanged(to, from)
+    {
+        if (this.live)
+            this._liveOrDeadPageName = "live";
+        else
+            this._liveOrDeadPageName = "dead";
+
+        // Change the icon color of the power button
+        var iconColor;
+        if (this.live)
+            iconColor = "limegreen";
+        else
+            iconColor = "firebrick";
+        this.$.liveButton.updateStyles({
+            '--ft-labeled-icon-button-icon-fill-color': iconColor
+        });
     }
 
     _onContinueButtonClicked()

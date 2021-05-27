@@ -113,7 +113,7 @@ export class FtAccordionItem extends LitElement {
                                 font-size: 16pt;
                             }
                             #hide-button {
-                                margin-top: 15px;
+                                margin-top: 3px;
                             }
                     #closed {
                         display: flex;
