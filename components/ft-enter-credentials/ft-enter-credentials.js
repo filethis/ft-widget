@@ -129,6 +129,7 @@ export class FtEnterCredentials extends LitElement {
                 width: 100%; height: 100%;
                 display: flex;
                 flex-direction: column;
+                justify-content: flex-start;
                 align-items: center;
             }
                 #top {
@@ -140,6 +141,7 @@ export class FtEnterCredentials extends LitElement {
                     background-color: ${unsafeCSS(light.Color.Neutral100)};
                     display: flex;
                     flex-direction: column;
+                    justify-content: flex-start;
                     align-items: center;
                 }
                     #title {
@@ -241,6 +243,7 @@ export class FtEnterCredentials extends LitElement {
                         #bottom-text {
                             display: flex;
                             flex-direction: column;
+                            justify-content: flex-start;
                             align-items: flex-start;
                         }
                             #go-to-site {

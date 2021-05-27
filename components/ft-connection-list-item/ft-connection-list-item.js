@@ -76,6 +76,7 @@ export class FtConnectionListItem extends LitElement {
                     padding-right:12px;
                     display: flex;
                     flex-direction: row;
+                    justify-content: flex-start;
                     align-items: center;
                 }
                     #logo {
@@ -84,6 +85,7 @@ export class FtConnectionListItem extends LitElement {
                         min-width: 100px;
                         display: flex;
                         flex-direction: row;
+                        justify-content: flex-start;
                         align-items: center;
                     }
                         #logo-image {

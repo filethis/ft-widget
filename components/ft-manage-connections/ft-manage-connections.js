@@ -85,6 +85,7 @@ export class FtManageConnections extends LitElement {
                     width: 100%; height: 100%;
                     display: flex;
                     flex-direction: column;
+                    justify-content: flex-start;
                     align-items: stretch;
                 }
                     #header{
@@ -93,6 +94,7 @@ export class FtManageConnections extends LitElement {
                         margin-right: 24px;
                         display: flex;
                         flex-direction: column;
+                        justify-content: flex-start;
                         align-items: flex-start;
                     }
                         #title {
@@ -128,6 +130,7 @@ export class FtManageConnections extends LitElement {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
+                        justify-content: flex-start;
                         background-color: ${unsafeCSS(light.Color.Neutral100)};
                     }
                         #private-and-secure {

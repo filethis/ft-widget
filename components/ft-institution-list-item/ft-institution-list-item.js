@@ -76,6 +76,7 @@ export class FtInstitutionListItem extends LitElement {
                     padding-right:12px;
                     display: flex;
                     flex-direction: row;
+                    justify-content: flex-start;
                     align-items: center;
                 }
                     #logo {
@@ -85,6 +86,7 @@ export class FtInstitutionListItem extends LitElement {
                         /* cursor: pointer; */
                         display: flex;
                         flex-direction: row;
+                        justify-content: flex-start;
                         align-items: center;
                     }
                         #logo-image {

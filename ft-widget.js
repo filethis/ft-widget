@@ -73,7 +73,7 @@ export class FtWidget extends LitElement {
                     Start
                 </div>
 
-                <ft-fixture id="fixture-panel">
+                <ft-fixture id="fixture-panel" foo="bar">
                 </ft-fixture>
 
                 <ft-gallery id="gallery-panel">
@@ -94,6 +94,7 @@ export class FtWidget extends LitElement {
                 background-color: ${unsafeCSS(light.Color.Neutral100)};
                 display: flex;
                 flex-direction: column;
+                justify-content: flex-start;
                 align-items: stretch;
             }
                 #header {
@@ -101,8 +102,10 @@ export class FtWidget extends LitElement {
                     padding-bottom: 10px;
                     /* border-bottom: 2px solid ${unsafeCSS(light.Color.Neutral800)}; */
                     border-bottom: 2px solid #DDD;
+                    background-color: white;
                     display: flex;
                     flex-direction: row;
+                    justify-content: flex-start;
                     align-items: flex-start;
                 }
                     mwc-tab-bar {

@@ -49,6 +49,7 @@ export class FtPrivateAndSecure extends LitElement {
                     width: 100%; height: 100%;
                     display: flex;
                     flex-direction: column;
+                    justify-content: flex-start;
                     align-items: center;
                 }
                     #lock-and-private {
@@ -56,6 +57,7 @@ export class FtPrivateAndSecure extends LitElement {
                         height: 16px;
                         display: flex;
                         flex-direction: row;
+                        justify-content: flex-start;
                         align-items: center;
                     }
                         #lock {

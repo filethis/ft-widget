@@ -45,7 +45,9 @@ export class FtFixture extends LitElement {
             _userAccountPanelOpen: { type: Object },
 
             userAccessToken: { type: String },
-            _userAccessTokenPanelOpen: { type: Object }
+            _userAccessTokenPanelOpen: { type: Object },
+
+            isLive: { type: Boolean, reflect: true },
 
         };
     }
@@ -69,6 +71,8 @@ export class FtFixture extends LitElement {
 
         this.userAccessToken = localStorage.getItem("userAccessToken") || "";
         this._userAccessTokenPanelOpen = ("true" == localStorage.getItem("userAccessTokenPanelOpen"));
+    
+        this.isLive = false;
     }
 
     firstUpdated() {
@@ -236,18 +240,34 @@ export class FtFixture extends LitElement {
                 <div id="live-or-dead">
 
                     <div id="live">
-                        <ft-connect id="ft-connect">
-                        </ft-connect>
+
+                        <div id="ft-connect-wrapper">
+                            <div id="ft-connect-wrapper-label" class="code">&lt;ft-connect&gt;</div>
+                            <ft-connect id="ft-connect" class="screen">
+                            </ft-connect>
+                        </div>
+
+                        <div id="ft-manage-wrapper">
+                            <div id="ft-manage-wrapper-label" class="code">&lt;ft-manage&gt;</div>
+                            <ft-manage id="ft-manage" class="screen">
+                            </ft-manage>
+                        </div>
+
                     </div>
 
                     <div id="dead">
-                        <div id="dotted-ft-connect">
+
+                        <div id="dotted-ft-connect-wrapper">
+                            <div id="dotted-ft-connect-wrapper-label" class="code">&lt;ft-connect&gt;</div>
+                            <div id="dotted-ft-connect"></div>
+                        </div>
+                        
+                        <div id="dotted-ft-manage-wrapper">
+                            <div id="dotted-ft-manage-wrapper-label" class="code">&lt;ft-manage&gt;</div>
+                            <div id="dotted-ft-manage"></div>
                         </div>
 
-                        <div id="dotted-ft-manage">
-                        </div>
                     </div>
-                    
                 </div>
             </div>
         </div>
@@ -267,6 +287,7 @@ export class FtFixture extends LitElement {
                     width: 100%; height: 100%;
                     display: flex;
                     flex-direction: row;
+                    justify-content: flex-start;
                     align-items: stretch;
                 }
                     #accordion {
@@ -281,6 +302,7 @@ export class FtFixture extends LitElement {
                         flex: 1;
                         display: flex;
                         flex-direction: column;
+                        justify-content: flex-start;
                         align-items: stretch;
                     }
                         #instance-header {
@@ -290,6 +312,7 @@ export class FtFixture extends LitElement {
                             padding-right: 10px;
                             display: flex;
                             flex-direction: row;
+                            justify-content: flex-start;
                             align-items: center;
                         }
                             #instance-title {
@@ -307,45 +330,103 @@ export class FtFixture extends LitElement {
                             #live {
                                 width:100%;
                                 height: 100%;
-                                /* display: flex; */
                                 display: none;
-                                flex-direction: column;
+                                flex-direction: row;
+                                justify-content: center;
                                 align-items: center;
                             }
-                                #ft-connect {
+                                #ft-connect-wrapper {
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: flex-start;
+                                    align-items: center;
                                 }
+                                    #ft-connect-wrapper-label {
+                                    }
+                                    #ft-connect {
+                                    }
+                                #ft-manage-wrapper {
+                                    margin-left: 100px;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: flex-start;
+                                    align-items: center;
+                                }
+                                    #ft-connect-manage-label {
+                                    }
+                                    #ft-manage {
+                                    }
                             #dead {
                                 width:100%;
                                 height: 100%;
                                 display: flex;
                                 flex-direction: row;
+                                justify-content: center;
                                 align-items: center;
-                                background-color: tan;
                             }
-                                #dotted-ft-connect {
-                                    width: 400px;
-                                    height: 650px;
-                                    border-style:dashed;
-                                    border-color:black;
-                                    border-width:2px;
-                                    padding:10px;
+                                #dotted-ft-connect-wrapper {
                                     display: flex;
                                     flex-direction: column;
+                                    justify-content: flex-start;
                                     align-items: center;
                                 }
-                                #dotted-ft-manage {
-                                    width: 400px;
-                                    height: 650px;
-                                    border-style:dashed;
-                                    border-color:black;
-                                    border-width:2px;
-                                    padding:10px;
+                                    #dotted-ft-connect-wrapper-label {
+                                    }
+                                    #dotted-ft-connect {
+                                        width: 400px;
+                                        height: 650px;
+                                        border-style:dashed;
+                                        border-color:black;
+                                        border-width:2px;
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: flex-start;
+                                        align-items: center;
+                                    }
+                                #dotted-ft-manage-wrapper {
+                                    margin-left: 100px;
                                     display: flex;
                                     flex-direction: column;
+                                    justify-content: flex-start;
                                     align-items: center;
                                 }
+                                    #dotted-ft-manage-wrapper-label {
+                                    }
+                                    #dotted-ft-manage {
+                                        width: 400px;
+                                        height: 650px;
+                                        border-style:dashed;
+                                        border-color:black;
+                                        border-width:2px;
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: flex-start;
+                                        align-items: center;
+                                    }
+            .screen {
+                background: #FFFFFF;
+                border: solid 1px gray;
+                box-shadow: 0px 6px 12px rgba(87, 102, 117, 0.14), 0px 3px 8px rgba(87, 102, 117, 0.06);
+                border-radius: 8px;
+            }
+            .colorRed {
+                color: limegreen;
+            }
+            .colorGreen {
+                color: firebrick;
+            }
+            .code {
+                font-family: "courier";
+                font-size: 14pt;
+                font-weight: 600;
+                margin-bottom: 16px;
+            }
         `
         ];
+    }
+
+    _onPowerButtonClicked() {
+        this.isLive = !this.isLive;
     }
 
     _checkForNewInput() {
@@ -390,6 +471,45 @@ export class FtFixture extends LitElement {
             localStorage.setItem('userAccessToken', this.userAccessToken);
         if (changedProperties.has('_userAccessTokenPanelOpen'))
             localStorage.setItem('userAccessTokenPanelOpen', this._userAccessTokenPanelOpen);
+
+        if (changedProperties.has('isLive'))
+            this._handleIsLiveChanged();
+    }
+
+    _handleIsLiveChanged() {
+        var showLivePanel = false;
+        var showDeadPanel = false;
+        if (this.isLive)
+            showLivePanel = true;
+        else
+            showDeadPanel = true;
+        this._setPanelShown("live", showLivePanel);
+        this._setPanelShown("dead", showDeadPanel);
+
+        // Change the icon color of the power button
+        var iconLabel;
+        var iconColor;
+        if (this.isLive)
+        {
+            iconLabel = "On";
+            iconColor = "limegreen";
+        }
+        else
+        {
+            iconLabel = "Off";
+            iconColor = "firebrick";
+        }
+        var button = this.shadowRoot.getElementById("power-button");
+        button.label = iconLabel;
+        button.style.setProperty("--ft-labeled-icon-button-icon-color", iconColor);
+    }
+
+    _setPanelShown(panelId, show) {
+        var panel = this.shadowRoot.getElementById(panelId)
+        if (show)
+            panel.style.display = "flex";
+        else
+            panel.style.display = "none";
     }
 
     _handlePropertyChanged(propertyName, detailName, event) {
@@ -397,24 +517,6 @@ export class FtFixture extends LitElement {
         const oldValue = this[propertyName];
         if (oldValue != newValue)
             this[propertyName] = newValue;
-    }
-
-    _onLiveChanged(to, from)
-    {
-        if (this.live)
-            this._liveOrDeadPageName = "live";
-        else
-            this._liveOrDeadPageName = "dead";
-
-        // Change the icon color of the power button
-        var iconColor;
-        if (this.live)
-            iconColor = "limegreen";
-        else
-            iconColor = "firebrick";
-        this.$.liveButton.updateStyles({
-            '--ft-labeled-icon-button-icon-fill-color': iconColor
-        });
     }
 
     _onContinueButtonClicked()

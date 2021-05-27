@@ -40,9 +40,9 @@ export class FtLabeledIconButton extends LitElement {
         return html`
             <div id="wrapper" part="wrapper">
 
-                <mwc-icon id="icon">${this.icon}</mwc-icon>
+                <mwc-icon id="icon" part="icon">${this.icon}</mwc-icon>
                 
-                <div id="label">
+                <div id="label" part="label">
                     ${this.label}
                 </div>
             </div>
@@ -68,6 +68,7 @@ export class FtLabeledIconButton extends LitElement {
                     width: 100%; height: 100%;
                     display: flex;
                     flex-direction: column;
+                    justify-content: flex-start;
                     align-items: center;
                     user-select: none;
                 }
@@ -76,6 +77,7 @@ export class FtLabeledIconButton extends LitElement {
                 }
                     #icon {
                         margin-top: 3px;
+                        color: var(--ft-labeled-icon-button-icon-color);
                     }
                     #label {
                         margin-top: 3px;

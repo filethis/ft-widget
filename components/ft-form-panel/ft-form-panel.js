@@ -99,11 +99,13 @@ export class FtFormPanel extends LitElement {
                     width: 100%; height: 100%;
                     display: flex;
                     flex-direction: column;
+                    justify-content: flex-start;
                     align-items: stretch;
                 }
                     #header {
                         display: flex;
                         flex-direction: row;
+                        justify-content: flex-start;
                         align-items: center;
                     }
                         #show-hide-button {
@@ -123,6 +125,7 @@ export class FtFormPanel extends LitElement {
                         padding-left: 35px;
                         display: flex;
                         flex-direction: column;
+                        justify-content: flex-start;
                         align-items: stretch
                     }
         `

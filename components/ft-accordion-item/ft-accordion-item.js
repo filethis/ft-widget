@@ -92,11 +92,13 @@ export class FtAccordionItem extends LitElement {
                     width: 100%; height: 100%;
                     display: flex;
                     flex-direction: column;
+                    justify-content: flex-start;
                     align-items: stretch;
                 }
                     #open {
                         display: flex;
                         flex-direction: column;
+                        justify-content: flex-start;
                         align-items: stretch;
                     }
                         #open-header {
@@ -106,6 +108,7 @@ export class FtAccordionItem extends LitElement {
                             padding-right: 10px;
                             display: flex;
                             flex-direction: row;
+                            justify-content: flex-start;
                             align-items: center;
                         }
                             #open-heading {
@@ -118,6 +121,7 @@ export class FtAccordionItem extends LitElement {
                     #closed {
                         display: flex;
                         flex-direction: column;
+                        justify-content: flex-start;
                         align-items: center;
                     }
                         #closed-button-wrapper {
@@ -126,6 +130,7 @@ export class FtAccordionItem extends LitElement {
                             padding-right: 5px;
                             display: flex;
                             flex-direction: row;
+                            justify-content: flex-start;
                             align-items: center;
                         }
                             #show-button {
@@ -136,6 +141,7 @@ export class FtAccordionItem extends LitElement {
                                 padding-top: 58px;
                                 display: flex;
                                 flex-direction: column;
+                                justify-content: flex-start;
                                 align-items: center;
                             }
                                 #closed-heading {

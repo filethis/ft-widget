@@ -25,6 +25,7 @@ export class FtComponentPanel extends LitElement {
                 background-color: ${unsafeCSS(light.Color.Neutral100)};
                 display: flex;
                 flex-direction: column;
+                justify-content: flex-start;
                 align-items: center;
             }
             #title {
