@@ -28,7 +28,7 @@ export class FtAccordionItem extends LitElement {
     static get properties() {
         return {
             heading: { type: String },
-            isOpen: { type: Boolean }
+            isOpen: { type: Object }
         };
     }
 
@@ -135,6 +135,8 @@ export class FtAccordionItem extends LitElement {
                                 width:20px;
                                 padding-top: 58px;
                                 display: flex;
+                                flex-direction: column;
+                                align-items: center;
                             }
                                 #closed-heading {
                                     font-size: 16pt;
@@ -157,7 +159,20 @@ export class FtAccordionItem extends LitElement {
 
     updated(changedProperties) {
         if (changedProperties.has('isOpen'))
+        {
             this._isOpenChanged();
+
+            const event = new CustomEvent
+                (
+                    "is-open-changed",
+                    {
+                        detail: { isOpen: this.isOpen },
+                        bubbles: true,
+                        composed: true
+                    }
+                );
+            this.dispatchEvent(event)
+        }
     }
 
     _isOpenChanged() {

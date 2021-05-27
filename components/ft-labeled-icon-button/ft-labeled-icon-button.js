@@ -24,7 +24,7 @@ export class FtLabeledIconButton extends LitElement {
         return {
             icon: { type: String },
             label: { type: String },
-            disabled: { type: Boolean }
+            disabled: { type: Object }
         }
     }
 

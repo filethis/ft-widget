@@ -27,7 +27,7 @@ export class FtFormPanel extends LitElement {
     static get properties() {
         return {
             heading: { type: String },
-            contentShown: { type: Boolean }
+            contentShown: { type: Object }
         };
     }
 
@@ -36,6 +36,13 @@ export class FtFormPanel extends LitElement {
 
         this.heading = "Untitled";
         this.contentShown = true;
+    }
+
+    firstUpdated() {
+
+        // TODO: This seems wonky
+        var button = this.shadowRoot.querySelector("#show-hide-button");
+        button.onclick = this._onShowOrHideButtonClicked.bind(this);
     }
 
     render() {
@@ -50,7 +57,6 @@ export class FtFormPanel extends LitElement {
                 <mwc-icon-button id="show-hide-button"
                     icon="clear"
                     label="Hide"
-                    @click="${this._onShowOrHideButtonClicked}"
                 >
                 </mwc-icon-button>
                 
@@ -128,9 +134,23 @@ export class FtFormPanel extends LitElement {
         this.contentShown = !this.contentShown;
     }
 
-    updated(changedProperties) {
+    updated(changedProperties)
+    {
         if (changedProperties.has('contentShown'))
+        {
             this._contentShownChanged();
+
+            const event = new CustomEvent
+                (
+                    "content-shown-changed",
+                    {
+                        detail: { contentShown: this.contentShown },
+                        bubbles: true,
+                        composed: true
+                    }
+                );
+            this.dispatchEvent(event)
+        }
     }
 
     _contentShownChanged()
@@ -150,6 +170,12 @@ export class FtFormPanel extends LitElement {
         var button = this.shadowRoot.querySelector("#show-hide-button");
         button.icon = icon;
         button.label = label;
+
+        var contentWrapper = this.shadowRoot.querySelector("#content-wrapper");
+        if (this.contentShown)
+            contentWrapper.style.display = "flex";
+        else
+            contentWrapper.style.display = "none";
     }
 }
 

@@ -29,28 +29,50 @@ export class FtFixture extends LitElement {
 
     static get properties() {
         return {
+            _isOpen: { type: Object },
+
             server: { type: String },
+            _serverPanelOpen: { type: Object },
 
             apiPath: { type: String },
 
             apiKey: { type: String },
             apiSecret: { type: String },
+            _apiCredentialsPanelOpen: { type: Object },
 
             accountId: { type: String },
+            _userAccountPanelOpen: { type: Object },
 
-            userAccessToken: { type: String }
+            userAccessToken: { type: String },
+            _userAccessTokenPanelOpen: { type: Object }
+
         };
     }
 
     constructor() {
         super();
+        this._isOpen = ("true" == localStorage.getItem("isOpen"));
 
-        this.server = "";
+        this.server = localStorage.getItem("server") || "";
+        this._serverPanelOpen = ("true" == localStorage.getItem("serverPanelOpen"));
+
         this.apiPath = "";
-        this.apiKey = "";
-        this.apiSecret = "";
-        this.accountId = "";
-        this.userAccessToken = "";
+
+        this.apiKey = localStorage.getItem("apiKey") || "";
+        this.apiSecret = localStorage.getItem("apiSecret") || "";
+        this._apiCredentialsPanelOpen = ("true" == localStorage.getItem("apiCredentialsPanelOpen"));
+
+        this.accountId = localStorage.getItem("accountId") || "";
+        this._userAccountPanelOpen = ("true" == localStorage.getItem("userAccountPanelOpen"));
+
+        this.userAccessToken = localStorage.getItem("userAccessToken") || "";
+        this._userAccessTokenPanelOpen = ("true" == localStorage.getItem("userAccessTokenPanelOpen"));
+    }
+
+    firstUpdated() {
+
+        // TODO: Find a way to get events when the text input fields change instead of polling like this
+        setInterval(this._checkForNewInput.bind(this), 1000)
     }
 
     render() {
@@ -60,70 +82,145 @@ export class FtFixture extends LitElement {
 
             <ft-accordion-item id="accordion"
                 heading="Fixture"
+                isOpen="${this._isOpen}"
+                @is-open-changed="${this._handlePropertyChanged.bind(this, "_isOpen", "isOpen")}"
             >
-
                 <div id="sidebar" slot="content">
 
-                    <ft-form-panel id="server-panel" heading="FileThis Server">
-
+                    <!-- Server -->
+                    <ft-form-panel id="server-panel"
+                        heading="FileThis Server"
+                        contentShown="${this._serverPanelOpen}"
+                        @content-shown-changed="${this._handlePropertyChanged.bind(this, "_serverPanelOpen", "contentShown")}"
+                    >
                         <!-- Summary -->
                         <div slot="summary">${this._getDomain()}</div>
-                    
-                        <!-- Test Server button -->
-                        <div slot="controls">Test Server button</div>
-                    
+
+                        <!-- Test button -->
+                        <ft-labeled-icon-button id="server-test-button"
+                            slot="controls"
+                            icon="check"
+                            label="Test"
+                            @click="${this._onDefaultServerButtonClicked}"
+                        >
+                        </ft-labeled-icon-button>
+
                         <!-- Content -->
-                        <div slot="content">Content</div>
-                    
+                        <div slot="content">
+                            <mwc-textfield id="server"
+                                outlined
+                                label="URL"
+                                value="${this.server}"
+                            >
+                            </mwc-textfield>
+
+                        <!-- Default button -->
+                        <ft-labeled-icon-button id="default-server-button"
+                            icon="undo"
+                            label="Default"
+                            @click="${this._onDefaultServerButtonClicked}"
+                        >
+                        </ft-labeled-icon-button>
+
+                        </div>
+                    </ft-form-panel>
+
+                    <!-- API Credentials -->
+                    <ft-form-panel id="api-credentials-panel"
+                        heading="API Credentials"
+                        contentShown="${this._apiCredentialsPanelOpen}"
+                        @content-shown-changed="${this._handlePropertyChanged.bind(this, "_apiCredentialsPanelOpen", "contentShown")}"
+                    >
+                        <!-- Test button -->
+                        <ft-labeled-icon-button id="api-credentials-test-button"
+                            slot="controls"
+                            icon="check"
+                            label="Test"
+                            @click="${this._onTestApiCredentialsButtonClicked}"
+                        >
+                        </ft-labeled-icon-button>
+
+                        <!-- Content -->
+                        <div slot="content">
+                            <mwc-textfield id="api-key" part="api-key"
+                                outlined
+                                type="password"
+                                label="API Key"
+                                iconTrailing="visibility"
+                                value="${this.apiKey}"
+                            >
+                            </mwc-textfield>
+
+                            <mwc-textfield id="api-secret" part="api-secret"
+                                outlined 
+                                type="password"
+                                label="API Secret"
+                                iconTrailing="visibility"
+                                value="${this.apiSecret}"
+                            >
+                            </mwc-textfield>
+                        </div>
+                    </ft-form-panel>
+
+                    <!-- User Account -->
+                    <ft-form-panel id="user-account-panel"
+                        heading="User Account"
+                        contentShown="${this._userAccountPanelOpen}"
+                        @content-shown-changed="${this._handlePropertyChanged.bind(this, "_userAccountPanelOpen", "contentShown")}"
+                    >
+                        <!-- Test button -->
+                        <ft-labeled-icon-button id="user-account-test-button"
+                            slot="controls"
+                            icon="check"
+                            label="Test"
+                            @click="${this._onTestAccountButtonClicked}"
+                        >
+                        </ft-labeled-icon-button>
+
+                        <!-- Content -->
+                        <div slot="content">
+                            <mwc-textfield id="account-id" part="account-id"
+                                outlined 
+                                label="Account ID"
+                                value="${this.accountId}"
+                            >
+                            </mwc-textfield>
+                        </div>
+                    </ft-form-panel>
+
+                    <!-- User Access Token -->
+                    <ft-form-panel id="user-access-token-panel"
+                        heading="User Access Token"
+                        contentShown="${this._userAccessTokenPanelOpen}"
+                        @content-shown-changed="${this._handlePropertyChanged.bind(this, "_userAccessTokenPanelOpen", "contentShown")}"
+                    >
+                        <!-- Test button -->
+                        <ft-labeled-icon-button id="user-access-token-test-button"
+                            slot="controls"
+                            icon="check"
+                            label="Test"
+                            @click="${this._onTestTokenButtonClicked}">
+                        </ft-labeled-icon-button>
+
+                        <!-- Content -->
+                        <div slot="content">
+                            <mwc-textfield id="user-access-token" part="user-access-token"
+                                outlined 
+                                type="password"
+                                label="User Access Token"
+                                iconTrailing="visibility"
+                                value="${this.userAccessToken}"
+                            >
+                            </mwc-textfield>
+                        </div>
                     </ft-form-panel>
                 </div>
 
             </ft-accordion-item>
 
             <div id="main">
-                Main
+                hello
             </div>
-
-            <!-- <mwc-textfield id="api-key" part="api-key"
-                outlined
-                type="password"
-                label="API Key"
-                iconTrailing="visibility"
-            >
-            </mwc-textfield>
-
-            <mwc-textfield id="api-secret" part="api-secret"
-                outlined 
-                type="password"
-                label="API Secret"
-                iconTrailing="visibility"
-            >
-            </mwc-textfield>
-
-            <mwc-textfield id="account-id" part="account-id"
-                outlined 
-                label="Account ID"
-            >
-            </mwc-textfield>
-
-            <mwc-textfield id="user-access-token" part="user-access-token"
-                outlined 
-                type="password"
-                label="User Access Token"
-                iconTrailing="visibility"
-            >
-            </mwc-textfield>
-
-            <mwc-button id="button" part="button"
-                unelevated 
-                label="Continue" 
-                @click=${this._onContinueButtonClicked}
-            >
-            </mwc-button>
-
-            <ft-labeled-icon-button>
-            </ft-labeled-icon-button> -->
-
         </div>
 
         `;
@@ -138,6 +235,7 @@ export class FtFixture extends LitElement {
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
                 #wrapper {
+                    width: 100%; height: 100%;
                     display: flex;
                     flex-direction: row;
                     align-items: stretch;
@@ -145,11 +243,68 @@ export class FtFixture extends LitElement {
                     #sidebar {
                         width: 410px;
                     }
+                        #server-panel {
+                        }
+                            #kkk {
+
+                            }
                     #main {
                         flex: 1;
+                        background-color: lightgray;
                     }
         `
         ];
+    }
+
+    _checkForNewInput() {
+        this._updatePropertyFromField("server", "#server")
+        this._updatePropertyFromField("apiKey", "#api-key")
+        this._updatePropertyFromField("apiSecret", "#api-secret")
+        this._updatePropertyFromField("accountId", "#account-id")
+        this._updatePropertyFromField("userAccessToken", "#user-access-token")
+    }
+
+    _updatePropertyFromField(propertyName, fieldSelector)
+    {
+        const field = this.shadowRoot.querySelector(fieldSelector);
+        const fieldValue = field.value;
+        if (this[propertyName] != fieldValue)
+            this[propertyName] = fieldValue;
+    }
+
+    updated(changedProperties)
+    {
+        if (changedProperties.has('_isOpen'))
+            localStorage.setItem('isOpen', this._isOpen);
+
+        if (changedProperties.has('server'))
+            localStorage.setItem('server', this.server);
+        if (changedProperties.has('_serverPanelOpen'))
+            localStorage.setItem('serverPanelOpen', this._serverPanelOpen);
+
+        if (changedProperties.has('apiKey'))
+            localStorage.setItem('apiKey', this.apiKey);
+        if (changedProperties.has('apiSecret'))
+            localStorage.setItem('apiSecret', this.apiSecret);
+        if (changedProperties.has('_apiCredentialsPanelOpen'))
+            localStorage.setItem('apiCredentialsPanelOpen', this._apiCredentialsPanelOpen);
+
+        if (changedProperties.has('accountId'))
+            localStorage.setItem('accountId', this.accountId);
+        if (changedProperties.has('_userAccountPanelOpen'))
+            localStorage.setItem('userAccountPanelOpen', this._userAccountPanelOpen);
+
+        if (changedProperties.has('userAccessToken'))
+            localStorage.setItem('userAccessToken', this.userAccessToken);
+        if (changedProperties.has('_userAccessTokenPanelOpen'))
+            localStorage.setItem('userAccessTokenPanelOpen', this._userAccessTokenPanelOpen);
+    }
+
+    _handlePropertyChanged(propertyName, detailName, event) {
+        const newValue = event.detail[detailName];
+        const oldValue = this[propertyName];
+        if (oldValue != newValue)
+            this[propertyName] = newValue;
     }
 
     _onContinueButtonClicked()

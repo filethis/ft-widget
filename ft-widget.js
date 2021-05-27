@@ -88,7 +88,6 @@ export class FtWidget extends LitElement {
             css`
             :host {
                 display: block;
-                border: solid 1px gray;
                 font-family: ${unsafeCSS(light.Font.Regular)};
                 background-color: ${unsafeCSS(light.Color.Neutral100)};
                 display: flex;
@@ -103,10 +102,13 @@ export class FtWidget extends LitElement {
                     flex: 1;
                 }
                     #start-panel {
+                        height: 100%
                     }
                     #fixture-panel {
+                        height: 100%
                     }
                     #gallery-panel {
+                        height: 100%
                     }
             /* .floating {
                 border: solid 1px gray;
