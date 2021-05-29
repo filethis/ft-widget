@@ -48,7 +48,7 @@ export class FtFormPanel extends LitElement {
     render() {
         return html`
 
-        <div id="wrapper" part="wrapper">
+        <div id="wrapper">
 
             <!-- Header -->
             <div id="header">
@@ -76,11 +76,13 @@ export class FtFormPanel extends LitElement {
             </div>
 
             <!-- Content -->
-            <div id="content-wrapper" class="flex" style="padding-left:35px; " hidden\$="[[!contentShown]]">
+            <div id="content-wrapper">
 
                 <!-- Content slot -->
                 <slot id="content" name="content"></slot>
             </div>
+
+            <slot id="tooltip" name="tooltip"></slot>
 
         </div>
         `;
@@ -112,9 +114,9 @@ export class FtFormPanel extends LitElement {
                         }
                         #heading {
                             font-size: 14pt;
+                            margin-right: 15px;
                         }
                         #summary {
-                            margin-top: 15px;
                         }
                         #spacer {
                             flex: 1;

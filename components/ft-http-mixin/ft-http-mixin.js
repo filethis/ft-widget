@@ -179,6 +179,10 @@ export const FtHttpMixin = (base) =>
                     if (options.headers)
                     {
                         var headers = options.headers;
+
+                        // Add header to prevent Chrome and maybe other browsers posing a Basic Auth dialog when creds are invalid
+                        request.setRequestHeader("x-requested-with", "XMLHttpRequest");
+
                         Object.keys(headers).forEach(function (name)
                         {
                             var value = headers[name];
@@ -260,7 +264,8 @@ export const FtHttpMixin = (base) =>
                 {
                     // Create an Error instance describing the problem
                     message = description + " failed\n" + message;
-                    var error = this.createErrorFromValues(message, url, lineNumber, columnNumber, errorObject);
+                    // var error = this.createErrorFromValues(message, url, lineNumber, columnNumber, errorObject);
+                    var error = message;
 
                     // Reject our promise with the Error instance
                     reject(error);
