@@ -718,7 +718,7 @@ export const FtClientMixin = (base) =>
             {
                 "username": btoa(username),
                 "password": btoa(password),
-                "institutionId": institutionId
+                "sourceId": institutionId
             };
 
             var url = this.server + this.apiPath +

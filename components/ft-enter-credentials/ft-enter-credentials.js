@@ -251,7 +251,17 @@ export class FtEnterCredentials extends LitElement {
         ];
     }
 
-    _onConnectButtonClicked(thing) {
+    _onConnectButtonClicked()
+    {
+        var usernameField = this.shadowRoot.querySelector("#username");
+        var passwordField = this.shadowRoot.querySelector("#password");
+        var payload = {
+            institution: this.institution,
+            username: usernameField.value,
+            password: passwordField.value,
+        }
+        const newEvent = new CustomEvent('create-connection-command', { detail: payload, bubbles: true, composed: true });
+        this.dispatchEvent(newEvent);
     }
 
     _handleVisibilityClicked(event) {
