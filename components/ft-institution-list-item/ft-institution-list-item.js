@@ -40,7 +40,7 @@ export class FtInstitutionListItem extends LitElement {
         <div id="wrapper" part="wrapper">
         
             <div id="logo" part="logo" on-tap="_onSourceClicked">
-                <img id="logo-image" part="logo-image" src="${this.institution.logoUrl}">
+                <img id="logo-image" part="logo-image" src="${!this.institution ? '' : this.institution.logoUrl}">
             </div>
         
             <div id="text" part="text">
@@ -49,7 +49,6 @@ export class FtInstitutionListItem extends LitElement {
                     ${!this.institution ? '' : this.institution.name}
                 </div>
         
-                <!-- onclick="location.href='${this.institution.homePageUrl}';" -->
                 <div id="address" part="address">
                     ${!this.institution ? '' : this._getDomain()}
                 </div>
@@ -128,7 +127,9 @@ export class FtInstitutionListItem extends LitElement {
     }
 
     _getDomain() {
-        return new URL(this.institution.homePageUrl).hostname;
+        // if (!this.institution)
+        //     return "";
+        // return new URL(this.institution.homePageUrl).hostname;
     }
 }
 

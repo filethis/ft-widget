@@ -28,7 +28,8 @@ export class FtConnect extends FtClientMixin(LitElement) {
 
     static get properties() {
         return {
-            selectedInstitution: { type: Object }
+            selectedInstitution: { type: Object },
+            foo: { type: Object }
         };
     }
 
@@ -36,6 +37,26 @@ export class FtConnect extends FtClientMixin(LitElement) {
         super();
 
         this.live = false;
+
+        this.selectedInstitution = null;
+
+        this.foo = {
+           "id": 11,
+           "name": "PG&E",
+           "type": "util",
+           "state": "live",
+           "homePageUrl": "http:\/\/www.pge.com",
+           "phone": "(800) 743-5000",
+           "logoPath": "logos\/Logo_PGandE.png",
+           "logo": "Logo_PGandE.png",
+           "logoUrl": "https:\/\/filethis.com\/static\/logos\/72\/Logo_PGandE.png",
+           "note": "",
+           "info": "",
+           "pattern": "",
+           "isNew": false,
+           "isPopular": true
+        };
+
 
         // Command event listeners
         this.addEventListener('ft-connect-to-your-account-continue-command', this._onConnectToYourAccountContinueCommand);
@@ -63,6 +84,7 @@ export class FtConnect extends FtClientMixin(LitElement) {
         </div>
         `;
     }
+
 
     static get styles() {
         return [
@@ -97,7 +119,8 @@ export class FtConnect extends FtClientMixin(LitElement) {
     }
 
     _onInstitutionSelected(event) {
-        this.selectedInstitution = event.detail.institution;
+        this.selectedInstitution = event.detail;
+        this._goToPanel("ft-enter-credentials");
     }
 
     _goToPanel(name)

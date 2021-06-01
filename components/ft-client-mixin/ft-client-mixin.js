@@ -517,8 +517,8 @@ export const FtClientMixin = (base) =>
             var options = this._buildHttpOptions();
             return this.httpGet(url, options)
                 .then(function (institutions) {
-                    if (this.fakeInstitutions && this.selectedFilterId === "all")
-                        this._prependFakeInstitution(institutions);
+                    // if (this.fakeInstitutions && this.selectedFilterId === "all")
+                    //     this._prependFakeInstitution(institutions);
                     this.institutions = institutions;
                     return institutions;
                 }.bind(this));

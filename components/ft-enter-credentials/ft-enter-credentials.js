@@ -37,22 +37,7 @@ export class FtEnterCredentials extends LitElement {
     constructor() {
         super();
 
-        this.institution = {
-            "id": 428,
-            "name": "Gusto",
-            "type": "fina",
-            "state": "live",
-            "homePageUrl": "https:\/\/app.gusto.com\/login",
-            "phone": "(800) 936-0383",
-            "logoPath": "logos\/Logo_Gusto.png",
-            "logo": "Logo_Gusto.png",
-            "logoUrl": "https:\/\/filethis.com\/static\/logos\/72\/Logo_Gusto.png",
-            "note": "",
-            "info": "",
-            "pattern": "",
-            "isNew": false,
-            "isPopular": true
-        };
+        this.institution = null;
     }
 
     firstUpdated()
@@ -100,7 +85,6 @@ export class FtEnterCredentials extends LitElement {
                 <div id="bottom-inner" part="bottom-inner">
                     <div id="bottom-text" part="bottom-text">
                         <div id="go-to-site" part="go-to-site">
-                            Go to ${this.institution.name} website
                         </div>
                         <div id="check-site" part="check-site">
                             Check or reset your account access

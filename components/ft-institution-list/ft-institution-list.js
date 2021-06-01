@@ -89,8 +89,8 @@ export class FtInstitutionList extends LitElement {
     _onInstitutionSelected(event) {
         const institutionIndex = event.detail.index;
         const institution = this.institutions[institutionIndex];
-        const event = new CustomEvent('institution-selected', { detail:institution, bubbles: true, composed: true });
-        this.dispatchEvent(event);
+        const newEvent = new CustomEvent('institution-selected', { detail:institution, bubbles: true, composed: true });
+        this.dispatchEvent(newEvent);
     }
 }
 
