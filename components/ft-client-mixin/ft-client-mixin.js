@@ -25,7 +25,7 @@ export const FtClientMixin = (base) =>
             return {
 
                 /** When true, the element is "live" and will communicate with the FileThis service. */
-                live: { type: Boolean },
+                isLive: { type: Object },
 
                 /** The "base" URL for requests. For example: "https://filethis.com". Note that you should __not__ use a trailing slash. */
                 server: { type: String },
@@ -37,13 +37,13 @@ export const FtClientMixin = (base) =>
                 userAccountId: { type: String },
 
                 /** The end-user FileThis token. Used to authenticate and authorize requests to the FileThis API endpoints. */
-                token: { type: String },
+                userAccessToken: { type: String },
 
                 /** The user's FileThis account resource. */
                 account: { type: Object },
 
-                /** The list FileThis source (fetchable website) resources. */
-                sources: { type: Array },
+                /** The list FileThis institution (fetchable website) resources. */
+                institutions: { type: Array },
 
                 /** The id of the currently-selected filter. */
                 selectedFilterId: { type: String },
@@ -63,8 +63,8 @@ export const FtClientMixin = (base) =>
                 /** When set, various debugging options are enabled, including the display of a log4javascript log window. */
                 debug: { type: Boolean },
 
-                /** When set, the fake institutions are injected into the list of sources. */
-                fakeSources: { type: Boolean },
+                /** When set, the fake institutions are injected into the list of institutions. */
+                fakeInstitutions: { type: Boolean },
 
                 /** When set, fake local data is used. Note that many functions that operate on FileThis resources will not work with this fake data. This is useful for rendering the UI in a quiescent state so that it "looks good". */
                 fakeData: { type: Boolean },
@@ -82,19 +82,19 @@ export const FtClientMixin = (base) =>
             super();
 
             // Reactive property initialization
-            this.live = true;
+            this.isLive = false;
             this.server = "https://filethis.com";
             this.apiPath = "/api/v1";
             this.userAccountId = "";
             this.account = null;
-            this.sources = [];
+            this.institutions = [];
             this.selectedFilterId = null;
             this.interactionRequests = [];
             this.connections = [];
             this.documents = [];
             this.interactionVersion = "1.0.0";
             this.debug = false;
-            this.fakeSources = false;
+            this.fakeInstitutions = false;
             this.fakeData = false;
             this.fakeDataPath = "../node_modules/ft-connect-behavior/demo/data/";
             this.pollForChangeNotifications = true;
@@ -135,19 +135,25 @@ export const FtClientMixin = (base) =>
 
         connectedCallback()
         {
-            // TODO: Is this really the best place to put this?
-
             super.connectedCallback();
+
+            // TODO: Is this really the best place to put this?
 
             setInterval(this._changeNotificationPoller.bind(this), 1000);  // Poll for change notifications
         }
 
         updated(changedProperties)
         {
+            super.updated?.(changedProperties);
+
             if (changedProperties.has('selectedFilterId'))
                 this._onSelectedFilterIdChanged();
-            if (changedProperties.has('live'))
+            if (changedProperties.has('isLive'))
                 this._onLiveChanged();
+            if (changedProperties.has('institutions'))
+            {
+                var foo = "bar";
+            }
         }
 
         _onLiveChanged()
@@ -155,7 +161,7 @@ export const FtClientMixin = (base) =>
             this._lastChangeNotificationHandledOrdinal = null;
             this._processingChangeNotifications = false;
 
-            if (this.live)
+            if (this.isLive)
                 this.getAllData();
         }
 
@@ -225,7 +231,7 @@ export const FtClientMixin = (base) =>
         {
             if (!this.pollForChangeNotifications)
                 return;
-            if (!this.live)
+            if (!this.isLive)
                 return;
             if (this._processingChangeNotifications)
                 return;
@@ -235,7 +241,7 @@ export const FtClientMixin = (base) =>
 
         _onSelectedFilterIdChanged()
         {
-            this._getSources();
+            this._getInstitutions();
         }
 
 
@@ -246,8 +252,8 @@ export const FtClientMixin = (base) =>
             var createConnectionDialog = event.detail;
             var username = createConnectionDialog.username;
             var password = createConnectionDialog.password;
-            var source = createConnectionDialog.source;
-            this._createConnection(username, password, source);
+            var institution = createConnectionDialog.institution;
+            this._createConnection(username, password, institution);
         }
 
         _onDownloadDocumentsCommand(event)
@@ -277,7 +283,7 @@ export const FtClientMixin = (base) =>
                     this._downloadFilename = document.name;
                     this._downloadUrl = this.server + this.apiPath +
                         "/documents/" + documentId +
-                        "?ticket=" + this.token +
+                        "?ticket=" + this.userAccessToken +
                         "&accept=application%2Fpdf";
 
                     this.$.downloader.click();
@@ -457,9 +463,9 @@ export const FtClientMixin = (base) =>
                 .then(this._getAccount.bind(this))  // Rest of promise chain depends on having the account record
                 .then(function () {
                     this._getDocuments();  // Nothing in the rest of promise chain depends on having documents
-                    return this._getSources();
+                    return this._getInstitutions();
                 }.bind(this))
-                .then(this._getConnections.bind(this))  // Depends on sources in order to render
+                .then(this._getConnections.bind(this))  // Depends on institutions in order to render
                 .then(this._getInteractionRequests.bind(this))  // Depends on connections, though only for now
                 .then(function () {
                     this._processingChangeNotifications = false;  // In case we got here after failing to get them
@@ -493,14 +499,14 @@ export const FtClientMixin = (base) =>
                 }.bind(this));
         }
 
-        _getSources()
+        _getInstitutions()
         {
             if (this.fakeData) {
-                var fakeDataUrl = this.fakeDataPath + "fake-sources.json";
+                var fakeDataUrl = this.fakeDataPath + "fake-institutions.json";
                 return this.httpGet(fakeDataUrl)
-                    .then(function (sources) {
-                        this.sources = sources;
-                        return sources;
+                    .then(function (institutions) {
+                        this.institutions = institutions;
+                        return institutions;
                     }.bind(this));
             }
 
@@ -510,11 +516,11 @@ export const FtClientMixin = (base) =>
                 url += "?filter=" + this.selectedFilterId;
             var options = this._buildHttpOptions();
             return this.httpGet(url, options)
-                .then(function (sources) {
-                    if (this.fakeSources && this.selectedFilterId === "all")
-                        this._prependFakeSource(sources);
-                    this.sources = sources;
-                    return sources;
+                .then(function (institutions) {
+                    if (this.fakeInstitutions && this.selectedFilterId === "all")
+                        this._prependFakeInstitution(institutions);
+                    this.institutions = institutions;
+                    return institutions;
                 }.bind(this));
         }
 
@@ -701,18 +707,18 @@ export const FtClientMixin = (base) =>
                 }.bind(this));
         }
 
-        _createConnection(username, password, source)
+        _createConnection(username, password, institution)
         {
             if (this.fakeData)
                 return Promise.resolve();
 
-            var sourceId = source.id;
+            var institutionId = institution.id;
 
             var body =
             {
                 "username": btoa(username),
                 "password": btoa(password),
-                "sourceId": sourceId
+                "institutionId": institutionId
             };
 
             var url = this.server + this.apiPath +
@@ -733,23 +739,23 @@ export const FtClientMixin = (base) =>
 
         // Helpers -------------------------------------------------------------------------------
 
-        _getSourceLogoUrl(sourceId)
+        _getInstitutionLogoUrl(institutionId)
         {
-            var source = this._findSourceWithId(sourceId);
-            if (source === null)
+            var institution = this._findInstitutionWithId(institutionId);
+            if (institution === null)
                 return null;
-            return source.logoUrl;
+            return institution.logoUrl;
         }
 
-        _findSourceWithId(sourceId)
+        _findInstitutionWithId(institutionId)
         {
-            var count = this.sources.length;
+            var count = this.institutions.length;
             for (var index = 0;
                 index < count;
                 index++) {
-                var source = this.sources[index];
-                if (source.id === sourceId)
-                    return source;
+                var institution = this.institutions[index];
+                if (institution.id === institutionId)
+                    return institution;
             }
             return null;
         }
@@ -769,8 +775,8 @@ export const FtClientMixin = (base) =>
 
         _injectLogoUrlIntoConnection(connection)
         {
-            var sourceId = parseInt(connection.sourceId);
-            var logoUrl = this._getSourceLogoUrl(sourceId);
+            var institutionId = parseInt(connection.institutionId);
+            var logoUrl = this._getInstitutionLogoUrl(institutionId);
             connection.logoUrl = logoUrl;
         }
 
@@ -786,7 +792,7 @@ export const FtClientMixin = (base) =>
             var url = this.server + this.apiPath +
                 "/documents/" + document.id +
                 "/derivatives/" + "thumbnail-medium" +
-                "?ticket=" + this.token +
+                "?ticket=" + this.userAccessToken +
                 "&accept=" + "image%2Fjpeg";
             document.thumbnailUrl = url;
         }
@@ -818,7 +824,7 @@ export const FtClientMixin = (base) =>
                     this._handleError(reason);
 
                     // If we're still live (eg. the user token did not just expire)
-                    if (this.live) {
+                    if (this.isLive) {
                         // Fall back to doing a full refresh of all data
                         this.logInfo("Falling back on doing a full refresh of all data after failure to use change notifications.");
                         this.getAllData();
@@ -1384,7 +1390,7 @@ export const FtClientMixin = (base) =>
         {
             return {
                 headers: {
-                    "X-FileThis-Session": this.token
+                    "X-FileThis-Session": this.userAccessToken
                 }
             };
         }
@@ -1392,12 +1398,12 @@ export const FtClientMixin = (base) =>
 
         // Miscellaneous
 
-        _prependFakeSource(sources)
+        _prependFakeInstitution(institutions)
         {
-            var fakeSource;
+            var fakeInstitution;
 
-            // The fake external source
-            fakeSource =
+            // The fake external institution
+            fakeInstitution =
             {
                 "id": 100100,
                 "name": "Fake External",
@@ -1414,10 +1420,10 @@ export const FtClientMixin = (base) =>
                 "isNew": false,
                 "isPopular": false
             };
-            sources.unshift(fakeSource);
+            institutions.unshift(fakeInstitution);
 
-            // The fake internal source
-            fakeSource =
+            // The fake internal institution
+            fakeInstitution =
             {
                 "id": 100301,
                 "name": "Fake Internal Bills",
@@ -1434,10 +1440,10 @@ export const FtClientMixin = (base) =>
                 "isNew": false,
                 "isPopular": false
             };
-            sources.unshift(fakeSource);
+            institutions.unshift(fakeInstitution);
 
-            // The fake internal source
-            //            fakeSource =
+            // The fake internal institution
+            //            fakeInstitution =
             //            {
             //                "id": 100304,
             //                "name": "Fake Internal Creds",
@@ -1454,7 +1460,7 @@ export const FtClientMixin = (base) =>
             //                "isNew": false,
             //                "isPopular": false
             //            };
-            //            sources.unshift(fakeSource);
+            //            institutions.unshift(fakeInstitution);
         }
 
         _handleError(error)

@@ -26,7 +26,13 @@ import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
 
 export class FtConnect extends FtClientMixin(LitElement) {
 
-    constructor() {
+    static get properties() {
+        return {
+            selectedInstitution: { type: Object }
+        };
+    }
+
+   constructor() {
         super();
 
         this.live = false;
@@ -43,10 +49,15 @@ export class FtConnect extends FtClientMixin(LitElement) {
             <ft-connect-to-your-account id="ft-connect-to-your-account" part="ft-connect-to-your-account">
             </ft-connect-to-your-account>
 
-            <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution">
+            <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution"
+                institutions=${JSON.stringify(this.institutions)}
+                @institution-selected="${this._onInstitutionSelected}"
+            >
             </ft-select-your-institution>
 
-            <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials">
+            <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials"
+                institution=${JSON.stringify(this.selectedInstitution)}
+            >
             </ft-enter-credentials>
 
         </div>
@@ -83,6 +94,10 @@ export class FtConnect extends FtClientMixin(LitElement) {
     _onConnectToYourAccountContinueCommand()
     {
         this._goToPanel("ft-select-your-institution");
+    }
+
+    _onInstitutionSelected(event) {
+        this.selectedInstitution = event.detail.institution;
     }
 
     _goToPanel(name)

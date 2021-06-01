@@ -52,7 +52,8 @@ export class FtSelectYourInstitution extends LitElement {
             </mwc-textfield>
         
             <ft-institution-list id="ft-institution-list" part="ft-institution-list"
-                institutions=${JSON.stringify(this.institutions)}>
+                institutions=${JSON.stringify(this.institutions)}
+            >
             </ft-institution-list>
         
             <div id="footer" part="footer">
@@ -125,6 +126,7 @@ export class FtSelectYourInstitution extends LitElement {
         `
         ];
     }
+
 }
 
 window.customElements.define('ft-select-your-institution', FtSelectYourInstitution);

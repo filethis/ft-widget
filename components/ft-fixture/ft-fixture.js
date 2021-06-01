@@ -44,7 +44,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             apiSecret: { type: String },
             _apiCredentialsPanelOpen: { type: Object },
 
-            accountId: { type: String },
+            userAccountId: { type: String },
             _userAccountPanelOpen: { type: Object },
 
             userAccessTokenId: { type: String },
@@ -70,7 +70,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         this.apiSecret = localStorage.getItem("apiSecret") || "";
         this._apiCredentialsPanelOpen = ("true" == localStorage.getItem("apiCredentialsPanelOpen"));
 
-        this.accountId = localStorage.getItem("accountId") || "";
+        this.userAccountId = localStorage.getItem("userAccountId") || "";
         this._userAccountPanelOpen = ("true" == localStorage.getItem("userAccountPanelOpen"));
 
         this.userAccessTimeout = localStorage.getItem("userAccessTimeout") || 120;  // Two hours
@@ -199,7 +199,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                         @content-shown-changed="${this._handlePropertyChanged.bind(this, "_userAccountPanelOpen", "contentShown")}"
                     >
                         <!-- Summary -->
-                        <div slot="summary" class="summary">ID: ${this.accountId}</div>
+                        <div slot="summary" class="summary">ID: ${this.userAccountId}</div>
 
                         <!-- Test button -->
                         <ft-labeled-icon-button id="user-account-test-button"
@@ -218,7 +218,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <mwc-textfield id="user-account-field" part="user-account"
                                 outlined 
                                 label="Account ID"
-                                value="${this.accountId}"
+                                value="${this.userAccountId}"
                             >
                             </mwc-textfield>
 
@@ -380,8 +380,9 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
                                 apiSecret="${this.apiSecret}"
-                                accountId="${this.accountId}"
+                                userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
+                                isLive="${this.isLive}"
                             >
                             </ft-connect>
                         </div>
@@ -390,6 +391,14 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <div id="ft-manage-wrapper-label" class="code">&lt;ft-manage&gt;</div>
 
                             <ft-manage id="ft-manage" class="screen">
+                                server="${this.server}"
+                                apiPath="${this.apiPath}"
+                                apiKey="${this.apiKey}"
+                                apiSecret="${this.apiSecret}"
+                                userAccountId="${this.userAccountId}"
+                                userAccessToken="${this.userAccessToken}"
+                                <!-- isLive="${this.isLive}" -->
+                                isLive="false"
                             </ft-manage>
                         </div>
 
@@ -686,7 +695,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
     _onTestAccountButtonClicked()
     {
-        var url = this.server + this.apiPath + "/accounts/" + this.accountId;
+        var url = this.server + this.apiPath + "/accounts/" + this.userAccountId;
         var options = this._buildHttpOptions();
         this._makeTest
             (
@@ -701,7 +710,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
     _onTestTokenButtonClicked()
     {
-        var url = this.server + this.apiPath + "/accounts/" + this.accountId;
+        var url = this.server + this.apiPath + "/accounts/" + this.userAccountId;
         var options = {
             headers: {
                 "X-FileThis-Session": this.userAccessToken
@@ -787,7 +796,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         this._updatePropertyFromField("server", "#server-field")
         this._updatePropertyFromField("apiKey", "#api-key-field")
         this._updatePropertyFromField("apiSecret", "#api-secret-field")
-        this._updatePropertyFromField("accountId", "#user-account-field")
+        this._updatePropertyFromField("userAccountId", "#user-account-field")
         this._updatePropertyFromField("userAccessToken", "#user-access-token-field")
         this._updatePropertyFromField("userAccessTimeout", "#user-access-timeout-field")
     }
@@ -817,8 +826,8 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         if (changedProperties.has('_apiCredentialsPanelOpen'))
             localStorage.setItem('apiCredentialsPanelOpen', this._apiCredentialsPanelOpen);
 
-        if (changedProperties.has('accountId'))
-            localStorage.setItem('accountId', this.accountId);
+        if (changedProperties.has('userAccountId'))
+            localStorage.setItem('userAccountId', this.userAccountId);
         if (changedProperties.has('_userAccountPanelOpen'))
             localStorage.setItem('userAccountPanelOpen', this._userAccountPanelOpen);
 
@@ -880,7 +889,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
     _onCopyUserAccountIdButtonClicked()
     {
-        this._copyTextToClipboard(this.accountId);
+        this._copyTextToClipboard(this.userAccountId);
     }
 
     _onCopyUserAccessTokenButtonClicked() {
@@ -893,7 +902,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             .then(function ()
             {
                 // If there is no current user account, go ahead and create one
-                var haveCurrentAccount = !!this.accountId;
+                var haveCurrentAccount = !!this.userAccountId;
                 if (!haveCurrentAccount)
                     return this._createUserAccount();
 
@@ -909,7 +918,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             }.bind(this))
             .then(function (response)
             {
-                this.accountId = response.id;
+                this.userAccountId = response.id;
             }.bind(this))
             .catch(function (reason)
             {
@@ -931,7 +940,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             }.bind(this))
             .then(function (response)
             {
-                this.accountId = response.id;
+                this.userAccountId = response.id;
             }.bind(this))
             .catch(function (reason)
             {
@@ -947,7 +956,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             }.bind(this))
             .then(function ()
             {
-                this.accountId = "";
+                this.userAccountId = "";
                 this.userAccessToken = "";  // Deleting an account deletes its tokens
             }.bind(this))
             .then(this._createUserAccount.bind(this));
@@ -974,7 +983,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         this._deleteUserAccount()
             .then(function ()
             {
-                this.accountId = "";
+                this.userAccountId = "";
 
                 // Deleting an account deletes its tokens
                 this.userAccessTokenId = "";
@@ -1130,7 +1139,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
     // Actions -------------------------------------------------------------------------------------
 
     _deleteUserAccount() {
-        var url = this.server + "/api/v1/accounts/" + this.accountId;
+        var url = this.server + "/api/v1/accounts/" + this.userAccountId;
         var options = this._buildHttpOptions();
         return this.httpDelete(url, options);
     }
@@ -1147,13 +1156,13 @@ export class FtFixture extends FtHttpMixin(LitElement) {
     }
 
     _deleteToken() {
-        var url = this.server + "/api/v1/accounts/" + this.accountId + "/tokens/" + this.userAccessTokenId;
+        var url = this.server + "/api/v1/accounts/" + this.userAccountId + "/tokens/" + this.userAccessTokenId;
         var options = this._buildHttpOptions();
         return this.httpDelete(url, options);
     }
 
     _createToken() {
-        var url = this.server + "/api/v1/accounts/" + this.accountId + "/tokens/";
+        var url = this.server + "/api/v1/accounts/" + this.userAccountId + "/tokens/";
         var body = {
             expiresIn: this.userAccessTimeout.toString()
         };

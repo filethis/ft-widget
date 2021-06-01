@@ -37,13 +37,15 @@ export class FtInstitutionList extends LitElement {
         super();
 
         this.institutions = [];
-    } 
+    }
 
     render() {
         return html`
 
         <div id="wrapper" part="wrapper">
-            <mwc-list>
+            <mwc-list
+                @selected="${this._onInstitutionSelected}"
+            >
                 ${!this.institutions ? '' : this.institutions.map(institution => html`
                     <mwc-list-item>
                         <ft-institution-list-item institution=${JSON.stringify(institution)}>
@@ -82,6 +84,13 @@ export class FtInstitutionList extends LitElement {
                         }
         `
         ];
+    }
+
+    _onInstitutionSelected(event) {
+        const institutionIndex = event.detail.index;
+        const institution = this.institutions[institutionIndex];
+        const event = new CustomEvent('institution-selected', { detail:institution, bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
 }
 
