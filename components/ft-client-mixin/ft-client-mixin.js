@@ -543,6 +543,7 @@ export const FtClientMixin = (base) =>
                     this.connections = connections;
                     connections.forEach(function (connection) {
                         this._injectLogoUrlIntoConnection(connection);
+                        this._injectHomePageUrlIntoConnection(connection);
                     }.bind(this));
                     return connections;
                 }.bind(this));
@@ -559,6 +560,7 @@ export const FtClientMixin = (base) =>
             return this.httpGet(url, options)
                 .then(function (connection) {
                     this._injectLogoUrlIntoConnection(connection);
+                    this._injectHomePageUrlIntoConnection(connection);
                     return connection;
                 }.bind(this));
         }
@@ -739,12 +741,18 @@ export const FtClientMixin = (base) =>
 
         // Helpers -------------------------------------------------------------------------------
 
-        _getInstitutionLogoUrl(institutionId)
-        {
+        _getInstitutionLogoUrl(institutionId) {
             var institution = this._findInstitutionWithId(institutionId);
             if (institution === null)
                 return null;
             return institution.logoUrl;
+        }
+
+        _getInstitutionHomePageUrl(institutionId) {
+            var institution = this._findInstitutionWithId(institutionId);
+            if (institution === null)
+                return null;
+            return institution.homePageUrl;
         }
 
         _findInstitutionWithId(institutionId)
@@ -773,11 +781,16 @@ export const FtClientMixin = (base) =>
             return null;
         }
 
-        _injectLogoUrlIntoConnection(connection)
-        {
-            var institutionId = parseInt(connection.institutionId);
+        _injectLogoUrlIntoConnection(connection) {
+            var institutionId = parseInt(connection.sourceId);
             var logoUrl = this._getInstitutionLogoUrl(institutionId);
             connection.logoUrl = logoUrl;
+        }
+
+        _injectHomePageUrlIntoConnection(connection) {
+            var institutionId = parseInt(connection.sourceId);
+            var homePageUrl = this._getInstitutionHomePageUrl(institutionId);
+            connection.homePageUrl = homePageUrl;
         }
 
         _injectThumbnailUrlIntoDocuments()

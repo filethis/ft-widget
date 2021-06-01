@@ -27,7 +27,10 @@ export class FtSelectYourInstitution extends LitElement {
 
     static get properties() {
         return {
-            institutions: { type: Array }
+            institutions: { type: Array },
+            _searchPattern: { type: String },
+            _haveSearchPattern: { type: Boolean },
+            _institutionsFilteredAndSorted: { type: Array }
         };
     }
 
@@ -35,6 +38,9 @@ export class FtSelectYourInstitution extends LitElement {
         super();
 
         this.institutions = [];
+        this._searchPattern = "";
+        this._haveSearchPattern = false;
+        this._institutionsFilteredAndSorted = [];
    }
 
     render() {
@@ -48,11 +54,17 @@ export class FtSelectYourInstitution extends LitElement {
                 </div>
             </div>
         
-            <mwc-textfield id="search" part="search" outlined label="Search" icon="search">
+            <mwc-textfield id="search" part="search"
+                outlined
+                label="Search"
+                icon="search"
+                value="${this._searchPattern}"
+                @input="${this._onSearchFieldChanged}"
+            >
             </mwc-textfield>
         
             <ft-institution-list id="ft-institution-list" part="ft-institution-list"
-                institutions=${JSON.stringify(this.institutions)}
+                institutions=${JSON.stringify(this._institutionsFilteredAndSorted)}
             >
             </ft-institution-list>
         
@@ -127,6 +139,73 @@ export class FtSelectYourInstitution extends LitElement {
         ];
     }
 
+    _onSearchFieldChanged()
+    {
+        var field = this.shadowRoot.querySelector("#search");
+        const value = field.value;
+        this._searchPattern = value;
+        this._haveSearchPattern = (!!value)
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has('_searchPattern'))
+            this._updateFilteredInstitutionsDebounced();
+        if (changedProperties.has('institutions'))
+            this._updateFilteredInstitutions();
+    }
+
+    _updateFilteredInstitutionsDebounced() {
+        this.debounce(
+            this._updateFilteredInstitutions.bind(this),
+            250
+        )();
+    }
+
+    _updateFilteredInstitutions() {
+        if (!this.institutions) {
+            this._institutionsFilteredAndSorted = [];
+            return;
+        }
+
+        const filteredInstitutions = this.institutions.filter(this._searchFilter.bind(this));
+        const filteredAndSortedInstitutions = filteredInstitutions.sort(this._institutionSort);
+
+        this._institutionsFilteredAndSorted = filteredAndSortedInstitutions;
+            
+    }
+
+    _institutionSort(first, second) {
+        const firstName = first.name.toLowerCase();
+        const secondName = second.name.toLowerCase();
+        return (firstName.localeCompare(secondName));
+    }
+
+    _searchFilter(institution) {
+        const pattern = this._searchPattern.toLowerCase();
+        if (pattern == "")
+            return true;
+        const name = institution.name.toLowerCase();
+        return name.includes(pattern);
+    }
+
+    // TODO: Factor out
+    debounce(func, wait, immediate)
+    {
+        var timeout;
+        return function ()
+        {
+            var context = this, args = arguments;
+            var later = function ()
+            {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    }
 }
 
 window.customElements.define('ft-select-your-institution', FtSelectYourInstitution);

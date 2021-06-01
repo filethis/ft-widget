@@ -62,21 +62,33 @@ export class FtEnterCredentials extends LitElement {
         
             <div id="card" part="card">
         
-                <ft-institution-list-item id="institution" part="institution" institution=${JSON.stringify(this.institution)}>
+                <ft-institution-list-item id="institution" part="institution"
+                    institution=${JSON.stringify(this.institution)}
+                >
                 </ft-institution-list-item>
         
                 <div id="username-box" part="username-box">
-                    <mwc-textfield id="username" part="username" outlined label="Username">
+                    <mwc-textfield id="username" part="username"
+                        outlined
+                        label="Username"
+                        >
                     </mwc-textfield>
                 </div>
         
                 <div id="password-box" part="password-box">
-                    <mwc-textfield id="password" part="password" outlined type="password" label="Password"
-                        iconTrailing="visibility">
+                    <mwc-textfield id="password" part="password"
+                        outlined type="password"
+                        label="Password"
+                        iconTrailing="visibility"
+                    >
                     </mwc-textfield>
                 </div>
         
-                <mwc-button id="button" part="button" unelevated label="Connect" @click=${this._onConnectButtonClicked}>
+                <mwc-button id="button" part="button"
+                    unelevated
+                    label="Connect"
+                    @click=${this._onConnectButtonClicked}
+                >
                 </mwc-button>
         
             </div>
@@ -90,7 +102,10 @@ export class FtEnterCredentials extends LitElement {
                             Check or reset your account access
                         </div>
                     </div>
-                    <mwc-icon-button id="bottom-icon" part="bottom-icon" icon="open_in_new">
+                    <mwc-icon-button id="bottom-icon" part="bottom-icon"
+                        icon="open_in_new"
+                        @click=${this._onCheckButtonClicked}
+                    >
                     </mwc-icon-button>
                 </div>
             </div>
@@ -251,6 +266,14 @@ export class FtEnterCredentials extends LitElement {
         ];
     }
 
+    _onCheckButtonClicked()
+    {
+        if (!this.institution)
+            return;
+        
+        this._openUrl(this.institution.homePageUrl);
+    }
+
     _onConnectButtonClicked()
     {
         var usernameField = this.shadowRoot.querySelector("#username");
@@ -266,6 +289,16 @@ export class FtEnterCredentials extends LitElement {
 
     _handleVisibilityClicked(event) {
         alert("_handleVisibilityClicked");
+    }
+
+    // TODO: Factor out
+    _openUrl(url)
+    {
+        var win = window.open(url, '_blank');
+        if (win)
+            win.focus();
+        else
+            alert("Please allow popups for this site");
     }
 
 }

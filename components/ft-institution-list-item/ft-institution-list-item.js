@@ -127,9 +127,8 @@ export class FtInstitutionListItem extends LitElement {
     }
 
     _getDomain() {
-        // if (!this.institution)
-        //     return "";
-        // return new URL(this.institution.homePageUrl).hostname;
+        const homePageUrl = this.institution.homePageUrl;
+        return new URL(homePageUrl).hostname;
     }
 }
 

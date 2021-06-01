@@ -25,8 +25,6 @@ import '../ft-connection-list/ft-connection-list.js'
 
 export class FtManage extends FtClientMixin(LitElement) {
 
-
-
     constructor() {
         super();
 
@@ -40,8 +38,8 @@ export class FtManage extends FtClientMixin(LitElement) {
 
         <div id="wrapper" part="wrapper">
             <ft-connection-list id="ft-connection-list" part="ft-connection-list"
-                connections=${JSON.stringify(this.connections)}></ft-connection-list>
-                </ft-connection-list>
+                connections=${JSON.stringify(this.connections)}>
+            </ft-connection-list>
         </div>
 
         `;

@@ -27,7 +27,7 @@ import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
 import '../ft-connect/ft-connect.js'
-// import '../ft-connect/ft-manage.js'
+import '../ft-manage/ft-manage.js'
 
 
 export class FtFixture extends FtHttpMixin(LitElement) {
@@ -383,7 +383,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 apiSecret="${this.apiSecret}"
                                 userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
-                                isLive="${this.isLive}"
+                                isLive="false"
                             >
                             </ft-connect>
                         </div>
@@ -391,14 +391,15 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                         <div id="ft-manage-wrapper">
                             <div id="ft-manage-wrapper-label" class="code">&lt;ft-manage&gt;</div>
 
-                            <ft-manage id="ft-manage" class="screen">
+                            <ft-manage id="ft-manage" class="screen"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
                                 apiSecret="${this.apiSecret}"
                                 userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
-                                isLive="false"
+                                isLive="${this.isLive}"
+                            >
                             </ft-manage>
                         </div>
 

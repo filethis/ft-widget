@@ -127,10 +127,10 @@ export class FtConnectionListItem extends LitElement {
     }
 
     _getDomain() {
-        // if (!this.connection)
-        //     return "";
-        // return new URL(this.connection.homePageUrl).hostname;
+        const homePageUrl = this.connection.homePageUrl;
+        return new URL(homePageUrl).hostname;
     }
+
 }
 
 window.customElements.define('ft-connection-list-item', FtConnectionListItem);
