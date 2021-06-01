@@ -43,7 +43,9 @@ export class FtConnectionList extends LitElement {
         return html`
 
         <div id="wrapper" part="wrapper">
-            <mwc-list>
+            <mwc-list
+                 @selected="${this._onConnectionSelected}"
+           >
                 ${!this.connections ? '' : this.connections.map(connection => html`
                 <mwc-list-item>
                     <ft-connection-list-item connection=${JSON.stringify(connection)}>
@@ -82,6 +84,13 @@ export class FtConnectionList extends LitElement {
                         }
         `
         ];
+    }
+
+    _onConnectionSelected(event) {
+        const connectionIndex = event.detail.index;
+        const connection = this.connections[connectionIndex];
+        const newEvent = new CustomEvent('connection-selected', { detail: connection, bubbles: true, composed: true });
+        this.dispatchEvent(newEvent);
     }
 }
 

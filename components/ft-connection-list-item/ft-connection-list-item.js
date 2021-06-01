@@ -40,7 +40,7 @@ export class FtConnectionListItem extends LitElement {
         <div id="wrapper" part="wrapper">
         
             <div id="logo" part="logo" on-tap="_onSourceClicked">
-                <img id="logo-image" part="logo-image" src="${this.connection.logoUrl}">
+                <img id="logo-image" part="logo-image" src="${!this.connection ? '' : this.connection.logoUrl}">
             </div>
         
             <div id="text" part="text">
@@ -127,8 +127,9 @@ export class FtConnectionListItem extends LitElement {
     }
 
     _getDomain() {
+        // if (!this.connection)
+        //     return "";
         // return new URL(this.connection.homePageUrl).hostname;
-        return "fixme";
     }
 }
 

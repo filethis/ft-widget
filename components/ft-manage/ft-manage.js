@@ -20,21 +20,28 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
+import '../ft-connection-list/ft-connection-list.js'
 
 
 export class FtManage extends FtClientMixin(LitElement) {
+
+
 
     constructor() {
         super();
 
         this.live = false;
+
+        this.selectedConnection = null;
     }
 
     render() {
         return html`
 
         <div id="wrapper" part="wrapper">
-            ft-manage
+            <ft-connection-list id="ft-connection-list" part="ft-connection-list"
+                connections=${JSON.stringify(this.connections)}></ft-connection-list>
+                </ft-connection-list>
         </div>
 
         `;
