@@ -208,8 +208,11 @@ export class FtEditConnection extends LitElement {
         ];
     }
 
+    enter() {
+    }
+
     _onBackButtonClicked() {
-        const newEvent = new CustomEvent('credentials-back-button-clicked', { bubbles: true, composed: true });
+        const newEvent = new CustomEvent('edit-connection-back-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(newEvent);
     }
 

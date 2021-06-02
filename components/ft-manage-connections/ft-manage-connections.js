@@ -20,7 +20,6 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-textfield';
-import '@material/mwc-icon';
 import '../../components/ft-connection-list/ft-connection-list.js';
 import '../../components/ft-private-and-secure/ft-private-and-secure.js';
 
@@ -139,6 +138,9 @@ export class FtManageConnections extends LitElement {
                         }
         `
         ];
+    }
+
+    enter() {
     }
 
     updated(changedProperties) {

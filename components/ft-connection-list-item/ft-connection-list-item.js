@@ -18,13 +18,16 @@ limitations under the License.
 
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
+import '@material/mwc-icon';
+import '@material/mwc-icon-button';
 import { light } from "../../mx-design-tokens/index.js";
 
 export class FtConnectionListItem extends LitElement {
 
     static get properties() {
         return {
-            connection: { type: Object }
+            connection: { type: Object },
+            _message: { type: String }
        };
     }
 
@@ -32,6 +35,7 @@ export class FtConnectionListItem extends LitElement {
         super();
 
         this.connection = {};
+        this._message = "Message here";
     }
 
     render() {
@@ -49,12 +53,22 @@ export class FtConnectionListItem extends LitElement {
                     ${!this.connection ? '' : this.connection.name}
                 </div>
         
-                <!-- onclick="location.href='${this.connection.homePageUrl}';" -->
-                <div id="address" part="address">
-                    ${!this.connection ? '' : this._getDomain()}
+                <div id="message" part="message">
+                    ${this._message}
                 </div>
         
             </div>
+
+            <mwc-icon id="emblem" part="emblem">
+                error_outline
+            </mwc-icon>
+
+            <mwc-icon-button id="edit-button" part="edit-button"
+                icon="chevron_right"
+                @click=${this._onEditButtonClicked}
+            >
+            </mwc-icon-button>
+
         </div>
         `;
     }
@@ -93,6 +107,7 @@ export class FtConnectionListItem extends LitElement {
                             max-width:100%;
                         }
                     #text {
+                        flex: 1;
                         height: 36px;
                         top: calc(50% - 36px/2);
                         margin-left: 12px;
@@ -111,7 +126,7 @@ export class FtConnectionListItem extends LitElement {
                             overflow: hidden;
                             text-overflow: ellipsis;
                         }
-                        #address {
+                        #message {
                             position: static;
                             height: 16px;
                             left: 0px;
@@ -122,13 +137,17 @@ export class FtConnectionListItem extends LitElement {
                             line-height: ${unsafeCSS(light.LineHeight.Small)}px;
                             color: ${unsafeCSS(light.Color.Neutral700)};
                         }
+                    #emblem {
+                    }
+                    #edit-button {
+                    }
         `
         ];
     }
 
-    _getDomain() {
-        const homePageUrl = this.connection.homePageUrl;
-        return new URL(homePageUrl).hostname;
+    _onEditButtonClicked() {
+        const event = new CustomEvent('edit-connection-button-clicked', { detail: this.connection, bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
 
 }

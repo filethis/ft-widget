@@ -172,8 +172,8 @@ export class FtSelectYourInstitution extends LitElement {
 
     _onBackButtonClicked()
     {
-        const newEvent = new CustomEvent('institution-back-button-clicked', { bubbles: true, composed: true });
-        this.dispatchEvent(newEvent);
+        const event = new CustomEvent('institution-back-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
 
     _onSearchFieldChanged()
