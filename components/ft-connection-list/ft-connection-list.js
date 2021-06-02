@@ -91,7 +91,7 @@ export class FtConnectionList extends LitElement {
     _onConnectionSelectedInList(event) {
         var connection = null;
         const connectionIndex = event.detail.index;
-        const haveSelection = (connectionIndex >= 0);  // TODO: Verify this
+        const haveSelection = (connectionIndex >= 0);
         if (haveSelection)
             connection = this.connections[connectionIndex];
         if (this._connectionChanges(this.selectedConnection, connection))

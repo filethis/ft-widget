@@ -216,6 +216,9 @@ export class FtEnterCredentials extends LitElement {
         ];
     }
 
+    enter() {
+    }
+
     _onBackButtonClicked() {
         const newEvent = new CustomEvent('credentials-back-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(newEvent);

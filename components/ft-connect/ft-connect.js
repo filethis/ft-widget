@@ -113,7 +113,10 @@ export class FtConnect extends FtClientMixin(LitElement) {
     }
 
     _onInstitutionSelected(event) {
-        this.selectedInstitution = event.detail;
+        const selectedInstitution = event.detail;
+        if (!selectedInstitution)
+            return;
+        this.selectedInstitution = selectedInstitution;
         this._goToPanel("ft-enter-credentials");
     }
 
@@ -123,18 +126,25 @@ export class FtConnect extends FtClientMixin(LitElement) {
         var showSecond = false;
         var showThird = false;
 
+        let nextPanel;
+
         switch (name)
         {
             case "ft-connect-to-your-account":
                 showFirst = true;
+                nextPanel = this.shadowRoot.getElementById("ft-connect-to-your-account");
                 break;
             case "ft-select-your-institution":
                 showSecond = true;
+                nextPanel = this.shadowRoot.getElementById("ft-select-your-institution");
                 break;
             case "ft-enter-credentials":
                 showThird = true;
+                nextPanel = this.shadowRoot.getElementById("ft-enter-credentials");
                 break;
         }
+
+        nextPanel.enter();
 
         this._setPanelShown("ft-connect-to-your-account", showFirst);
         this._setPanelShown("ft-select-your-institution", showSecond);

@@ -226,6 +226,9 @@ export class FtConnectToYourAccount extends LitElement {
         ];
     }
 
+    enter() {
+    }
+
     _onContinueButtonClicked()
     {
         const event = new CustomEvent('ft-connect-to-your-account-continue-command', { bubbles: true, composed: true });

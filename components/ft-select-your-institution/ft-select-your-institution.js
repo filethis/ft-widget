@@ -165,6 +165,11 @@ export class FtSelectYourInstitution extends LitElement {
         ];
     }
 
+    enter() {
+        var list = this.shadowRoot.getElementById("ft-institution-list");
+        list.selectedInstitution = null;
+    }
+
     _onBackButtonClicked()
     {
         const newEvent = new CustomEvent('institution-back-button-clicked', { bubbles: true, composed: true });
