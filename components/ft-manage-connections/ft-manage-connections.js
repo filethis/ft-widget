@@ -28,15 +28,15 @@ export class FtManageConnections extends LitElement {
 
     static get properties() {
         return {
-            connectionCount: { type: Number },
-            connections: { type: Array }
+            connections: { type: Array },
+            _connectionCount: { type: Number }
         };
     }
 
     constructor() {
         super();
-        this.connectionCount = 0;
         this.connections = [];
+        this._connectionCount = 0;
     }
 
     render() {
@@ -52,7 +52,7 @@ export class FtManageConnections extends LitElement {
                     Manage connected accounts
                 </div>
                 <div id="connection-count" part="connection-count">
-                    ${this.connectionCount} connected institutions
+                    ${this._connectionCount} connected institutions
                 </div>
             </div>
         
@@ -140,6 +140,19 @@ export class FtManageConnections extends LitElement {
         `
         ];
     }
+
+    updated(changedProperties) {
+        if (changedProperties.has('connections'))
+            this._updateConnectionCount();
+    }
+
+    _updateConnectionCount() {
+        var count = 0;
+        if (!!this.connections)
+            count = this.connections.length;
+        this._connectionCount = count;
+    }
+
 }
 
 window.customElements.define('ft-manage-connections', FtManageConnections);

@@ -383,7 +383,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 apiSecret="${this.apiSecret}"
                                 userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
-                                isLive="false"
+                                isLive="${this.isLive}"
                             >
                             </ft-connect>
                         </div>

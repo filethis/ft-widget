@@ -29,7 +29,8 @@ export class FtConnectionList extends LitElement {
 
     static get properties() {
         return {
-            connections: { type: Array }
+            connections: { type: Array },
+            selectedConnection: { type: Object }
        };
     }
 
@@ -37,14 +38,15 @@ export class FtConnectionList extends LitElement {
         super();
 
         this.connections = [];
-    } 
+        this.selectedConnection = null;
+    }
 
     render() {
         return html`
 
         <div id="wrapper" part="wrapper">
-            <mwc-list
-                 @selected="${this._onConnectionSelected}"
+            <mwc-list id="list" part="list"
+                 @selected="${this._onConnectionSelectedInList}"
            >
                 ${!this.connections ? '' : this.connections.map(connection => html`
                 <mwc-list-item>
@@ -86,11 +88,58 @@ export class FtConnectionList extends LitElement {
         ];
     }
 
-    _onConnectionSelected(event) {
+    _onConnectionSelectedInList(event) {
+        var connection = null;
         const connectionIndex = event.detail.index;
-        const connection = this.connections[connectionIndex];
-        const newEvent = new CustomEvent('connection-selected', { detail: connection, bubbles: true, composed: true });
-        this.dispatchEvent(newEvent);
+        const haveSelection = (connectionIndex >= 0);  // TODO: Verify this
+        if (haveSelection)
+            connection = this.connections[connectionIndex];
+        if (this._connectionChanges(this.selectedConnection, connection))
+            this.selectedConnection = connection;
+    }
+
+    _connectionChanges(first, second) {
+        return (this._valueChanges(first, second, (first, second) => first.id != second.id))
+    }
+
+    // TODO: Factor out
+    _valueChanges(first, second, test) {
+
+        const firstIsUndefinedOrNull = !first;
+        const secondIsUndefinedOrNull = !second;
+
+        const bothAreUndefinedOrNull = (firstIsUndefinedOrNull && secondIsUndefinedOrNull);
+        if (bothAreUndefinedOrNull)
+            return false;
+
+        const justOneIsUndefinedOrNull = (firstIsUndefinedOrNull || secondIsUndefinedOrNull);
+        if (justOneIsUndefinedOrNull)
+            return true;
+
+        return test(first, second);
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has("selectedConnection"))
+            this._onSelectedConnectionChanged();
+    }
+
+    _onSelectedConnectionChanged() {
+
+        // Make sure the list element is selected
+        const index = this._indexOfSelectedConnection();
+        var list = this.shadowRoot.getElementById("list");
+        list.select(index);
+
+        // Notify
+        const event = new CustomEvent('selected-connection-changed', { detail: this.selectedConnection, bubbles: true, composed: true });
+        this.dispatchEvent(event);
+    }
+
+    _indexOfSelectedConnection() {
+        if (this.selectedConnection == null)
+            return -1;
+        return this.connections.findIndex(connection => connection.id == this.selectedConnection.id);
     }
 }
 

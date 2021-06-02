@@ -42,7 +42,7 @@ export class FtSelectYourInstitution extends LitElement {
         this._searchPattern = "";
         this._haveSearchPattern = false;
         this._institutionsFilteredAndSorted = [];
-   }
+    }
 
     render() {
         return html`

@@ -53,7 +53,7 @@ export class FtConnect extends FtClientMixin(LitElement) {
 
             <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution"
                 institutions=${JSON.stringify(this.institutions)}
-                @institution-selected="${this._onInstitutionSelected}"
+                @selected-institution-changed="${this._onInstitutionSelected}"
                 @institution-back-button-clicked="${this._onInstitutionBackButtonClicked}"
             >
             </ft-select-your-institution>

@@ -29,7 +29,8 @@ export class FtInstitutionList extends LitElement {
 
     static get properties() {
         return {
-            institutions: { type: Array }
+            institutions: { type: Array },
+            selectedInstitution: { type: Object }
        };
     }
 
@@ -37,14 +38,15 @@ export class FtInstitutionList extends LitElement {
         super();
 
         this.institutions = [];
+        this.selectedInstitution = null;
     }
 
     render() {
         return html`
 
         <div id="wrapper" part="wrapper">
-            <mwc-list
-                @selected="${this._onInstitutionSelected}"
+            <mwc-list id="list" part="list"
+                @selected="${this._onInstitutionSelectedInList}"
             >
                 ${!this.institutions ? '' : this.institutions.map(institution => html`
                     <mwc-list-item>
@@ -86,11 +88,58 @@ export class FtInstitutionList extends LitElement {
         ];
     }
 
-    _onInstitutionSelected(event) {
+    _onInstitutionSelectedInList(event) {
+        var institution = null;
         const institutionIndex = event.detail.index;
-        const institution = this.institutions[institutionIndex];
-        const newEvent = new CustomEvent('institution-selected', { detail:institution, bubbles: true, composed: true });
-        this.dispatchEvent(newEvent);
+        const haveSelection = (institutionIndex >= 0);
+        if (haveSelection)
+            institution = this.institutions[institutionIndex];
+        if (this._institutionChanges(this.selectedInstitution, institution))
+            this.selectedInstitution = institution;
+    }
+
+    _institutionChanges(first, second) {
+        return (this._valueChanges(first, second, (first, second) => first.id != second.id ))
+    }
+
+    // TODO: Factor out
+    _valueChanges(first, second, test) {
+
+        const firstIsUndefinedOrNull = !first;
+        const secondIsUndefinedOrNull = !second;
+
+        const bothAreUndefinedOrNull = (firstIsUndefinedOrNull && secondIsUndefinedOrNull);
+        if (bothAreUndefinedOrNull)
+            return false;
+
+        const justOneIsUndefinedOrNull = (firstIsUndefinedOrNull || secondIsUndefinedOrNull);
+        if (justOneIsUndefinedOrNull)
+            return true;
+
+        return test(first, second);
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has("selectedInstitution"))
+            this._onSelectedInstitutionChanged();
+    }
+
+    _onSelectedInstitutionChanged() {
+
+        // Make sure the list element is selected
+        const index = this._indexOfSelectedInstitution();
+        var list = this.shadowRoot.getElementById("list");
+        list.select(index);
+
+        // Notify
+        const event = new CustomEvent('selected-institution-changed', { detail: this.selectedInstitution, bubbles: true, composed: true });
+        this.dispatchEvent(event);
+    }
+
+    _indexOfSelectedInstitution() {
+        if (this.selectedInstitution == null)
+            return -1;
+        return this.institutions.findIndex(institution => institution.id == this.selectedInstitution.id);
     }
 }
 
