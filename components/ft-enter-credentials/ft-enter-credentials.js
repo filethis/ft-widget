@@ -52,63 +52,57 @@ export class FtEnterCredentials extends LitElement {
 
         <div id="wrapper" part="wrapper">
         
-            <div id="top" part="top">
-                <div id="title" part="title">
-                    Enter Credentials
-                </div>
-                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
-                </ft-private-and-secure>
-            </div>
-        
-            <div id="card" part="card">
-        
-                <ft-institution-list-item id="institution" part="institution"
-                    institution=${JSON.stringify(this.institution)}
+            <div id="header" part="header">
+                <mwc-icon-button id="back-button" part="back-button"
+                    icon="chevron_left"
+                    @click=${this._onBackButtonClicked}
                 >
-                </ft-institution-list-item>
-        
-                <div id="username-box" part="username-box">
-                    <mwc-textfield id="username" part="username"
-                        outlined
-                        label="Username"
-                        >
-                    </mwc-textfield>
-                </div>
-        
-                <div id="password-box" part="password-box">
-                    <mwc-textfield id="password" part="password"
-                        outlined type="password"
-                        label="Password"
-                        iconTrailing="visibility"
-                    >
-                    </mwc-textfield>
-                </div>
-        
-                <mwc-button id="button" part="button"
-                    unelevated
-                    label="Connect"
-                    @click=${this._onConnectButtonClicked}
-                >
-                </mwc-button>
-        
+                </mwc-icon-button>
             </div>
-        
+
+            <ft-institution-list-item id="institution" part="institution"
+                institution=${JSON.stringify(this.institution)}
+            >
+            </ft-institution-list-item>
+            
+            <div id="title" part="title">
+                Enter your credentials
+            </div>
+            
+            <mwc-textfield id="username" part="username"
+                outlined
+                label="Username"
+                >
+            </mwc-textfield>
+            
+            <mwc-textfield id="password" part="password"
+                outlined type="password"
+                label="Password" 
+                iconTrailing="visibility"
+            >
+            </mwc-textfield>
+            
+            <mwc-button id="button" part="button"
+                unelevated
+                label="Continue"
+                @click=${this._onConnectButtonClicked}
+            >
+            </mwc-button>
+            
             <div id="bottom" part="bottom">
-                <div id="bottom-inner" part="bottom-inner">
-                    <div id="bottom-text" part="bottom-text">
-                        <div id="go-to-site" part="go-to-site">
-                        </div>
-                        <div id="check-site" part="check-site">
-                            Check or reset your account access
-                        </div>
-                    </div>
-                    <mwc-icon-button id="bottom-icon" part="bottom-icon"
-                        icon="open_in_new"
-                        @click=${this._onCheckButtonClicked}
-                    >
-                    </mwc-icon-button>
+                <div id="check-site" part="check-site">
+                    Check or reset your account access 
                 </div>
+                <mwc-icon-button id="bottom-icon" part="bottom-icon"
+                    icon="open_in_new"
+                    @click=${this._onCheckButtonClicked}
+                >
+                </mwc-icon-button>
             </div>
+
+            <ft-private-and-secure id="private-and-secure" part="private-and-secure">
+            </ft-private-and-secure>
+
         </div>
         `;
     }
@@ -129,141 +123,102 @@ export class FtEnterCredentials extends LitElement {
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
-                align-items: center;
+                align-items: stretch;
             }
-                #top {
-                    position: absolute;
-                    width: 400px;
-                    height: 64px;
-                    left: calc(50% - 400px/2);
-                    top: 0;
-                    background-color: ${unsafeCSS(light.Color.Neutral100)};
+                #header{
                     display: flex;
                     flex-direction: column;
                     justify-content: flex-start;
+                    align-items: flex-start;
+                    height: 56px;
+                }
+                    #back-button{
+                        margin-left: 5px;
+                    }
+                #institution {
+                    margin-left: 24px;
+                    margin-right: 24px;
+                    width:353px;
+                    height: 64px;
+                }
+                #title {
+                    margin-top: 20px;
+                    margin-left: 24px;
+                    margin-right: 24px;
+                    font-size: ${unsafeCSS(light.FontSize.H3)}px;
+                    font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                    line-height: ${unsafeCSS(light.LineHeight.H3)}px;
+                    text-align: left;
+                    color: ${unsafeCSS(light.Color.Neutral900)};
+                }
+                #username {
+                    margin-top: 25px;
+                    margin-left: 24px;
+                    margin-right: 24px;
+                    height: 48px;
+                    --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                    --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                    --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                    --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                    --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
+                }
+                #password {
+                    margin-top: 30px;
+                    margin-left: 24px;
+                    margin-right: 24px;
+                    height: 48px;
+                    --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                    --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                    --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                    --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                    --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
+                }
+                #button {
+                    margin-top: 30px;
+                    margin-left: 24px;
+                    margin-right: 24px;
+                    height: 44px;
+                    --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                    --mdc-theme-on-primary: white;
+                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
+                    --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
+                    --mdc-typography-button-text-transform: none;
+                }
+
+                #bottom {
+                    margin-left: 24px;
+                    margin-right: 10px;
+                    height: 64px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
                     align-items: center;
                 }
-                    #title {
-                        width: 170px;
-                        font-size: ${unsafeCSS(light.FontSize.H3)}px;
-                        font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                        line-height: ${unsafeCSS(light.LineHeight.H3)}px;
-                        text-align: center;
+                    #go-to-site {
+                        font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                        line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    #check-site {
+                        flex: 1;
+                        margin-top: 2px;
+                        font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
+                        line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
-                    #private-and-secure {
-                    }
-                #card {
-                    position: absolute;
-                    width: 400px;
-                    height: 348px;
-                    left: calc(50% - 400px/2);
-                    top: 64px;
-                    background-color: ${unsafeCSS(light.BackgroundColor.Card)};
-                    border-radius: ${unsafeCSS(light.BorderRadius.Card)}px;
+                #private-and-secure {
                 }
-                    #institution {
-                        position: absolute;
-                        width:353px;
-                        height: 64px;
-                        left: 24px;
-                        top: 24px;
-                    }
-                    #username-box {
-                        position: absolute;
-                        height: 80px;
-                        left: 24px;
-                        right: 24px;
-                        top: 112px;
-                    }
-                        #username {
-                            position: absolute;
-                            height: 48px;
-                            left: 0px;
-                            right: 0px;
-                            top: 8px;
-                            --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                            --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                            --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                            --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                            --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-                        }
-                    #password-box {
-                        position: absolute;
-                        height: 80px;
-                        left: 24px;
-                        right: 24px;
-                        top: 192px;
-                    }
-                        #password {
-                            position: absolute;
-                            height: 48px;
-                            left: 0px;
-                            right: 0px;
-                            top: 8px;
-                            --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                            --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                            --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                            --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                            --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-                        }
-                    #button {
-                        position: absolute;
-                        height: 44px;
-                        left: 24px;
-                        right: 24px;
-                        top: 280px;
-                        --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
-                        --mdc-theme-on-primary: white;
-                        --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
-                        --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                        --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
-                        --mdc-typography-button-text-transform: none;
-                    }
-                #bottom {
-                    position: absolute;
-                    width: 400px;
-                    height: 64px;
-                    left: calc(50% - 400px/2);
-                    top: 412px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: stretch;
-                }
-                    #bottom-inner {
-                        margin-left: 25px;
-                        margin-right: 10px;
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;
-                        align-items: center;
-                    }
-                        #bottom-text {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: flex-start;
-                            align-items: flex-start;
-                        }
-                            #go-to-site {
-                                font-size: ${unsafeCSS(light.FontSize.Body)}px;
-                                font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                                line-height: ${unsafeCSS(light.LineHeight.Body)}px;
-                                max-width:300px;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                            }
-                            #check-site {
-                                margin-top: 2px;
-                                font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
-                                line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
-                                color: ${unsafeCSS(light.Color.Neutral900)};
-                            }
-                        #bottom-icon {
-                        }
         `
         ];
+    }
+
+    _onBackButtonClicked() {
+        const newEvent = new CustomEvent('credentials-back-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(newEvent);
     }
 
     _onCheckButtonClicked()
@@ -283,8 +238,12 @@ export class FtEnterCredentials extends LitElement {
             username: usernameField.value,
             password: passwordField.value,
         }
-        const newEvent = new CustomEvent('create-connection-command', { detail: payload, bubbles: true, composed: true });
-        this.dispatchEvent(newEvent);
+
+        const connectEvent = new CustomEvent('create-connection-command', { detail: payload, bubbles: true, composed: true });
+        this.dispatchEvent(connectEvent);
+ 
+        const continueEvent = new CustomEvent('credentials-continue-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(continueEvent);
     }
 
     _handleVisibilityClicked(event) {

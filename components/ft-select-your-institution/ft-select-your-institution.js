@@ -21,6 +21,7 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-textfield';
 import '@material/mwc-icon';
+import '@material/mwc-icon-button';
 import '../../components/ft-institution-list/ft-institution-list.js';
 
 export class FtSelectYourInstitution extends LitElement {
@@ -49,11 +50,17 @@ export class FtSelectYourInstitution extends LitElement {
         <div id="wrapper" part="wrapper">
         
             <div id="header" part="header">
-                <div id="title" part="title">
-                    Select your institution
-                </div>
+                <mwc-icon-button id="back-button" part="back-button"
+                    icon="chevron_left"
+                    @click=${this._onBackButtonClicked}
+                >
+                </mwc-icon-button>
             </div>
         
+            <div id="title" part="title">
+                Select your institution
+            </div>
+
             <mwc-textfield id="search" part="search"
                 outlined
                 label="Search"
@@ -69,9 +76,14 @@ export class FtSelectYourInstitution extends LitElement {
             </ft-institution-list>
         
             <div id="footer" part="footer">
-                <!-- <div id="add" part="add">
-                            Add company manually
-                        </div> -->
+                <mwc-icon-button id="add-button" part="add-button"
+                    icon="add_circle_outline"
+                    @click=${this._onAddButtonClicked}
+                >
+                </mwc-icon-button>
+                <div id="add-text" part="add-text">
+                    Add company manually
+                </div>
             </div>
         
         </div>
@@ -97,46 +109,66 @@ export class FtSelectYourInstitution extends LitElement {
                     justify-content: flex-start;
                     align-items: stretch;
                 }
-                #header{
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    align-items: flex-start;
-                    margin-top: 24px;
-                    margin-left: 24px;
-                    margin-right: 24px;
-                }
+                    #header{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        height: 56px;
+                    }
+                        #back-button{
+                            margin-left: 5px;
+                        }
                     #title {
+                        margin-left: 24px;
+                        margin-right: 24px;
                         height: 32px;
                         font-size: ${unsafeCSS(light.FontSize.H2)}px;
                         font-weight: ${unsafeCSS(light.FontWeight.Bold)};
                         line-height: ${unsafeCSS(light.LineHeight.H2)}px;
-                        text-align: center;
+                        text-align: left;
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
-                #search {
-                    --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                    --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                    --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                    --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                    --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-                }
-                #ft-institution-list {
-                    margin-left: 12px;
-                    width: 376px;
-                }
-                #footer {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    align-items: center;
-                    background-color: ${unsafeCSS(light.Color.Neutral100)};
-                }
-                    #add {
+                    #search {
+                        margin-top: 10px;
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        height: 44px;
+                        --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                        --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
+                        --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
+                        --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
+                        --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
                     }
+                    #ft-institution-list {
+                        flex: 1;
+                        margin-top: 12px;
+                        margin-left: 12px;
+                        width: 376px;
+                        height: 430px;
+                    }
+                    #footer {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        align-items: center;
+                        background-color: ${unsafeCSS(light.Color.Neutral100)};
+                        height: 55px;
+                    }
+                        #add-button {
+                            color: ${unsafeCSS(light.Color.Primary300)};
+                        }
+                        #add-text {
+                            color: ${unsafeCSS(light.Color.Primary300)};
+                        }
         `
         ];
+    }
+
+    _onBackButtonClicked()
+    {
+        const newEvent = new CustomEvent('institution-back-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(newEvent);
     }
 
     _onSearchFieldChanged()

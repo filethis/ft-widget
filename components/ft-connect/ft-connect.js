@@ -40,7 +40,7 @@ export class FtConnect extends FtClientMixin(LitElement) {
         this.selectedInstitution = null;
 
         // Command event listeners
-        this.addEventListener('ft-connect-to-your-account-continue-command', this._onConnectToYourAccountContinueCommand);
+       this.addEventListener('ft-connect-to-your-account-continue-command', this._onConnectToYourAccountContinueCommand);
     }
 
     render() {
@@ -54,11 +54,14 @@ export class FtConnect extends FtClientMixin(LitElement) {
             <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution"
                 institutions=${JSON.stringify(this.institutions)}
                 @institution-selected="${this._onInstitutionSelected}"
+                @institution-back-button-clicked="${this._onInstitutionBackButtonClicked}"
             >
             </ft-select-your-institution>
 
             <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials"
                 institution=${JSON.stringify(this.selectedInstitution)}
+                @credentials-back-button-clicked="${this._onCredentialsBackButtonClicked}"
+                @credentials-continue-button-clicked="${this._onCredentialsContinueButtonClicked}"
             >
             </ft-enter-credentials>
 
@@ -93,9 +96,20 @@ export class FtConnect extends FtClientMixin(LitElement) {
         ];
     }
 
-    _onConnectToYourAccountContinueCommand()
-    {
+    _onConnectToYourAccountContinueCommand() {
         this._goToPanel("ft-select-your-institution");
+    }
+
+    _onInstitutionBackButtonClicked() {
+        this._goToPanel("ft-connect-to-your-account");
+    }
+
+    _onCredentialsBackButtonClicked() {
+        this._goToPanel("ft-select-your-institution");
+    }
+
+    _onCredentialsContinueButtonClicked() {
+        this._goToPanel("ft-connect-to-your-account");
     }
 
     _onInstitutionSelected(event) {
