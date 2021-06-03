@@ -73,6 +73,7 @@ export class FtInstitutionListItem extends LitElement {
                     width: 100%; height: 100%;
                     padding-left:12px;
                     padding-right:12px;
+                    box-sizing: border-box;
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;
@@ -93,11 +94,13 @@ export class FtInstitutionListItem extends LitElement {
                         }
                 #text {
                     flex: 1;
-                        margin-left: 12px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: stretch;
+                    min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
+                    margin-left: 12px;
+                    margin-right: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: stretch;
                 }
                     #name {
                         font-size: ${unsafeCSS(light.FontSize.Body)}px;

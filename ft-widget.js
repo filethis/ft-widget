@@ -58,6 +58,11 @@ export class FtWidget extends LitElement {
     {
         return html`
             <div id="header">
+
+                <div id="title">
+                    FileThis Widget SDK
+                </div>
+
                 <mwc-tab-bar id="tab-bar"
                     activeIndex=${this._selectedTabIndex}
                 >
@@ -65,6 +70,7 @@ export class FtWidget extends LitElement {
                     <mwc-tab label="Fixture"></mwc-tab>
                     <mwc-tab label="Gallery"></mwc-tab>
                 </mwc-tab-bar>
+
             </div>
 
             <div id="content">
@@ -108,6 +114,9 @@ export class FtWidget extends LitElement {
                     justify-content: flex-start;
                     align-items: flex-start;
                 }
+                    title {
+                        font-size: 16pt;
+                    }
                     mwc-tab-bar {
                         width: 400px;
                     }

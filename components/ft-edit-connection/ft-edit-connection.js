@@ -48,7 +48,7 @@ export class FtEditConnection extends LitElement {
         
             <div id="header" part="header">
                 <mwc-icon-button id="back-button" part="back-button"
-                    icon="chevron_left"
+                    icon="arrow_back"
                     @click=${this._onBackButtonClicked}
                 >
                 </mwc-icon-button>
@@ -124,6 +124,7 @@ export class FtEditConnection extends LitElement {
                 }
                     #back-button{
                         margin-left: 5px;
+                        margin-top: 4px;
                     }
                 #institution {
                     margin-left: 24px;

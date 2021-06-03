@@ -51,7 +51,7 @@ export class FtSelectYourInstitution extends LitElement {
         
             <div id="header" part="header">
                 <mwc-icon-button id="back-button" part="back-button"
-                    icon="chevron_left"
+                    icon="arrow_back"
                     @click=${this._onBackButtonClicked}
                 >
                 </mwc-icon-button>
@@ -118,6 +118,7 @@ export class FtSelectYourInstitution extends LitElement {
                     }
                         #back-button{
                             margin-left: 5px;
+                            margin-top: 4px;
                         }
                     #title {
                         margin-left: 24px;
