@@ -56,8 +56,8 @@ export class FtManage extends FtClientMixin(LitElement) {
             <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
                 connection=${JSON.stringify(this._selectedConnection)}
                 institution=${JSON.stringify(this._selectedInstitution)}
-                @edit-connection-button-clicked="${this._onEditConnectionButtonClicked}"
                 @delete-connection-button-clicked="${this._onDeleteConnectionButtonClicked}"
+                @edit-connection-back-button-clicked="${this._onEditConnectionBackButtonClicked}"
             >
             </ft-edit-connection>
 
@@ -120,6 +120,10 @@ export class FtManage extends FtClientMixin(LitElement) {
         dialog.open = true;
     }
 
+    _onEditConnectionBackButtonClicked() {
+        this._goToPanel("ft-manage-connections");
+    }
+    
     _findInstitutionForConnection(connection)
     {
         if (!connection)

@@ -194,7 +194,7 @@ export class FtEditConnection extends LitElement {
     }
 
     _onBackButtonClicked() {
-        const newEvent = new CustomEvent('edit-connection-button-clicked', { bubbles: true, composed: true });
+        const newEvent = new CustomEvent('edit-connection-back-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(newEvent);
     }
 
