@@ -23,13 +23,14 @@ import '@material/mwc-textfield';
 import '@material/mwc-icon';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
-import '../ft-connection-list-item/ft-connection-list-item.js';
+import '../ft-institution-list-item/ft-institution-list-item.js';
 
 export class FtEditConnection extends LitElement {
 
     static get properties() {
         return {
-            connection: { type: Object }
+            connection: { type: Object },
+            institution: { type: Object }
        };
     }
 
@@ -37,6 +38,7 @@ export class FtEditConnection extends LitElement {
         super();
 
         this.connection = null;
+        this.institution = null;
     }
 
     render() {
@@ -52,44 +54,40 @@ export class FtEditConnection extends LitElement {
                 </mwc-icon-button>
             </div>
 
-            <ft-connection-list-item id="connection" part="connection"
-                connection=${JSON.stringify(this.connection)}
+            <ft-institution-list-item id="institution" part="institution"
+                institution=${JSON.stringify(this.institution)}
             >
-            </ft-connection-list-item>
-            
-            <div id="title" part="title">
-                Enter your credentials
-            </div>
-            
-            <mwc-textfield id="username" part="username"
-                outlined
-                label="Username"
-                >
-            </mwc-textfield>
-            
-            <mwc-textfield id="password" part="password"
-                outlined type="password"
-                label="Password" 
-                iconTrailing="visibility"
-            >
-            </mwc-textfield>
-            
-            <mwc-button id="button" part="button"
-                unelevated
-                label="Continue"
-                @click=${this._onConnectButtonClicked}
-            >
-            </mwc-button>
-            
-            <div id="bottom" part="bottom">
+            </ft-institution-list-item>
+
+            <div id="site" part="site">
                 <div id="check-site" part="check-site">
-                    Check or reset your account access 
+                    Check or reset your account access
                 </div>
                 <mwc-icon-button id="bottom-icon" part="bottom-icon"
                     icon="open_in_new"
                     @click=${this._onCheckButtonClicked}
                 >
                 </mwc-icon-button>
+            </div>
+
+            <div id="disconnect-box" part="disconnect-box">
+                <div id="disconnect-text" part="disconnect-text">
+        
+                    <div id="disconnect-title" part="disconnect-title">
+                        Disconnect this institution 
+                    </div>
+                    <div id="disconnect-explanation" part="disconnect-explanation">
+                        Stop sharing information
+                    </div>
+                
+                </div>
+                
+                <mwc-icon-button id="disconnect-button" part="disconnect-button"
+                    icon="chevron_right"
+                    @click=${this._onDisconnectButtonClicked}
+                >
+                </mwc-icon-button>
+
             </div>
 
             <ft-private-and-secure id="private-and-secure" part="private-and-secure">
@@ -127,58 +125,12 @@ export class FtEditConnection extends LitElement {
                     #back-button{
                         margin-left: 5px;
                     }
-                #connection {
+                #institution {
                     margin-left: 24px;
                     margin-right: 24px;
-                    width:353px;
                     height: 64px;
                 }
-                #title {
-                    margin-top: 20px;
-                    margin-left: 24px;
-                    margin-right: 24px;
-                    font-size: ${unsafeCSS(light.FontSize.H3)}px;
-                    font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                    line-height: ${unsafeCSS(light.LineHeight.H3)}px;
-                    text-align: left;
-                    color: ${unsafeCSS(light.Color.Neutral900)};
-                }
-                #username {
-                    margin-top: 25px;
-                    margin-left: 24px;
-                    margin-right: 24px;
-                    height: 48px;
-                    --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                    --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                    --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                    --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                    --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-                }
-                #password {
-                    margin-top: 30px;
-                    margin-left: 24px;
-                    margin-right: 24px;
-                    height: 48px;
-                    --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
-                    --mdc-text-field-outlined-idle-border-color: ${unsafeCSS(light.Color.Neutral600)};
-                    --mdc-text-field-outlined-hover-border-color: ${unsafeCSS(light.Color.Neutral900)};
-                    --mdc-text-field-ink-color: ${unsafeCSS(light.Color.Neutral900)};
-                    --mdc-text-field-label-ink-color: ${unsafeCSS(light.Color.Neutral600)};
-                }
-                #button {
-                    margin-top: 30px;
-                    margin-left: 24px;
-                    margin-right: 24px;
-                    height: 44px;
-                    --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
-                    --mdc-theme-on-primary: white;
-                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
-                    --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
-                    --mdc-typography-button-text-transform: none;
-                }
-
-                #bottom {
+                #site {
                     margin-left: 24px;
                     margin-right: 10px;
                     height: 64px;
@@ -202,6 +154,36 @@ export class FtEditConnection extends LitElement {
                         line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
+                #disconnect-box {
+                    margin-left: 24px;
+                    margin-right: 10px;
+                    height: 64px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+                    #disconnect-text {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: stretch;
+                    }
+                        #disconnect-title {
+                            color: ${unsafeCSS(light.Color.Error300)};
+                            font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                            line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                        }
+                        #disconnect-explanation {
+                            margin-top: 6px;
+                            color: ${unsafeCSS(light.Color.Error300)};
+                            font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
+                            line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
+                        }
+                    #disconnect-button {
+                        }
                 #private-and-secure {
                 }
         `
@@ -212,18 +194,22 @@ export class FtEditConnection extends LitElement {
     }
 
     _onBackButtonClicked() {
-        const newEvent = new CustomEvent('edit-connection-back-button-clicked', { bubbles: true, composed: true });
+        const newEvent = new CustomEvent('edit-connection-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(newEvent);
     }
 
-    _onCheckButtonClicked()
-    {
+    _onCheckButtonClicked() {
         if (!this.connection)
             return;
-        
+
         this._openUrl(this.connection.homePageUrl);
     }
 
+    _onDisconnectButtonClicked() {
+        const newEvent = new CustomEvent('delete-connection-button-clicked', { detail: this.connection, bubbles: true, composed: true });
+        this.dispatchEvent(newEvent);
+    }
+    
     _onConnectButtonClicked()
     {
         var usernameField = this.shadowRoot.querySelector("#username");

@@ -27,7 +27,8 @@ export class FtManage extends FtClientMixin(LitElement) {
 
     static get properties() {
         return {
-            selectedConnection: { type: Object }
+            _selectedConnection: { type: Object },
+            _selectedInstitution: { type: Object }
         };
     }
 
@@ -36,7 +37,8 @@ export class FtManage extends FtClientMixin(LitElement) {
 
         this.live = false;
 
-        this.selectedConnection = null;
+        this._selectedConnection = null;
+        this._selectedInstitution = null;
 
         this.addEventListener('edit-connection-button-clicked', this._onEditConnectionButtonClicked);
     }
@@ -49,15 +51,25 @@ export class FtManage extends FtClientMixin(LitElement) {
             <ft-manage-connections id="ft-manage-connections" part="ft-manage-connections"
                 connections=${JSON.stringify(this.connections)}
             >
-                </ft-manage-connections>
+            </ft-manage-connections>
 
             <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
-                connections=${JSON.stringify(this.selectedConnection)}
-                @edit-connection-back-button-clicked="${this._onEditConnectionBackButtonClicked}"
+                connection=${JSON.stringify(this._selectedConnection)}
+                institution=${JSON.stringify(this._selectedInstitution)}
+                @edit-connection-button-clicked="${this._onEditConnectionButtonClicked}"
+                @delete-connection-button-clicked="${this._onDeleteConnectionButtonClicked}"
             >
             </ft-edit-connection>
 
         </div>
+
+        <mwc-dialog id="delete-connection-confirm-dialog"
+            @closed="${this._onDeleteConnectionConfirmDialog}"
+        >
+            <div>Are you sure you want to delete this connection?</div>
+            <mwc-button slot="primaryAction" dialogAction="confirmed">Delete</mwc-button>
+            <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
+        </mwc-dialog>
 
         `;
     }
@@ -86,13 +98,34 @@ export class FtManage extends FtClientMixin(LitElement) {
         ];
     }
 
+    _onDeleteConnectionConfirmDialog(event)
+    {
+        if (event.detail.action == "confirmed")
+        {
+            const newEvent = new CustomEvent('delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
+            this.dispatchEvent(newEvent);
+
+            this._goToPanel("ft-manage-connections");
+        }
+    }
+
     _onEditConnectionButtonClicked(event) {
-        this.selectedConnection = event.detail;
+        this._selectedConnection = event.detail;
+        this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
         this._goToPanel("ft-edit-connection");
     }
 
-    _onEditConnectionBackButtonClicked() {
-        this._goToPanel("ft-manage-connections");
+    _onDeleteConnectionButtonClicked() {
+        var dialog = this.shadowRoot.querySelector("#delete-connection-confirm-dialog");
+        dialog.open = true;
+    }
+
+    _findInstitutionForConnection(connection)
+    {
+        if (!connection)
+            return null;
+        const institution = this.institutions.find(institution => institution.id == connection.sourceId);
+        return institution;
     }
 
     _goToPanel(name) {
