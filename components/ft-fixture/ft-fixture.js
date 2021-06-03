@@ -176,7 +176,6 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 outlined
                                 type="password"
                                 label="API Key"
-                                iconTrailing="visibility"
                                 value="${this.apiKey}"
                             >
                             </mwc-textfield>
@@ -185,7 +184,6 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 outlined 
                                 type="password"
                                 label="API Secret"
-                                iconTrailing="visibility"
                                 value="${this.apiSecret}"
                             >
                             </mwc-textfield>
@@ -301,7 +299,6 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     outlined 
                                     type="password"
                                     label="User Access Token"
-                                    iconTrailing="visibility"
                                     value="${this.userAccessToken}"
                                 >
                                 </mwc-textfield>
@@ -329,19 +326,19 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             >
                             </ft-labeled-icon-button>
 
-                            <mwc-dialog id="token-delete-confirm-dialog" @closed="${this._onTokenDeleteConfirmDialog}">
-                                <div>Creating a new user access token will first delete the current one, if it exists.</div>
-                                <div>Do you want do proceed?.</div>
-                                <mwc-button slot="primaryAction" dialogAction="confirmed">Delete Token</mwc-button>
-                                <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
-                            </mwc-dialog>
-
                             <ft-labeled-icon-button id="user-access-token-new-button"
                                 icon="add"
                                 label="New"
                                 @click="${this._onCreateTokenButtonClicked}"
                             >
                             </ft-labeled-icon-button>
+
+                            <mwc-dialog id="token-delete-confirm-dialog" @closed="${this._onTokenDeleteConfirmDialog}">
+                                <div>Creating a new user access token will first delete the current one, if it exists.</div>
+                                <div>Do you want do proceed?.</div>
+                                <mwc-button slot="primaryAction" dialogAction="confirmed">Delete Token</mwc-button>
+                                <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
+                            </mwc-dialog>
 
                             <mwc-dialog id="token-create-confirm-dialog" @closed="${this._onTokenCreateConfirmDialog}">
                                 <div>Creating a new user access token will first delete the current one, if it exists.</div>
@@ -463,7 +460,6 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: stretch;
-                                    margin-right: 25px;
                                 }
                                     #api-key-field {
                                     }
@@ -480,20 +476,43 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                         flex: 1;
                                         margin-right: 25px;
                                     }
+                                    #account-code-button {
+                                        margin-left: 10px;
+                                    }
+                                    #account-delete-button {
+                                        margin-left: 10px;
+                                    }
+                                    #account-new-button {
+                                        margin-left: 10px;
+                                    }
                                 #user-access-token-panel-content {
                                     display: flex;
                                     flex-direction: row;
                                     justify-content: flex-start;
-                                    align-items: center;
+                                    align-items: flex-end;
                                 }
                                     #timeout-and-token {
+                                        flex: 1;
                                         margin-right: 25px;
                                         display: flex;
                                         flex-direction: column;
                                         justify-content: flex-start;
                                         align-items: stretch;
                                     }
-                                    #user-access-token-field {
+                                        #user-access-timeout-field {
+                                            width: 120px;
+                                        }
+                                        #user-access-token-field {
+                                            margin-top: 20px;
+                                        }
+                                    #user-access-token-code-button {
+                                        margin-left: 10px;
+                                    }
+                                    #user-access-token-delete-button {
+                                        margin-left: 10px;
+                                    }
+                                    #user-access-token-new-button {
+                                        margin-left: 10px;
                                     }
                     #instance-panel {
                         flex: 1;
@@ -505,7 +524,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                         #instance-header {
                             height: 60px;
                             border-bottom: 1px solid #DDD;
-                            padding-left: 20px;
+                            padding-left: 24px;
                             padding-right: 10px;
                             display: flex;
                             flex-direction: row;
@@ -625,9 +644,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             }
             .panel-top
             {
-                margin-top: 20px;
                 border-top: 1px solid #DDD;
-                padding-top: 10px;
             }
             .tooltip
             {

@@ -95,6 +95,10 @@ export class FtFormPanel extends LitElement {
                 display: block;
                 overflow: hidden;
                 font-family: ${unsafeCSS(light.Font.Regular)};
+                padding-left: 8px;
+                padding-top: 10px;
+                padding-right: 14px;
+                padding-bottom: 10px;
             }
                 #wrapper {
                     position:relative;
@@ -114,6 +118,7 @@ export class FtFormPanel extends LitElement {
                         }
                         #heading {
                             font-size: 14pt;
+                            margin-left: -4px;
                             margin-right: 15px;
                         }
                         #summary {
@@ -124,7 +129,9 @@ export class FtFormPanel extends LitElement {
                         #controls {
                         }
                     #content-wrapper {
-                        padding-left: 35px;
+                        margin-left: 44px;
+                        margin-top: 16px;
+                        margin-bottom: 10px;
                         display: flex;
                         flex-direction: column;
                         justify-content: flex-start;

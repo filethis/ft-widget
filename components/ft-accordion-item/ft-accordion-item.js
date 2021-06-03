@@ -104,8 +104,8 @@ export class FtAccordionItem extends LitElement {
                         #open-header {
                             height: 60px;
                             border-bottom: 1px solid #DDD;
-                            padding-left: 20px;
-                            padding-right: 10px;
+                            margin-left: 24px;
+                            margin-right: 14px;
                             display: flex;
                             flex-direction: row;
                             justify-content: flex-start;
@@ -116,7 +116,7 @@ export class FtAccordionItem extends LitElement {
                                 font-size: 16pt;
                             }
                             #hide-button {
-                                margin-top: 3px;
+                                margin-top: 2px;
                             }
                     #closed {
                         display: flex;
@@ -134,7 +134,7 @@ export class FtAccordionItem extends LitElement {
                             align-items: center;
                         }
                             #show-button {
-                                margin-top: 15px;
+                                margin-top: 7px;
                             }
                         #closed-heading-wrapper {
                                 width:20px;
