@@ -108,34 +108,26 @@ export class FtConnectionListItem extends LitElement {
                         }
                     #text {
                         flex: 1;
-                        height: 36px;
-                        top: calc(50% - 36px/2);
                         margin-left: 12px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: stretch;
                     }
                         #name {
-                            position: static;
-                            height: 20px;
-                            left: 0px;
-                            right: 0px;
-                            top: calc(50% - 20px/2 - 8px);
                             font-size: ${unsafeCSS(light.FontSize.Body)}px;
                             font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
                             line-height: ${unsafeCSS(light.LineHeight.Body)}px;
-                            max-width:300px;
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
                         }
                         #message {
-                            position: static;
-                            height: 16px;
-                            left: 0px;
-                            right: 0px;
-                            top: calc(50% - 16px/2 + 10px);
-                            /* cursor: pointer; */
                             font-size: ${unsafeCSS(light.FontSize.Small)}px;
                             line-height: ${unsafeCSS(light.LineHeight.Small)}px;
                             color: ${unsafeCSS(light.Color.Neutral700)};
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                         }
                     #emblem {
                     }

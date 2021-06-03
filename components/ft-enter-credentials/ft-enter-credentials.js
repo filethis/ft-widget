@@ -217,6 +217,14 @@ export class FtEnterCredentials extends LitElement {
     }
 
     enter() {
+        this.clear();
+    }
+
+    clear() {
+        var usernameField = this.shadowRoot.querySelector("#username");
+        var passwordField = this.shadowRoot.querySelector("#password");
+        usernameField.value = "";
+        passwordField.value = "";
     }
 
     _onBackButtonClicked() {
