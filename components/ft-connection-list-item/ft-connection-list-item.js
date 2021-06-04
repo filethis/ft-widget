@@ -117,7 +117,7 @@ export class FtConnectionListItem extends LitElement {
                         display: flex;
                         flex-direction: row;
                         justify-content: flex-start;
-                        align-items: stretch;
+                        align-items: center;
                         border-bottom: solid 1px ${unsafeCSS(light.Color.Neutral300)};
                     }
                         #text {
@@ -155,6 +155,8 @@ export class FtConnectionListItem extends LitElement {
     }
 
     _onEditButtonClicked() {
+        this.shadowRoot.getElementById("edit-button").blur();
+        
         const event = new CustomEvent('edit-connection-button-clicked', { detail: this.connection, bubbles: true, composed: true });
         this.dispatchEvent(event);
     }

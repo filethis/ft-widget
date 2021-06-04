@@ -200,6 +200,8 @@ export class FtEditConnection extends LitElement {
     }
 
     _onCheckButtonClicked() {
+        this.shadowRoot.getElementById("bottom-icon").blur();
+
         if (!this.connection)
             return;
 

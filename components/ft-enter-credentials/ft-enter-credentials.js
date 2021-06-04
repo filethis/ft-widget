@@ -235,6 +235,8 @@ export class FtEnterCredentials extends LitElement {
 
     _onCheckButtonClicked()
     {
+        this.shadowRoot.getElementById("bottom-icon").blur();
+
         if (!this.institution)
             return;
         

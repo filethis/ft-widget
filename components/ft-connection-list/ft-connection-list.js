@@ -82,7 +82,7 @@ export class FtConnectionList extends LitElement {
                     }
                         mwc-list-item {
                             width: 376px;
-                            height: 72px;
+                            height: 64px;
                             --mdc-list-side-padding: 0;
                             --mdc-list-vertical-padding: 0;
                         }
