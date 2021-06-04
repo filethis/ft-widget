@@ -91,9 +91,6 @@ export class FtConnectionListItem extends LitElement {
                 #wrapper {
                     position:relative;
                     width: 100%; height: 100%;
-                    padding-left:12px;
-                    padding-right:12px;
-                    box-sizing: border-box;
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;

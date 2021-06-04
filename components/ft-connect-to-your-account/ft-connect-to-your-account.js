@@ -35,7 +35,7 @@ export class FtConnectToYourAccount extends LitElement {
             </div>
         
             <div id="explanation" part="explanation" class="body">
-                Dropbox will have access to the information below unless you choose to disconnect:
+                We will have access to the information below unless you choose to disconnect:
             </div>
         
             <div id="bullet1" part="bullet1" class="bullet"></div>

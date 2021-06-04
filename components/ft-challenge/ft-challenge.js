@@ -111,13 +111,18 @@ export class FtChallenge extends LitElement {
                         display: flex;
                         flex-direction: column;
                         justify-content: flex-start;
-                        align-items: flex-start;
+                        align-items: stretch;
                         height: 56px;
                     }
                         #back-button{
                             margin-left: 5px;
                             margin-top: 4px;
                         }
+                    #institution {
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        height: 64px;
+                    }
                     #title {
                         margin-left: 24px;
                         margin-right: 24px;
@@ -129,15 +134,23 @@ export class FtChallenge extends LitElement {
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
                     #content {
+                        margin-left: 24px;
+                        margin-right: 24px;
                         margin-top:20px;
                     }
                     #button {
+                        margin-left: 24px;
+                        margin-right: 24px;
                         margin-top:20px;
                     }
                     #help {
+                        margin-left: 24px;
+                        margin-right: 24px;
                         margin-top:20px;
                     }
                     #thing {
+                        margin-left: 24px;
+                        margin-right: 24px;
                         margin-top:20px;
                     }
         `,

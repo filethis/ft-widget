@@ -86,6 +86,11 @@ export class FtConnectionList extends LitElement {
                             --mdc-list-side-padding: 0;
                             --mdc-list-vertical-padding: 0;
                         }
+                            ft-connection-list-item {
+                                padding-left:12px;
+                                padding-right:12px;
+                                box-sizing: border-box;
+                            }
         `
         ];
     }

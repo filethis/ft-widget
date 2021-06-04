@@ -67,15 +67,11 @@ export class FtInstitutionListItem extends LitElement {
                 display: block;
                 overflow: hidden;
                 font-family: ${unsafeCSS(light.Font.Regular)};
-                width: 376px;
                 height: 72px;
             }
                 #wrapper {
                     position:relative;
                     width: 100%; height: 100%;
-                    padding-left:12px;
-                    padding-right:12px;
-                    box-sizing: border-box;
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;

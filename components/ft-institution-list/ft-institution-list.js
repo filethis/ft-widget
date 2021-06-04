@@ -30,7 +30,8 @@ export class FtInstitutionList extends LitElement {
     static get properties() {
         return {
             institutions: { type: Array },
-            selectedInstitution: { type: Object }
+            selectedInstitution: { type: Object },
+            demo: { type: Object }
        };
     }
 
@@ -39,6 +40,7 @@ export class FtInstitutionList extends LitElement {
 
         this.institutions = [];
         this.selectedInstitution = null;
+        this.demo = false;
     }
 
     render() {
@@ -84,6 +86,11 @@ export class FtInstitutionList extends LitElement {
                             --mdc-list-side-padding: 0;
                             --mdc-list-vertical-padding: 0;
                         }
+                        ft-institution-list-item {
+                            padding-left:12px;
+                            padding-right:12px;
+                            box-sizing: border-box;
+                        }
         `
         ];
     }
@@ -122,6 +129,8 @@ export class FtInstitutionList extends LitElement {
     updated(changedProperties) {
         if (changedProperties.has("selectedInstitution"))
             this._onSelectedInstitutionChanged();
+        if (changedProperties.has("demo"))
+            this._onDemoChanged();
     }
 
     _onSelectedInstitutionChanged() {
@@ -140,6 +149,27 @@ export class FtInstitutionList extends LitElement {
         if (this.selectedInstitution == null)
             return -1;
         return this.institutions.findIndex(institution => institution.id == this.selectedInstitution.id);
+    }
+
+    _onDemoChanged() {
+        if (this.demo)
+            this._loadFakeInstitutions();
+    }
+
+    _loadFakeInstitutions() {
+        var path = "/components/ft-institution-list/dev/fake-institutions.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var institutions = JSON.parse(request.responseText);
+                this.institutions = institutions;
+            }
+        }.bind(this);
+        request.send();
     }
 }
 

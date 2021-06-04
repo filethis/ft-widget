@@ -4,20 +4,26 @@
 
 <head>
     <meta charset="utf-8">
-    <title>&lt;ft-connect-to-your-account&gt; Demo</title>
-    <script type="module" src="../ft-connect-to-your-account.js"></script>
+    <title>&lt;ft-form-panel&gt; Demo</title>
+    <script type="module" src="../ft-form-panel.js"></script>
+    <script type="module" src="../../ft-demo/ft-demo.js"></script>
     <!-- TODO: Find a way to load the icons inside the components -->
     <!-- https://google.github.io/material-design-icons/#getting-icons -->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+  
     <style>
-      #ft-connect-to-your-account {
-        border: solid 1px gray;
+      html,
+      body {
+          height: 100%;
+          margin: 0;
       }
     </style>
 </head>
 
 <body>
-    <ft-connect-to-your-account id="ft-connect-to-your-account"></ft-connect-to-your-account>
+    <ft-demo>
+        <ft-form-panel id="ft-form-panel"></ft-form-panel>
+    </ft-demo>
 </body>
 
 </html>

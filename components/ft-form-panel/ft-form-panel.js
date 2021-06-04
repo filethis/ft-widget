@@ -143,6 +143,7 @@ export class FtFormPanel extends LitElement {
 
     _onShowOrHideButtonClicked()
     {
+        this.shadowRoot.getElementById("show-hide-button").blur();
         this.contentShown = !this.contentShown;
     }
 

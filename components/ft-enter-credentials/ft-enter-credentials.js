@@ -30,7 +30,8 @@ export class FtEnterCredentials extends LitElement {
 
     static get properties() {
         return {
-            institution: { type: Object }
+            institution: { type: Object },
+            demo: { type: Object }
        };
     }
 
@@ -38,6 +39,7 @@ export class FtEnterCredentials extends LitElement {
         super();
 
         this.institution = null;
+        this.demo = false;
     }
 
     firstUpdated()
@@ -62,6 +64,7 @@ export class FtEnterCredentials extends LitElement {
 
             <ft-institution-list-item id="institution" part="institution"
                 institution=${JSON.stringify(this.institution)}
+                demo="${this.demo}"
             >
             </ft-institution-list-item>
             
@@ -139,7 +142,6 @@ export class FtEnterCredentials extends LitElement {
                 #institution {
                     margin-left: 24px;
                     margin-right: 24px;
-                    width:353px;
                     height: 64px;
                 }
                 #title {

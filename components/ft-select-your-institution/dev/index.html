@@ -6,18 +6,27 @@
     <meta charset="utf-8">
     <title>&lt;ft-select-your-institution&gt; Demo</title>
     <script type="module" src="../ft-select-your-institution.js"></script>
+    <script type="module" src="../../ft-demo/ft-demo.js"></script>
     <!-- TODO: Find a way to load the icons inside the components -->
     <!-- https://google.github.io/material-design-icons/#getting-icons -->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+    
     <style>
-        #ft-select-your-institution {
-            border: solid 1px gray;
+        html,
+        body {
+            height: 100%;
+            margin: 0;
         }
     </style>
 </head>
 
 <body>
-    <ft-select-your-institution id="ft-select-your-institution"></ft-select-your-institution>
+    <ft-demo>
+        <ft-select-your-institution id="ft-select-your-institution"
+            demo="true"
+        >
+        </ft-select-your-institution>
+    </ft-demo>
 </body>
 
 </html>
