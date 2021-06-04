@@ -24,26 +24,55 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { Layouts } from 'lit-flexbox-literals';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
+import '@material/mwc-icon-button';
+import '../../components/ft-institution-list-item/ft-institution-list-item.js';
+
 export class FtChallenge extends LitElement {
+
+    static get properties() {
+        return {
+            institution: { type: Object },
+            demo: { type: Object }
+        };
+    }
+
+    constructor() {
+        super();
+
+        this.institution = null;
+        this.demo = false;
+    }
 
     render() {
         return html`
 
-        <div class="layout vertical center">
-        
-            <!-- <img id="logo" part="logo"
-                        src="../Placeholder.png"
-                    /> -->
-        
-            <div id="title" part="title">
-                Title
+        <div id="wrapper" part="wrapper">
+                
+            <div id="header" part="header">
+                <mwc-icon-button id="back-button" part="back-button"
+                    icon="arrow_back"
+                    @click=${this._onBackButtonClicked}
+                >
+                </mwc-icon-button>
             </div>
-        
+    
+            <ft-institution-list-item id="institution" part="institution"
+                institution=${JSON.stringify(this.institution)}
+                demo="${this.demo}"
+            >
+            </ft-institution-list-item>
+
+            <div id="title" part="title">
+                Authenticate
+            </div>
+                    
             <div id="content" part="content">
                 Content
             </div>
         
-            <mwc-button id="button" part="button" outlined label="Continue" part="button"
+            <mwc-button id="button" part="button"
+                outlined
+                label="Continue"
                 @click=${this._onContinueButtonClicked}>
             </mwc-button>
         
@@ -68,35 +97,64 @@ export class FtChallenge extends LitElement {
                 overflow: hidden;
                 width: 400px;
                 height: 650px;
-                padding: 25px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
-                #logo {
-                    margin-top: 30px;
-                    width:250px; height:auto;
+                #wrapper {
+                    position:relative;
+                    width: 100%; height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: stretch;
                 }
-                #title {
-                    margin-top:20px;
-                }
-                #content {
-                    margin-top:20px;
-                }
-                #button {
-                    margin-top:20px;
-                }
-                #help {
-                    margin-top:20px;
-                }
-                #thing {
-                    margin-top:20px;
-                }
+                    #header{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        height: 56px;
+                    }
+                        #back-button{
+                            margin-left: 5px;
+                            margin-top: 4px;
+                        }
+                    #title {
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        height: 32px;
+                        font-size: ${unsafeCSS(light.FontSize.H2)}px;
+                        font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                        line-height: ${unsafeCSS(light.LineHeight.H2)}px;
+                        text-align: left;
+                        color: ${unsafeCSS(light.Color.Neutral900)};
+                    }
+                    #content {
+                        margin-top:20px;
+                    }
+                    #button {
+                        margin-top:20px;
+                    }
+                    #help {
+                        margin-top:20px;
+                    }
+                    #thing {
+                        margin-top:20px;
+                    }
         `,
             Layouts
         ];
     }
 
-    _onContinueButtonClicked(thing) {
-        alert("yeah");
+    enter() {
+    }
+
+    _onBackButtonClicked()
+    {
+        const event = new CustomEvent('challenge-back-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(event);
+    }
+
+    _onContinueButtonClicked() {
     }
 
 }

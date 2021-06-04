@@ -24,7 +24,8 @@ export class FtInstitutionListItem extends LitElement {
 
     static get properties() {
         return {
-            institution: { type: Object }
+            institution: { type: Object },
+            demo: { type: Object }
        };
     }
 
@@ -32,6 +33,7 @@ export class FtInstitutionListItem extends LitElement {
         super();
 
         this.institution = {};
+        this.demo = false;
     }
 
     render() {
@@ -121,8 +123,36 @@ export class FtInstitutionListItem extends LitElement {
         ];
     }
 
+    updated(changedProperties) {
+        if (changedProperties.has("demo"))
+            this._onDemoChanged();
+    }
+
+    _onDemoChanged() {
+        if (this.demo)
+            this._loadFakeInstitution();
+    }
+
+    _loadFakeInstitution() {
+        var path = "/components/ft-institution-list-item/dev/fake-institution.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var institution = JSON.parse(request.responseText);
+                this.institution = institution;
+            }
+        }.bind(this);
+        request.send();
+    }
+
     _getDomain() {
         const homePageUrl = this.institution.homePageUrl;
+        if (!homePageUrl)
+            return;
         return new URL(homePageUrl).hostname;
     }
 }

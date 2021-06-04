@@ -27,7 +27,8 @@ export class FtConnectionListItem extends LitElement {
     static get properties() {
         return {
             connection: { type: Object },
-            _message: { type: String }
+            _message: { type: String },
+            demo: { type: Object }
        };
     }
 
@@ -36,6 +37,7 @@ export class FtConnectionListItem extends LitElement {
 
         this.connection = {};
         this._message = "Message here";
+        this.demo = false;
     }
 
     render() {
@@ -154,11 +156,37 @@ export class FtConnectionListItem extends LitElement {
         ];
     }
 
+    updated(changedProperties) {
+        if (changedProperties.has("demo"))
+            this._onDemoChanged();
+    }
+
     _onEditButtonClicked() {
         this.shadowRoot.getElementById("edit-button").blur();
         
         const event = new CustomEvent('edit-connection-button-clicked', { detail: this.connection, bubbles: true, composed: true });
         this.dispatchEvent(event);
+    }
+
+    _onDemoChanged() {
+        if (this.demo)
+            this._loadFakeConnection();
+    }
+
+    _loadFakeConnection() {
+        var path = "/components/ft-connection-list-item/dev/fake-connection.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var connection = JSON.parse(request.responseText);
+                this.connection = connection;
+            }
+        }.bind(this);
+        request.send();
     }
 
 }
