@@ -30,7 +30,8 @@ export class FtConnectionList extends LitElement {
     static get properties() {
         return {
             connections: { type: Array },
-            selectedConnection: { type: Object }
+            selectedConnection: { type: Object },
+            demo: { type: Object }
        };
     }
 
@@ -39,6 +40,7 @@ export class FtConnectionList extends LitElement {
 
         this.connections = [];
         this.selectedConnection = null;
+        this.demo = false;
     }
 
     render() {
@@ -122,6 +124,8 @@ export class FtConnectionList extends LitElement {
     updated(changedProperties) {
         if (changedProperties.has("selectedConnection"))
             this._onSelectedConnectionChanged();
+        if (changedProperties.has("demo"))
+            this._onDemoChanged();
     }
 
     _onSelectedConnectionChanged() {
@@ -141,6 +145,28 @@ export class FtConnectionList extends LitElement {
             return -1;
         return this.connections.findIndex(connection => connection.id == this.selectedConnection.id);
     }
+
+    _onDemoChanged() {
+        if (this.demo)
+            this._loadFakeConnections();
+    }
+
+    _loadFakeConnections() {
+        var path = "/components/ft-connection-list/dev/fake-connections.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var connections = JSON.parse(request.responseText);
+                this.connections = connections;
+            }
+        }.bind(this);
+        request.send();
+    }
+
 }
 
 window.customElements.define('ft-connection-list', FtConnectionList);

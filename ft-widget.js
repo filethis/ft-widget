@@ -112,12 +112,14 @@ export class FtWidget extends LitElement {
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;
-                    align-items: flex-start;
+                    align-items: center;
                 }
-                    title {
+                    #title {
+                        margin-left: 24px;
                         font-size: 16pt;
                     }
                     mwc-tab-bar {
+                        margin-left: 50px;
                         width: 400px;
                     }
                         mwc-tab {

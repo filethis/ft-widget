@@ -46,29 +46,32 @@ export class FtConnectionListItem extends LitElement {
             <div id="logo" part="logo" on-tap="_onSourceClicked">
                 <img id="logo-image" part="logo-image" src="${!this.connection ? '' : this.connection.logoUrl}">
             </div>
-        
-            <div id="text" part="text">
-        
-                <div id="name" part="name">
-                    ${!this.connection ? '' : this.connection.name}
+
+            <div id="text-and-buttons" part="text-and-buttons">
+
+                <div id="text" part="text">
+            
+                    <div id="name" part="name">
+                        ${!this.connection ? '' : this.connection.name}
+                    </div>
+            
+                    <div id="message" part="message">
+                        ${this._message}
+                    </div>
+            
                 </div>
-        
-                <div id="message" part="message">
-                    ${this._message}
-                </div>
-        
+
+                <mwc-icon id="emblem" part="emblem">
+                    error_outline
+                </mwc-icon>
+
+                <mwc-icon-button id="edit-button" part="edit-button"
+                    icon="chevron_right"
+                    @click=${this._onEditButtonClicked}
+                >
+                </mwc-icon-button>
+
             </div>
-
-            <mwc-icon id="emblem" part="emblem">
-                error_outline
-            </mwc-icon>
-
-            <mwc-icon-button id="edit-button" part="edit-button"
-                icon="chevron_right"
-                @click=${this._onEditButtonClicked}
-            >
-            </mwc-icon-button>
-
         </div>
         `;
     }
@@ -81,7 +84,7 @@ export class FtConnectionListItem extends LitElement {
                 overflow: hidden;
                 font-family: ${unsafeCSS(light.Font.Regular)};
                 width: 376px;
-                height: 72px;
+                height: 64px;
             }
                 #wrapper {
                     position:relative;
@@ -92,7 +95,7 @@ export class FtConnectionListItem extends LitElement {
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;
-                    align-items: center;
+                    align-items: stretch;
                 }
                     #logo {
                         width: 100px;
@@ -107,37 +110,46 @@ export class FtConnectionListItem extends LitElement {
                             width:auto;
                             max-width:100%;
                         }
-                    #text {
+                    #text-and-buttons {
                         flex: 1;
-                        min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
                         margin-left: 12px;
-                        margin-right: 12px;
+                        min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
                         display: flex;
-                        flex-direction: column;
+                        flex-direction: row;
                         justify-content: flex-start;
                         align-items: stretch;
+                        border-bottom: solid 1px ${unsafeCSS(light.Color.Neutral300)};
                     }
-                        #name {
-                            font-size: ${unsafeCSS(light.FontSize.Body)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                            line-height: ${unsafeCSS(light.LineHeight.Body)}px;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
+                        #text {
+                            flex: 1;
+                            min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
+                            margin-right: 12px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            align-items: stretch;
                         }
-                        #message {
-                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                            color: ${unsafeCSS(light.Color.Neutral700)};
-                            overflow: hidden;
-                            text-overflow: ellipsis;
+                            #name {
+                                font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                                font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                                line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                            #message {
+                                font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                                line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                                color: ${unsafeCSS(light.Color.Neutral700)};
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                        #emblem {
+                            display: none;
+                            color: ${unsafeCSS(light.Color.Error300)};
                         }
-                    #emblem {
-                        display: none;
-                        color: ${unsafeCSS(light.Color.Error300)};
-                    }
-                    #edit-button {
-                    }
+                        #edit-button {
+                        }
         `
         ];
     }
