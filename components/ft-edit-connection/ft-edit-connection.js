@@ -24,6 +24,7 @@ import '@material/mwc-icon';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '../ft-institution-list-item/ft-institution-list-item.js';
+import '../ft-private-and-secure/ft-private-and-secure.js';
 
 export class FtEditConnection extends LitElement {
 

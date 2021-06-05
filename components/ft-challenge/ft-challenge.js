@@ -26,6 +26,7 @@ import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '../../components/ft-institution-list-item/ft-institution-list-item.js';
+import '../ft-private-and-secure/ft-private-and-secure.js';
 
 export class FtChallenge extends LitElement {
 
@@ -70,22 +71,32 @@ export class FtChallenge extends LitElement {
                 Content
             </div>
         
-            <mwc-button id="button" part="button"
-                outlined
+            <mwc-button id="continue-button" part="continue-button"
+                unelevated
                 label="Continue"
                 @click=${this._onContinueButtonClicked}>
             </mwc-button>
         
-            <div id="help" part="help">
-                Help
+            <div id="help-box" part="help-box">
+
+                <div id="help-text" part="help-text">
+                    Get help
+                </div>
+
+                <mwc-icon-button id="help-button" part="help-button"
+                    icon="chevron_right"
+                    @click=${this._onHelpButtonClicked}
+                >
+                </mwc-icon-button>
+
             </div>
+
+            <div id="bottom-divider" part="bottom-divider"></div>
         
-            <div id="thing" part="thing">
-                Thing
-            </div>
+            <ft-private-and-secure id="private-and-secure" part="private-and-secure">
+            </ft-private-and-secure>
         
         </div>
-
         `;
     }
 
@@ -126,6 +137,7 @@ export class FtChallenge extends LitElement {
                     #title {
                         margin-left: 24px;
                         margin-right: 24px;
+                        margin-top: 20px;
                         height: 32px;
                         font-size: ${unsafeCSS(light.FontSize.H2)}px;
                         font-weight: ${unsafeCSS(light.FontWeight.Bold)};
@@ -138,20 +150,44 @@ export class FtChallenge extends LitElement {
                         margin-right: 24px;
                         margin-top:20px;
                     }
-                    #button {
+                    #continue-button {
                         margin-left: 24px;
                         margin-right: 24px;
                         margin-top:20px;
+                        --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                        --mdc-theme-on-primary: white;
+                        --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
+                        --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                        --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
+                        --mdc-typography-button-text-transform: none;
                     }
-                    #help {
+                    #help-box {
+                        margin-top:12px;
                         margin-left: 24px;
-                        margin-right: 24px;
-                        margin-top:20px;
+                        margin-right: 5px;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        align-items: center;
                     }
-                    #thing {
+                        #help-text {
+                            flex: 1;
+                            color: ${unsafeCSS(light.Color.Neutral700)};
+                            font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Regular)};
+                            line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                        }
+                        #help-button {
+                            color: ${unsafeCSS(light.Color.Neutral700)};
+                        }
+                    #bottom-divider {
+                        height: 1px;
                         margin-left: 24px;
                         margin-right: 24px;
-                        margin-top:20px;
+                        border-top: 1px solid ${unsafeCSS(light.Color.Neutral300)};
+                }
+                    #private-and-secure {
+                        margin-top: 10px;
                     }
         `,
             Layouts
