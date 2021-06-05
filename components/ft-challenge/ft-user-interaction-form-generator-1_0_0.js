@@ -124,10 +124,15 @@ InteractionFormGenerator_1_0_0.prototype.generateStaticText = function(id, text)
 InteractionFormGenerator_1_0_0.prototype.generateTextInput = function(id, label, sensitive)
 {
     var element = document.createElement('mwc-textfield');
+    element.setAttribute('outlined', 'outlined');
     this.rootView.appendChild(element);
 
+    // TODO: Fix this in the server code
+    // Remove trailing colon, if present
+    label = label.replace(/\:$/, '');
+
     element.label = label;
-    element.style.marginTop = "12px";
+    element.style.marginTop = "20px";
 
     var type;
     if (sensitive)

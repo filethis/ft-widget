@@ -21,6 +21,7 @@ import { light } from "../../mx-design-tokens/index.js";
 import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
+import '../ft-challenge/ft-challenge.js'
 import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
 
 
@@ -28,7 +29,10 @@ export class FtConnect extends FtClientMixin(LitElement) {
 
     static get properties() {
         return {
-            selectedInstitution: { type: Object }
+            selectedInstitution: { type: Object },
+            _selectedPanel: { type: String },
+            _panelUnderModal: { type: String },
+            _interactionRequest: { type: Object }
         };
     }
 
@@ -38,6 +42,9 @@ export class FtConnect extends FtClientMixin(LitElement) {
         this.live = false;
 
         this.selectedInstitution = null;
+        this._selectedPanel = "ft-connect-to-your-account";
+        this._panelUnderModal = "ft-connect-to-your-account";
+        this._interactionRequest = null;
 
         // Command event listeners
        this.addEventListener('ft-connect-to-your-account-continue-command', this._onConnectToYourAccountContinueCommand);
@@ -64,6 +71,14 @@ export class FtConnect extends FtClientMixin(LitElement) {
                 @credentials-continue-button-clicked="${this._onCredentialsContinueButtonClicked}"
             >
             </ft-enter-credentials>
+
+            <ft-challenge id="ft-challenge" part="ft-challenge"
+                institution=${JSON.stringify(this.selectedInstitution)}
+                request=${JSON.stringify(this._interactionRequest)}
+                @challenge-back-button-clicked="${this._onChallengeBackButtonClicked}"
+                @submit-response-command="${this._onChallengeContinueButtonClicked}"
+            >
+            </ft-challenge>
 
         </div>
         `;
@@ -92,8 +107,56 @@ export class FtConnect extends FtClientMixin(LitElement) {
                     #ft-enter-credentials {
                         display: none;
                     }
+                    #ft-challenge {
+                        display: none;
+                    }
         `
         ];
+    }
+
+    updated(changedProperties) {
+        super.updated?.(changedProperties);
+
+        if (changedProperties.has('interactionRequests'))
+            this._onInteractionRequestsChanged();
+    }
+
+    _onInteractionRequestsChanged() {
+        this._poseNextPendingInteractionRequest();
+    }
+
+    _poseNextPendingInteractionRequest () {
+        if (this.interactionRequests.length === 0)
+            return;
+
+        // If we already have a dialog posed
+        if (this._selectedPanel == "ft-challenge")
+            return;
+        
+        // HACK: Make a guess about which institution the request is for
+        var institution = this._hackGuessInteractionRequestInstitution();
+        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
+        challengeElement.institution = institution;
+
+        // Pose the first request
+        var interactionRequest = this.interactionRequests[0];
+        this._interactionRequest = interactionRequest;
+        this._panelUnderModal = this._selectedPanel;
+        this._goToPanel("ft-challenge")
+    }
+
+    _hackGuessInteractionRequestInstitution() {
+        const count = this.connections.length;
+        for (var index = 0; index < count; index++)
+        {
+            var connection = this.connections[index];
+            if (connection.state == "question")
+            {
+                var institutionId = parseInt(connection.sourceId);
+                return this._findInstitutionWithId(institutionId);
+            }
+        }
+        return null;
     }
 
     _onConnectToYourAccountContinueCommand() {
@@ -112,6 +175,10 @@ export class FtConnect extends FtClientMixin(LitElement) {
         this._goToPanel("ft-connect-to-your-account");
     }
 
+    _onChallengeBackButtonClicked() {
+        this._goToPanel(this._panelUnderModal);
+    }
+
     _onInstitutionSelected(event) {
         const selectedInstitution = event.detail;
         if (!selectedInstitution)
@@ -125,6 +192,7 @@ export class FtConnect extends FtClientMixin(LitElement) {
         var showFirst = false;
         var showSecond = false;
         var showThird = false;
+        var showFourth = false;
 
         let nextPanel;
 
@@ -142,13 +210,20 @@ export class FtConnect extends FtClientMixin(LitElement) {
                 showThird = true;
                 nextPanel = this.shadowRoot.getElementById("ft-enter-credentials");
                 break;
-        }
+            case "ft-challenge":
+                showFourth = true;
+                nextPanel = this.shadowRoot.getElementById("ft-challenge");
+                break;
+            }
 
         nextPanel.enter();
 
         this._setPanelShown("ft-connect-to-your-account", showFirst);
         this._setPanelShown("ft-select-your-institution", showSecond);
         this._setPanelShown("ft-enter-credentials", showThird);
+        this._setPanelShown("ft-challenge", showFourth);
+
+        this._selectedPanel = name;
     }
 
     _setPanelShown(panelId, show) {

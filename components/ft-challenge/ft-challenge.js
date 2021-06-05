@@ -253,6 +253,10 @@ export class FtChallenge extends LitElement {
     _onRequestChanged()
     {
         this._clear();
+
+        if (!this.request)
+            return;
+            
         this._generateForm();
   
         const event = new CustomEvent('request-changed', { detail: this.request, bubbles: true, composed: true });

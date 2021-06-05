@@ -149,10 +149,10 @@ export class FtManageConnections extends LitElement {
 
     updated(changedProperties) {
         if (changedProperties.has('connections'))
-            this._updateConnectionCount();
+            this._onConnectionsChanged();
     }
 
-    _updateConnectionCount() {
+    _onConnectionsChanged() {
         var count = 0;
         if (!!this.connections)
             count = this.connections.length;
