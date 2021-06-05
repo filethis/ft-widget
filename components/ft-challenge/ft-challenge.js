@@ -33,7 +33,11 @@ export class FtChallenge extends LitElement {
     static get properties() {
         return {
             institution: { type: Object },
-            demo: { type: Object }
+            version: { type: Object },
+            request: { type: Object },
+            response: { type: Object },
+            demo: { type: Object },
+            _widgetMap: { type: Object }
         };
     }
 
@@ -41,7 +45,16 @@ export class FtChallenge extends LitElement {
         super();
 
         this.institution = null;
+        this.version = "2.0.0";
+        this.request = null;
+        this.response = null;
         this.demo = false;
+        this._widgetMap = {};
+
+        // Non-reactive instance variable initialization
+        this._requestParser = null;
+        this._formGenerator = null;
+        this._responseGenerator = null;
     }
 
     render() {
@@ -197,6 +210,81 @@ export class FtChallenge extends LitElement {
     enter() {
     }
 
+    _clear()
+    {
+        this._widgetMap = {};
+        this._clearResponse();
+    }
+
+    _onVersionChanged(to, from)
+    {
+        this._clear();
+  
+        switch (this.version)
+        {
+            case "1.0.0":
+                this._requestParser = new InteractionRequestParser_1_0_0();
+                this._formGenerator = new InteractionFormGenerator_1_0_0(this, this.$.form, this._widgetMap, "450px");
+                this._responseGenerator = new InteractionResponseGenerator_1_0_0(this._widgetMap);
+                break;
+  
+            case "2.0.0":
+                this._requestParser = new InteractionRequestParser_2_0_0();
+                this._formGenerator = new InteractionFormGenerator_2_0_0(this, this.$.form, this._widgetMap, "450px");
+                this._responseGenerator = new InteractionResponseGenerator_2_0_0(this._widgetMap);
+                break;
+  
+            default:
+                throw new IllegalArgumentException("Unknown user interaction schema version: " + this.version);
+        }
+    }
+  
+    _onRequestChanged(to, from)
+    {
+        this._clear();
+        this._generateForm();
+  
+        this.fire('request-changed', this.request);
+    }
+  
+    _onResponseChanged(to, from)
+    {
+        this.fire('response-changed', this.response);
+    }
+  
+    _clearResponse()
+    {
+        this.response = null;
+    }
+  
+    _generateForm()
+    {
+        if (this._formGenerator == null)
+            return;
+        if (this.request == null)
+            this._formGenerator.clear();
+        else
+            this._requestParser.parse(this.request, this._formGenerator);
+    }
+  
+    /** You may call this at will to generate a partial response from what has been entered into the form, so far */
+    generateResponse()
+    {
+        if (this._responseGenerator == null)
+            return;
+        this._requestParser.parse(this.request, this._responseGenerator);
+        this.response = this._responseGenerator.getResponse();
+    }
+  
+    _onButtonClicked(event)
+    {
+        // If a submit button was clicked, generate the response, and fire a specific event
+        if (event.detail.submit)
+        {
+            this.generateResponse();
+            this.fire('submit-response-command', this.response);
+        }
+    }
     _onBackButtonClicked()
     {
         const event = new CustomEvent('challenge-back-button-clicked', { bubbles: true, composed: true });
