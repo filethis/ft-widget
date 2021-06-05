@@ -130,7 +130,7 @@ export class FtInstitutionList extends LitElement {
         if (changedProperties.has("selectedInstitution"))
             this._onSelectedInstitutionChanged();
         if (changedProperties.has("fake"))
-            this._onDemoChanged();
+            this._onFakeChanged();
     }
 
     _onSelectedInstitutionChanged() {
@@ -151,7 +151,7 @@ export class FtInstitutionList extends LitElement {
         return this.institutions.findIndex(institution => institution.id == this.selectedInstitution.id);
     }
 
-    _onDemoChanged() {
+    _onFakeChanged() {
         if (this.fake)
             this._loadFakeInstitutions();
     }

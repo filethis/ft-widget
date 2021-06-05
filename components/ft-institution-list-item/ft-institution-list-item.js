@@ -121,10 +121,10 @@ export class FtInstitutionListItem extends LitElement {
 
     updated(changedProperties) {
         if (changedProperties.has("fake"))
-            this._onDemoChanged();
+            this._onFakeChanged();
     }
 
-    _onDemoChanged() {
+    _onFakeChanged() {
         if (this.fake)
             this._loadFakeInstitution();
     }

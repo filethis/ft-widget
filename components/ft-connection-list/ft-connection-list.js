@@ -130,7 +130,7 @@ export class FtConnectionList extends LitElement {
         if (changedProperties.has("selectedConnection"))
             this._onSelectedConnectionChanged();
         if (changedProperties.has("fake"))
-            this._onDemoChanged();
+            this._onFakeChanged();
     }
 
     _onSelectedConnectionChanged() {
@@ -151,7 +151,7 @@ export class FtConnectionList extends LitElement {
         return this.connections.findIndex(connection => connection.id == this.selectedConnection.id);
     }
 
-    _onDemoChanged() {
+    _onFakeChanged() {
         if (this.fake)
             this._loadFakeConnections();
     }

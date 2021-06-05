@@ -87,8 +87,10 @@ export class FtChallenge extends LitElement {
             <div id="title" part="title">
                 Authenticate
             </div>
-                    
-            <div id="form" part="form"></div>
+            
+            <div id="form-box" part="form-box">
+                <div id="form" part="form"></div>
+            </div>
         
             <mwc-button id="continue-button" part="continue-button"
                 unelevated
@@ -164,15 +166,22 @@ export class FtChallenge extends LitElement {
                         text-align: left;
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
-                    #form {
+                    #form-box {
                         margin-left: 24px;
                         margin-right: 24px;
                         margin-top:20px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: flex-start;
+                        max-height: 100px;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+                        overscroll-behavior: contain;
+                        border: 1px solid ${unsafeCSS(light.Color.Neutral300)};
                     }
+                        #form {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            align-items: flex-start;
+                        }
                     #continue-button {
                         margin-left: 24px;
                         margin-right: 24px;
@@ -227,7 +236,7 @@ export class FtChallenge extends LitElement {
         if (changedProperties.has("response"))
             this._onResponseChanged();
         if (changedProperties.has("fake"))
-            this._onDemoChanged();
+            this._onFakeChanged();
     }
 
     _clear()
@@ -302,7 +311,6 @@ export class FtChallenge extends LitElement {
   
     _onContinueButtonClicked()
     {
-        // If a submit button was clicked, generate the response, and fire a specific event
         this.generateResponse();
 
         const event = new CustomEvent('submit-response-command', { detail: this.response, bubbles: true, composed: true });
@@ -315,7 +323,7 @@ export class FtChallenge extends LitElement {
         this.dispatchEvent(event);
     }
 
-    _onDemoChanged() {
+    _onFakeChanged() {
         if (this.fake)
             this._loadFakeRequest();
     }

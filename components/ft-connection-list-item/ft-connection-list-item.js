@@ -155,7 +155,7 @@ export class FtConnectionListItem extends LitElement {
 
     updated(changedProperties) {
         if (changedProperties.has("fake"))
-            this._onDemoChanged();
+            this._onFakeChanged();
     }
 
     _onEditButtonClicked() {
@@ -165,7 +165,7 @@ export class FtConnectionListItem extends LitElement {
         this.dispatchEvent(event);
     }
 
-    _onDemoChanged() {
+    _onFakeChanged() {
         if (this.fake)
             this._loadFakeConnection();
     }
