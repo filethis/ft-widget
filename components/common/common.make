@@ -8,6 +8,28 @@ serve:  ## Start serving project and open in browser with live update
 		--open components/${NAME}/dev/index.html
 
 
+# Production 
+
+dist-clean:  ## Clean the distributable
+	@rm -rf dist/
+
+dist-build:  ## Build the distributable
+	@npx rollup  --config ./dev/rollup.config.js
+
+dist-serve:  ## Serve the distributable locally
+	@npx web-dev-server --app-index ./dev/dist/index.html --open
+
+dist-deploy:  ## Deploy distributable to CDN
+	@aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/; \
+	echo https://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/index.html;
+
+dist-invalidate:  ## Invalidate distributable on CDN
+	@if [ -z "${CDN_DISTRIBUTION_ID}" ]; \
+		then echo "Cannot invalidate distribution. Define CDN_DISTRIBUTION_ID"; \
+		else aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/*"; \
+	fi
+
+
 #------------------------------------------------------------------------------
 # Help
 #------------------------------------------------------------------------------

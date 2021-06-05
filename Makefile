@@ -38,7 +38,7 @@ dist-clean:  ## Clean the distributable
 	@rm -rf dist/
 
 dist-build:  ## Build the distributable
-	@npx rollup -c
+	@npx rollup --config
 
 dist-serve:  ## Serve the distributable locally
 	@npx web-dev-server --app-index dist/index.html --open
