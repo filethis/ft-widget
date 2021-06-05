@@ -18,7 +18,7 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 
-export class FtDemo extends LitElement {
+export class FtDev extends LitElement {
 
     render() {
         return html`
@@ -57,5 +57,5 @@ export class FtDemo extends LitElement {
     }
 }
 
-window.customElements.define('ft-demo', FtDemo);
+window.customElements.define('ft-dev', FtDev);
 

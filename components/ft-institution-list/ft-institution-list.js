@@ -31,7 +31,7 @@ export class FtInstitutionList extends LitElement {
         return {
             institutions: { type: Array },
             selectedInstitution: { type: Object },
-            demo: { type: Object }
+            fake: { type: Object }
        };
     }
 
@@ -40,7 +40,7 @@ export class FtInstitutionList extends LitElement {
 
         this.institutions = [];
         this.selectedInstitution = null;
-        this.demo = false;
+        this.fake = false;
     }
 
     render() {
@@ -129,7 +129,7 @@ export class FtInstitutionList extends LitElement {
     updated(changedProperties) {
         if (changedProperties.has("selectedInstitution"))
             this._onSelectedInstitutionChanged();
-        if (changedProperties.has("demo"))
+        if (changedProperties.has("fake"))
             this._onDemoChanged();
     }
 
@@ -152,7 +152,7 @@ export class FtInstitutionList extends LitElement {
     }
 
     _onDemoChanged() {
-        if (this.demo)
+        if (this.fake)
             this._loadFakeInstitutions();
     }
 

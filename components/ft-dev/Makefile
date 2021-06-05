@@ -1,4 +1,4 @@
-NAME=ft-demo
+NAME=ft-dev
 
 include ../common/common.make
 

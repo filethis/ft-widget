@@ -28,7 +28,7 @@ export class FtConnectionListItem extends LitElement {
         return {
             connection: { type: Object },
             _message: { type: String },
-            demo: { type: Object }
+            fake: { type: Object }
        };
     }
 
@@ -37,7 +37,7 @@ export class FtConnectionListItem extends LitElement {
 
         this.connection = {};
         this._message = "Message here";
-        this.demo = false;
+        this.fake = false;
     }
 
     render() {
@@ -154,7 +154,7 @@ export class FtConnectionListItem extends LitElement {
     }
 
     updated(changedProperties) {
-        if (changedProperties.has("demo"))
+        if (changedProperties.has("fake"))
             this._onDemoChanged();
     }
 
@@ -166,7 +166,7 @@ export class FtConnectionListItem extends LitElement {
     }
 
     _onDemoChanged() {
-        if (this.demo)
+        if (this.fake)
             this._loadFakeConnection();
     }
 

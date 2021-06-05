@@ -21,12 +21,12 @@ limitations under the License.
 
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { Layouts } from 'lit-flexbox-literals';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '@material/mwc-radio';
 import '@material/mwc-textfield';
+import '@material/mwc-formfield';
 import '../../components/ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 import { InteractionFormGenerator_1_0_0 } from './ft-user-interaction-form-generator-1_0_0.js';
@@ -44,7 +44,7 @@ export class FtChallenge extends LitElement {
             version: { type: Object },
             request: { type: Object },
             response: { type: Object },
-            demo: { type: Object },
+            fake: { type: Object },
             _widgetMap: { type: Object }
         };
     }
@@ -56,13 +56,13 @@ export class FtChallenge extends LitElement {
         this.version = "1.0.0";
         this.request = null;
         this.response = null;
-        this.demo = false;
         this._widgetMap = {};
+        this.fake = false;
 
         // Non-reactive instance variable initialization
         this._requestParser = null;
-        this._formGenerator = null;
         this._responseGenerator = null;
+        this._formGenerator = null;
     }
 
     render() {
@@ -80,7 +80,7 @@ export class FtChallenge extends LitElement {
     
             <ft-institution-list-item id="institution" part="institution"
                 institution=${JSON.stringify(this.institution)}
-                demo="${this.demo}"
+                fake="${this.fake}"
             >
             </ft-institution-list-item>
 
@@ -212,8 +212,7 @@ export class FtChallenge extends LitElement {
                     #private-and-secure {
                         margin-top: 10px;
                     }
-        `,
-            Layouts
+        `
         ];
     }
 
@@ -227,7 +226,7 @@ export class FtChallenge extends LitElement {
             this._onRequestChanged();
         if (changedProperties.has("response"))
             this._onResponseChanged();
-        if (changedProperties.has("demo"))
+        if (changedProperties.has("fake"))
             this._onDemoChanged();
     }
 
@@ -317,7 +316,7 @@ export class FtChallenge extends LitElement {
     }
 
     _onDemoChanged() {
-        if (this.demo)
+        if (this.fake)
             this._loadFakeRequest();
     }
 

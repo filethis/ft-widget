@@ -29,7 +29,7 @@ export class FtManageConnections extends LitElement {
         return {
             connections: { type: Array },
             _connectionCount: { type: Number },
-            demo: { type: Object }
+            fake: { type: Object }
         };
     }
 
@@ -37,7 +37,7 @@ export class FtManageConnections extends LitElement {
         super();
         this.connections = [];
         this._connectionCount = 0;
-        this.demo = false;
+        this.fake = false;
     }
 
     render() {
@@ -59,7 +59,7 @@ export class FtManageConnections extends LitElement {
         
             <ft-connection-list id="ft-connection-list" part="ft-connection-list"
                 connections=${JSON.stringify(this.connections)}
-                demo="${this.demo}"
+                fake="${this.fake}"
             >
             </ft-connection-list>
         

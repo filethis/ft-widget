@@ -32,7 +32,7 @@ export class FtSelectYourInstitution extends LitElement {
             _searchPattern: { type: String },
             _haveSearchPattern: { type: Boolean },
             _institutionsFilteredAndSorted: { type: Array },
-            demo: { type: Object }
+            fake: { type: Object }
         };
     }
 
@@ -43,7 +43,7 @@ export class FtSelectYourInstitution extends LitElement {
         this._searchPattern = "";
         this._haveSearchPattern = false;
         this._institutionsFilteredAndSorted = [];
-        this.demo = false;
+        this.fake = false;
     }
 
     render() {
@@ -74,7 +74,7 @@ export class FtSelectYourInstitution extends LitElement {
         
             <ft-institution-list id="ft-institution-list" part="ft-institution-list"
                 institutions=${JSON.stringify(this._institutionsFilteredAndSorted)}
-                demo=${this.demo}
+                fake=${this.fake}
             >
             </ft-institution-list>
         

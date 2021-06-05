@@ -31,7 +31,7 @@ export class FtEnterCredentials extends LitElement {
     static get properties() {
         return {
             institution: { type: Object },
-            demo: { type: Object }
+            fake: { type: Object }
        };
     }
 
@@ -39,7 +39,7 @@ export class FtEnterCredentials extends LitElement {
         super();
 
         this.institution = null;
-        this.demo = false;
+        this.fake = false;
     }
 
     firstUpdated()
@@ -64,7 +64,7 @@ export class FtEnterCredentials extends LitElement {
 
             <ft-institution-list-item id="institution" part="institution"
                 institution=${JSON.stringify(this.institution)}
-                demo="${this.demo}"
+                fake="${this.fake}"
             >
             </ft-institution-list-item>
             
