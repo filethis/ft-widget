@@ -25,8 +25,16 @@ import { Layouts } from 'lit-flexbox-literals';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
+import '@material/mwc-radio';
+import '@material/mwc-textfield';
 import '../../components/ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
+import { InteractionFormGenerator_1_0_0 } from './ft-user-interaction-form-generator-1_0_0.js';
+import { InteractionFormGenerator_2_0_0 } from './ft-user-interaction-form-generator-2_0_0.js';
+import { InteractionRequestParser_1_0_0 } from './ft-user-interaction-request-parser-1_0_0.js';
+import { InteractionRequestParser_2_0_0 } from './ft-user-interaction-request-parser-2_0_0.js';
+import { InteractionResponseGenerator_1_0_0 } from './ft-user-interaction-response-generator-1_0_0.js';
+import { InteractionResponseGenerator_2_0_0 } from './ft-user-interaction-response-generator-2_0_0.js';
 
 export class FtChallenge extends LitElement {
 
@@ -45,7 +53,7 @@ export class FtChallenge extends LitElement {
         super();
 
         this.institution = null;
-        this.version = "2.0.0";
+        this.version = "1.0.0";
         this.request = null;
         this.response = null;
         this.demo = false;
@@ -80,9 +88,7 @@ export class FtChallenge extends LitElement {
                 Authenticate
             </div>
                     
-            <div id="content" part="content">
-                Content
-            </div>
+            <div id="form" part="form"></div>
         
             <mwc-button id="continue-button" part="continue-button"
                 unelevated
@@ -158,10 +164,14 @@ export class FtChallenge extends LitElement {
                         text-align: left;
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
-                    #content {
+                    #form {
                         margin-left: 24px;
                         margin-right: 24px;
                         margin-top:20px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
                     }
                     #continue-button {
                         margin-left: 24px;
@@ -210,46 +220,61 @@ export class FtChallenge extends LitElement {
     enter() {
     }
 
+    updated(changedProperties) {
+        if (changedProperties.has("version"))
+            this._onVersionChanged();
+        if (changedProperties.has("request"))
+            this._onRequestChanged();
+        if (changedProperties.has("response"))
+            this._onResponseChanged();
+        if (changedProperties.has("demo"))
+            this._onDemoChanged();
+    }
+
     _clear()
     {
         this._widgetMap = {};
         this._clearResponse();
     }
 
-    _onVersionChanged(to, from)
+    _onVersionChanged()
     {
         this._clear();
   
+        var form = this.shadowRoot.getElementById("form");
+
         switch (this.version)
         {
             case "1.0.0":
                 this._requestParser = new InteractionRequestParser_1_0_0();
-                this._formGenerator = new InteractionFormGenerator_1_0_0(this, this.$.form, this._widgetMap, "450px");
+                this._formGenerator = new InteractionFormGenerator_1_0_0(form, this._widgetMap, "450px");
                 this._responseGenerator = new InteractionResponseGenerator_1_0_0(this._widgetMap);
                 break;
   
             case "2.0.0":
                 this._requestParser = new InteractionRequestParser_2_0_0();
-                this._formGenerator = new InteractionFormGenerator_2_0_0(this, this.$.form, this._widgetMap, "450px");
+                this._formGenerator = new InteractionFormGenerator_2_0_0(form, this._widgetMap, "450px");
                 this._responseGenerator = new InteractionResponseGenerator_2_0_0(this._widgetMap);
                 break;
   
             default:
-                throw new IllegalArgumentException("Unknown user interaction schema version: " + this.version);
+                throw new Error("Unknown user interaction schema version: " + this.version);
         }
     }
   
-    _onRequestChanged(to, from)
+    _onRequestChanged()
     {
         this._clear();
         this._generateForm();
   
-        this.fire('request-changed', this.request);
+        const event = new CustomEvent('request-changed', { detail: this.request, bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
   
-    _onResponseChanged(to, from)
+    _onResponseChanged()
     {
-        this.fire('response-changed', this.response);
+        const event = new CustomEvent('response-changed', { detail: this.response, bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
   
     _clearResponse()
@@ -276,22 +301,40 @@ export class FtChallenge extends LitElement {
         this.response = this._responseGenerator.getResponse();
     }
   
-    _onButtonClicked(event)
+    _onContinueButtonClicked()
     {
         // If a submit button was clicked, generate the response, and fire a specific event
-        if (event.detail.submit)
-        {
-            this.generateResponse();
-            this.fire('submit-response-command', this.response);
-        }
+        this.generateResponse();
+
+        const event = new CustomEvent('submit-response-command', { detail: this.response, bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
+
     _onBackButtonClicked()
     {
         const event = new CustomEvent('challenge-back-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(event);
     }
 
-    _onContinueButtonClicked() {
+    _onDemoChanged() {
+        if (this.demo)
+            this._loadFakeRequest();
+    }
+
+    _loadFakeRequest() {
+        var path = "/components/ft-challenge/dev/fake-request.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200)
+            {
+                this.request = JSON.parse(request.responseText);
+            }
+        }.bind(this);
+        request.send();
     }
 
 }

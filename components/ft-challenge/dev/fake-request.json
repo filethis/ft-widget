@@ -1,0 +1,29 @@
+{
+    "version": "1.0.0",
+    "id": "DA708F42CE56",
+    "title": "One-Time Authorization Code",
+    "code": "generic",
+    "legacyCode": "complex",
+    "parts": [
+        {
+            "id": "80CA7FD95B46",
+            "kind": "choices",
+            "suggestedWidgetType": "radiobutton",
+            "label": "Send my temporary authorization code to",
+            "choices": [
+                {
+                    "label": "Email: trent@filethis.com",
+                    "id": "894EB3D57A6C"
+                },
+                {
+                    "label": "Mobile: 1-415-456-1234",
+                    "id": "BE1980FC76A2"
+                },
+                {
+                    "label": "Mobile: 1-415-377-7887",
+                    "id": "B93EC1A4258D"
+                }
+            ]
+        }
+    ]
+}
