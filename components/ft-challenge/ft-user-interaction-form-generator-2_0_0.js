@@ -16,11 +16,10 @@ limitations under the License.
 
 // InteractionFormGenerator_2_0_0
 
-export function InteractionFormGenerator_2_0_0(view, widgetMap, maxWidth)
+export function InteractionFormGenerator_2_0_0(view, widgetMap)
 {
     this.rootView = view;
     this.widgetMap = widgetMap;
-    this.maxWidth = maxWidth;
     this.submitButtons = [];
 }
 
@@ -70,8 +69,9 @@ InteractionFormGenerator_2_0_0.prototype.begin = function()
     this.rootView.addEventListener('paper-radio-group-changed', this.onPaperRadioGroupChanged.bind(this));
     this.rootView.addEventListener('change', this.onChange.bind(this));
 
-    this.rootView.style.minWidth = "300px";
-    this.rootView.style.padding = "16px";
+    this.rootView.style.display = "flex";
+    this.rootView.style.flexDirection = "column";
+    this.rootView.style.alignItems = "flex-start";
 };
 
 InteractionFormGenerator_2_0_0.prototype.end = function()
@@ -98,8 +98,15 @@ InteractionFormGenerator_2_0_0.prototype.generateTitle = function(title)
     var element = document.createElement('div');
     this.rootView.appendChild(element);
     element.innerHTML = title;
-    element.style.paddingBottom = "10px";
-    element.style.fontSize = "20pt;";
+    element.style.fontSize = "16pt";
+    element.style.fontWeight = "bold";
+    element.style.lineHeight = "20pt";
+    element.style.color = "#121417";
+    // font-size: ${unsafeCSS(light.FontSize.H2)}px;
+    // font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+    // line-height: ${unsafeCSS(light.LineHeight.H2)}px;
+    // text-align: left;
+    // color: ${unsafeCSS(light.Color.Neutral900)};
 };
 
 InteractionFormGenerator_2_0_0.prototype.generateStaticText = function(id, text)
@@ -110,8 +117,7 @@ InteractionFormGenerator_2_0_0.prototype.generateStaticText = function(id, text)
     this.rootView.appendChild(element);
 
     element.innerHTML = text;
-    element.style.maxWidth = this.maxWidth;
-    element.style.paddingTop = "12px";
+    element.style.marginTop = "12px";
 
     this.widgetMap[id] = element;
 };
@@ -124,7 +130,7 @@ InteractionFormGenerator_2_0_0.prototype.generateTextInput = function(id, label,
     this.rootView.appendChild(element);
 
     element.label = label;
-    element.style.paddingTop = "12px";
+    element.style.marginTop = "12px";
 
     var type;
     if (sensitive)
@@ -146,10 +152,7 @@ InteractionFormGenerator_2_0_0.prototype.generateChoices = function(id, label, c
     // Vertical container
     var container = document.createElement('div');
     this.rootView.appendChild(container);
-    // this.polymer.toggleClass("layout", true, container);
-    // this.polymer.toggleClass("vertical", true, container);
-    container.style.width = "100%";
-    container.style.paddingTop = "12px";
+    container.style.marginTop = "12px";
 
     // Create choice group
     switch (suggestedWidgetType)
@@ -175,15 +178,12 @@ InteractionFormGenerator_2_0_0.prototype._generateRadiobuttonChoices = function(
     var groupLabel = document.createElement('div');
     container.appendChild(groupLabel);
     groupLabel.innerHTML = label;
-    groupLabel.style.maxWidth = this.maxWidth;
-    groupLabel.style.marginBottom = "12px";
-    groupLabel.style.paddingTop = "12px";
+    groupLabel.style.marginTop = "9px";
 
     // Group
     var group = document.createElement('paper-radio-group');
     group.id = "choice-group";
     container.appendChild(group);
-    group.style.maxWidth = this.maxWidth;
     this.widgetMap[id] = group;
 
     // Choices in group
@@ -192,13 +192,17 @@ InteractionFormGenerator_2_0_0.prototype._generateRadiobuttonChoices = function(
     {
         var choice = choices[choicesIndex];
 
+        // Formfield parent for radiobutton
+        var formfield = document.createElement('mwc-formfield');
+        formfield.label = choice.label;
+        formfield.style.marginLeft = "16px";
+        group.appendChild(formfield);
+
         // Radiobutton
         var radiobutton = document.createElement('mwc-radio');
-        group.appendChild(radiobutton);
+        formfield.appendChild(radiobutton);
         radiobutton.id = choice.id;
         radiobutton.name = choice.id;
-        radiobutton.textContent = choice.label;
-        radiobutton.style.paddingLeft = "20px";
 
         // If a default choice was specified and this is it, select this radiobutton
         if (defaultChoiceId && radiobutton.id == defaultChoiceId)
@@ -213,7 +217,6 @@ InteractionFormGenerator_2_0_0.prototype._generateMenuChoices = function(id, lab
     // Dropdown menu
     var dropdownMenu = document.createElement('select');
     container.appendChild(dropdownMenu);
-    dropdownMenu.style.maxWidth = this.maxWidth;
     dropdownMenu.style.paddingTop = "12px";
     dropdownMenu.label = label;
     this.widgetMap[id] = dropdownMenu;

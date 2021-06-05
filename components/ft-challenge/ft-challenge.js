@@ -84,10 +84,6 @@ export class FtChallenge extends LitElement {
             >
             </ft-institution-list-item>
 
-            <div id="title" part="title">
-                Authenticate
-            </div>
-            
             <div id="form-box" part="form-box">
                 <div id="form" part="form"></div>
             </div>
@@ -155,32 +151,16 @@ export class FtChallenge extends LitElement {
                         margin-right: 24px;
                         height: 64px;
                     }
-                    #title {
-                        margin-left: 24px;
+                    #form-box {
                         margin-right: 24px;
                         margin-top: 20px;
-                        height: 32px;
-                        font-size: ${unsafeCSS(light.FontSize.H2)}px;
-                        font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                        line-height: ${unsafeCSS(light.LineHeight.H2)}px;
-                        text-align: left;
-                        color: ${unsafeCSS(light.Color.Neutral900)};
-                    }
-                    #form-box {
-                        margin-left: 24px;
-                        margin-right: 24px;
-                        margin-top:20px;
-                        max-height: 100px;
+                        max-height: 300px;
                         overflow-y: auto;
                         overflow-x: hidden;
                         overscroll-behavior: contain;
-                        border: 1px solid ${unsafeCSS(light.Color.Neutral300)};
                     }
                         #form {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: flex-start;
-                            align-items: flex-start;
+                            margin-left: 24px;
                         }
                     #continue-button {
                         margin-left: 24px;
@@ -255,13 +235,13 @@ export class FtChallenge extends LitElement {
         {
             case "1.0.0":
                 this._requestParser = new InteractionRequestParser_1_0_0();
-                this._formGenerator = new InteractionFormGenerator_1_0_0(form, this._widgetMap, "450px");
+                this._formGenerator = new InteractionFormGenerator_1_0_0(form, this._widgetMap);
                 this._responseGenerator = new InteractionResponseGenerator_1_0_0(this._widgetMap);
                 break;
   
             case "2.0.0":
                 this._requestParser = new InteractionRequestParser_2_0_0();
-                this._formGenerator = new InteractionFormGenerator_2_0_0(form, this._widgetMap, "450px");
+                this._formGenerator = new InteractionFormGenerator_2_0_0(form, this._widgetMap);
                 this._responseGenerator = new InteractionResponseGenerator_2_0_0(this._widgetMap);
                 break;
   

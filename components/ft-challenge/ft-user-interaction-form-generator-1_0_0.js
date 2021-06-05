@@ -17,11 +17,10 @@ limitations under the License.
 
 // InteractionFormGenerator_1_0_0
 
-export function InteractionFormGenerator_1_0_0(view, widgetMap, maxWidth)
+export function InteractionFormGenerator_1_0_0(view, widgetMap)
 {
     this.rootView = view;
     this.widgetMap = widgetMap;
-    this.maxWidth = maxWidth;
 
     this.submitButton = null;
 }
@@ -78,59 +77,13 @@ InteractionFormGenerator_1_0_0.prototype.begin = function()
     this.rootView.addEventListener('paper-radio-group-changed', this.onPaperRadioGroupChanged.bind(this));
     this.rootView.addEventListener('change', this.onChange.bind(this));
 
-    this.rootView.style.minWidth = "500px";
-    this.rootView.style.padding = "16px";
+    this.rootView.style.display = "flex";
+    this.rootView.style.flexDirection = "column";
+    this.rootView.style.alignItems = "flex-start";
 };
 
 InteractionFormGenerator_1_0_0.prototype.end = function()
 {
-    // Horizontal container for defer and submit buttons
-    var div = document.createElement('div');
-    this.rootView.appendChild(div);
-    div.classList.add("horizontal");
-    div.classList.add("end-justified");
-    div.classList.add("layout");
-    div.style.width = "100%";
-    div.style.paddingTop = "20px";
-
-    // Spacer to push button to right
-//            var springSpacer = document.createElement('div');
-//            div.appendChild(springSpacer);
-//            springSpacer.style.width = "100%";
-
-    // TODO: Something needs to remove the button event listeners when we are done with the form...
-
-    // Defer button
-    var deferButton = document.createElement('mwc-button');
-    var submitFalse = false;
-    deferButton.addEventListener('click', this.onButtonClicked.bind(this, "_deferButton", "defer", submitFalse));
-    div.appendChild(deferButton);
-    deferButton.raised = true;
-    deferButton.style.height = "36px";
-    deferButton.style.background = "white";
-    deferButton.textContent = 'Answer Later';
-    this.deferButton = deferButton;
-
-    // Spacer between buttons
-    var spacer = document.createElement('div');
-    div.appendChild(spacer);
-    spacer.style.width = "20px";
-
-    // Submit button
-    var submitButton = document.createElement('mwc-button');
-    var submitTrue = true;
-    submitButton.addEventListener('click', this.onButtonClicked.bind(this, "_submitButton", "submit", submitTrue));
-    div.appendChild(submitButton);
-    submitButton.raised = true;
-    submitButton.style.width = "60px";
-    submitButton.style.height = "36px";
-    submitButton.style.background = "white";
-    submitButton.textContent = 'OK';
-    this.submitButton = submitButton;
-
-    // Flush all changes
-    //flush();
-
     this.generating = false;
 
     this.validate();
@@ -146,8 +99,15 @@ InteractionFormGenerator_1_0_0.prototype.generateTitle = function(title)
     var element = document.createElement('div');
     this.rootView.appendChild(element);
     element.innerHTML = title;
-    element.style.paddingBottom = "10px";
-    element.style.fontSize = "20pt;";
+    element.style.fontSize = "16pt";
+    element.style.fontWeight = "bold";
+    element.style.lineHeight = "20pt";
+    element.style.color = "#121417";
+    // font-size: ${unsafeCSS(light.FontSize.H2)}px;
+    // font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+    // line-height: ${unsafeCSS(light.LineHeight.H2)}px;
+    // text-align: left;
+    // color: ${unsafeCSS(light.Color.Neutral900)};
 };
 
 InteractionFormGenerator_1_0_0.prototype.generateStaticText = function(id, text)
@@ -156,7 +116,6 @@ InteractionFormGenerator_1_0_0.prototype.generateStaticText = function(id, text)
     this.rootView.appendChild(element);
 
     element.innerHTML = text;
-    element.style.maxWidth = this.maxWidth;
     element.style.paddingTop = "12px";
 
     this.widgetMap[id] = element;
@@ -168,7 +127,7 @@ InteractionFormGenerator_1_0_0.prototype.generateTextInput = function(id, label,
     this.rootView.appendChild(element);
 
     element.label = label;
-    element.style.paddingTop = "12px";
+    element.style.marginTop = "12px";
 
     var type;
     if (sensitive)
@@ -185,10 +144,7 @@ InteractionFormGenerator_1_0_0.prototype.generateChoices = function(id, label, c
     // Vertical container
     var container = document.createElement('div');
     this.rootView.appendChild(container);
-    // this.polymer.toggleClass("layout", true, container);
-    // this.polymer.toggleClass("vertical", true, container);
-    container.style.width = "100%";
-    container.style.paddingTop = "12px";
+    container.style.marginTop = "12px";
 
     // Create choice group
     switch (suggestedWidgetType)
@@ -214,15 +170,12 @@ InteractionFormGenerator_1_0_0.prototype._generateRadiobuttonChoices = function(
     var groupLabel = document.createElement('div');
     container.appendChild(groupLabel);
     groupLabel.innerHTML = label;
-    groupLabel.style.maxWidth = this.maxWidth;
-    groupLabel.style.marginBottom = "12px";
-    groupLabel.style.paddingTop = "12px";
+    groupLabel.style.marginTop = "9px";
 
     // Group
     var group = document.createElement('paper-radio-group');
     group.id = "choice-group";
     container.appendChild(group);
-    group.style.maxWidth = this.maxWidth;
     this.widgetMap[id] = group;
 
     // Choices in group
@@ -231,13 +184,17 @@ InteractionFormGenerator_1_0_0.prototype._generateRadiobuttonChoices = function(
     {
         var choice = choices[choicesIndex];
 
+        // Formfield parent for radiobutton
+        var formfield = document.createElement('mwc-formfield');
+        formfield.label = choice.label;
+        formfield.style.marginLeft = "16px";
+        group.appendChild(formfield);
+
         // Radiobutton
         var radiobutton = document.createElement('mwc-radio');
-        group.appendChild(radiobutton);
+        formfield.appendChild(radiobutton);
         radiobutton.id = choice.id;
         radiobutton.name = choice.id;
-        radiobutton.textContent = choice.label;
-        radiobutton.style.paddingLeft = "20px";
 
         // If a default choice was specified and this is it, select this radiobutton
         if (defaultChoiceId && radiobutton.id == defaultChoiceId)
@@ -252,8 +209,7 @@ InteractionFormGenerator_1_0_0.prototype._generateMenuChoices = function(id, lab
     // Dropdown menu
     var dropdownMenu = document.createElement('select');
     container.appendChild(dropdownMenu);
-    dropdownMenu.style.maxWidth = this.maxWidth;
-    dropdownMenu.style.paddingTop = "12px";
+    dropdownMenu.style.marginTop = "9px";
     dropdownMenu.label = label;
     this.widgetMap[id] = dropdownMenu;
 
@@ -274,22 +230,6 @@ InteractionFormGenerator_1_0_0.prototype._generateMenuChoices = function(id, lab
 
         this.widgetMap[choice.id] = null;  // Unlike radiobutton clusters, there is no widget for each menu choice
     }
-};
-
-InteractionFormGenerator_1_0_0.prototype.onButtonClicked = function(id, action, submit)
-{
-    var event = new CustomEvent('button-clicked',
-        {
-            bubbles: true,
-            composed: true,
-            detail:
-                {
-                    id:id,
-                    action:action,
-                    submit:submit
-                }
-        });
-    this.rootView.dispatchEvent(event);
 };
 
 InteractionFormGenerator_1_0_0.prototype.onKeyUp = function()
