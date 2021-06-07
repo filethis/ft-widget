@@ -21,11 +21,11 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import './ft-component-panel.js'
 import '../ft-connect/ft-connect.js'
-import '../ft-manage/ft-manage.js'
+import '../ft-manage-connections/ft-manage-connections.js'
 import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
-import '../ft-manage-connections/ft-manage-connections.js'
+import '../ft-manage-connections-connections/ft-manage-connections-connections.js'
 import '../ft-challenge/ft-challenge.js'
 
 
@@ -55,13 +55,13 @@ export class FtGallery extends LitElement {
                 </ft-connect>
             </ft-component-panel> 
 
-            <ft-component-panel name="ft-manage">
-                <ft-manage
-                    id="ft-manage"
+            <ft-component-panel name="ft-manage-connections">
+                <ft-manage-connections
+                    id="ft-manage-connections"
                     class="screen" 
                     slot="component"
                 >
-                </ft-manage>
+                </ft-manage-connections>
             </ft-component-panel> 
 
             <ft-component-panel name="ft-connect-to-your-account">
@@ -92,14 +92,14 @@ export class FtGallery extends LitElement {
                 </ft-enter-credentials>
             </ft-component-panel>
 
-            <ft-component-panel name="ft-manage-connections">
-                <ft-manage-connections
-                    id="ft-manage-connections"
+            <ft-component-panel name="ft-manage-connections-connections">
+                <ft-manage-connections-connections
+                    id="ft-manage-connections-connections"
                     class="screen"
                     slot="component"
                     connections=${JSON.stringify(this.connections)}
                 >
-                </ft-manage-connections>
+                </ft-manage-connections-connections>
             </ft-component-panel>
         </div>
 

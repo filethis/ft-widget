@@ -27,7 +27,7 @@ import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
 import '../ft-connect/ft-connect.js'
-import '../ft-manage/ft-manage.js'
+import '../ft-manage-connections/ft-manage-connections.js'
 
 
 export class FtFixture extends FtHttpMixin(LitElement) {
@@ -385,10 +385,10 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             </ft-connect>
                         </div>
 
-                        <div id="ft-manage-wrapper">
-                            <div id="ft-manage-wrapper-label" class="code">&lt;ft-manage&gt;</div>
+                        <div id="ft-manage-connections-wrapper">
+                            <div id="ft-manage-connections-wrapper-label" class="code">&lt;ft-manage-connections&gt;</div>
 
-                            <ft-manage id="ft-manage" class="screen"
+                            <ft-manage-connections id="ft-manage-connections" class="screen"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -397,7 +397,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 userAccessToken="${this.userAccessToken}"
                                 isLive="${this.isLive}"
                             >
-                            </ft-manage>
+                            </ft-manage-connections>
                         </div>
 
                     </div>
@@ -409,9 +409,9 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <div id="dotted-ft-connect"></div>
                         </div>
                         
-                        <div id="dotted-ft-manage-wrapper">
-                            <div id="dotted-ft-manage-wrapper-label" class="code">&lt;ft-manage&gt;</div>
-                            <div id="dotted-ft-manage"></div>
+                        <div id="dotted-ft-manage-connections-wrapper">
+                            <div id="dotted-ft-manage-connections-wrapper-label" class="code">&lt;ft-manage-connections&gt;</div>
+                            <div id="dotted-ft-manage-connections"></div>
                         </div>
 
                     </div>
@@ -561,7 +561,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     }
                                     #ft-connect {
                                     }
-                                #ft-manage-wrapper {
+                                #ft-manage-connections-wrapper {
                                     margin-left: 100px;
                                     display: flex;
                                     flex-direction: column;
@@ -570,7 +570,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 }
                                     #ft-connect-manage-label {
                                     }
-                                    #ft-manage {
+                                    #ft-manage-connections {
                                     }
                             #dead {
                                 width:100%;
@@ -599,16 +599,16 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                         justify-content: flex-start;
                                         align-items: center;
                                     }
-                                #dotted-ft-manage-wrapper {
+                                #dotted-ft-manage-connections-wrapper {
                                     margin-left: 100px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #dotted-ft-manage-wrapper-label {
+                                    #dotted-ft-manage-connections-wrapper-label {
                                     }
-                                    #dotted-ft-manage {
+                                    #dotted-ft-manage-connections {
                                         width: 400px;
                                         height: 650px;
                                         border-style:dashed;

@@ -20,10 +20,10 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
-import '../ft-manage-connections/ft-manage-connections.js'
+import '../ft-manage-connections-connections/ft-manage-connections-connections.js'
 import '../ft-edit-connection/ft-edit-connection.js'
 
-export class FtManage extends FtClientMixin(LitElement) {
+export class FtManageConnections extends FtClientMixin(LitElement) {
 
     static get properties() {
         return {
@@ -48,10 +48,10 @@ export class FtManage extends FtClientMixin(LitElement) {
 
         <div id="wrapper" part="wrapper">
 
-            <ft-manage-connections id="ft-manage-connections" part="ft-manage-connections"
+            <ft-manage-connections-connections id="ft-manage-connections-connections" part="ft-manage-connections-connections"
                 connections=${JSON.stringify(this.connections)}
             >
-            </ft-manage-connections>
+            </ft-manage-connections-connections>
 
             <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
                 connection=${JSON.stringify(this._selectedConnection)}
@@ -88,7 +88,7 @@ export class FtManage extends FtClientMixin(LitElement) {
                     position:relative;
                     width: 100%; height: 100%;
                 }
-                    #ft-manage-connections {
+                    #ft-manage-connections-connections {
                         display: block;
                     }
                     #ft-edit-connection {
@@ -105,7 +105,7 @@ export class FtManage extends FtClientMixin(LitElement) {
             const newEvent = new CustomEvent('delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
             this.dispatchEvent(newEvent);
 
-            this._goToPanel("ft-manage-connections");
+            this._goToPanel("ft-manage-connections-connections");
         }
     }
 
@@ -121,7 +121,7 @@ export class FtManage extends FtClientMixin(LitElement) {
     }
 
     _onEditConnectionBackButtonClicked() {
-        this._goToPanel("ft-manage-connections");
+        this._goToPanel("ft-manage-connections-connections");
     }
     
     _findInstitutionForConnection(connection)
@@ -139,9 +139,9 @@ export class FtManage extends FtClientMixin(LitElement) {
         let nextPanel;
 
         switch (name) {
-            case "ft-manage-connections":
+            case "ft-manage-connections-connections":
                 showFirst = true;
-                nextPanel = this.shadowRoot.getElementById("ft-manage-connections");
+                nextPanel = this.shadowRoot.getElementById("ft-manage-connections-connections");
                 break;
             case "ft-edit-connection":
                 showSecond = true;
@@ -151,7 +151,7 @@ export class FtManage extends FtClientMixin(LitElement) {
 
         nextPanel.enter();
 
-        this._setPanelShown("ft-manage-connections", showFirst);
+        this._setPanelShown("ft-manage-connections-connections", showFirst);
         this._setPanelShown("ft-edit-connection", showSecond);
     }
 
@@ -165,5 +165,5 @@ export class FtManage extends FtClientMixin(LitElement) {
 
 }
 
-window.customElements.define('ft-manage', FtManage);
+window.customElements.define('ft-manage-connections', FtManageConnections);
 

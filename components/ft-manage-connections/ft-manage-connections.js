@@ -23,7 +23,7 @@ import '@material/mwc-textfield';
 import '../../components/ft-connection-list/ft-connection-list.js';
 import '../../components/ft-private-and-secure/ft-private-and-secure.js';
 
-export class FtManageConnections extends LitElement {
+export class FtManageConnectionsConnections extends LitElement {
 
     static get properties() {
         return {
@@ -161,5 +161,5 @@ export class FtManageConnections extends LitElement {
 
 }
 
-window.customElements.define('ft-manage-connections', FtManageConnections);
+window.customElements.define('ft-manage-connections-connections', FtManageConnectionsConnections);
 

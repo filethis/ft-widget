@@ -1,4 +1,4 @@
-NAME=ft-manage-connections
+NAME=ft-manage-connections-connections
 
 include ../common/common.make
 
