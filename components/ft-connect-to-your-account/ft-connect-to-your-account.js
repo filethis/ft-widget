@@ -23,6 +23,20 @@ import '@material/mwc-button';
 
 export class FtConnectToYourAccount extends LitElement {
 
+    static get properties() {
+        return {
+            companyName: { type: String },
+            companyLogoUrl: { type: String }
+       };
+    }
+
+    constructor() {
+        super();
+
+        this.companyName = "Acme";
+        this.companyLogoUrl = null;
+    }
+
     render() {
         return html`
 
@@ -35,7 +49,7 @@ export class FtConnectToYourAccount extends LitElement {
             </div>
         
             <div id="explanation" part="explanation" class="body">
-                We will have access to the information below unless you choose to disconnect:
+                ${this.companyName} will have access to the information below unless you choose to disconnect:
             </div>
         
             <div id="bullet1" part="bullet1" class="bullet"></div>
