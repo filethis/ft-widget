@@ -18,7 +18,6 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import '@material/mwc-tab-bar';
 import '@material/mwc-tab';
 import './components/ft-fixture/ft-fixture.js';
-import './components/ft-gallery/ft-gallery.js';
 import { light } from "./mx-design-tokens/index.js";
 
 
@@ -68,7 +67,6 @@ export class FtWidget extends LitElement {
                 >
                     <mwc-tab label="Start"></mwc-tab>
                     <mwc-tab label="Fixture"></mwc-tab>
-                    <mwc-tab label="Gallery"></mwc-tab>
                 </mwc-tab-bar>
 
             </div>
@@ -81,9 +79,6 @@ export class FtWidget extends LitElement {
 
                 <ft-fixture id="fixture-panel" foo="bar">
                 </ft-fixture>
-
-                <ft-gallery id="gallery-panel">
-                </ft-gallery>
 
             </div>
 
@@ -131,9 +126,6 @@ export class FtWidget extends LitElement {
                         height: 100%
                     }
                     #fixture-panel {
-                        height: 100%
-                    }
-                    #gallery-panel {
                         height: 100%
                     }
             /* .floating {
@@ -184,7 +176,6 @@ export class FtWidget extends LitElement {
     {
         var showFirst = false;
         var showSecond = false;
-        var showThird = false;
 
         switch (index)
         {
@@ -194,14 +185,10 @@ export class FtWidget extends LitElement {
             case 1:  //fixture-panel
                 showSecond = true;
                 break;
-            case 2:  // gallery-panel
-                showThird = true;
-                break;
         }
 
         this._setPanelShown("start-panel", showFirst);
         this._setPanelShown("fixture-panel", showSecond);
-        this._setPanelShown("gallery-panel", showThird);
 
         localStorage.setItem('tabIndex', index);
     }
