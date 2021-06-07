@@ -1,4 +1,4 @@
-NAME=ft-connect-to-your-account
+NAME=ft-document-list
 
 include ../common/common.make
 

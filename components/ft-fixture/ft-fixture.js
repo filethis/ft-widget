@@ -28,6 +28,7 @@ import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
 import '../ft-connect/ft-connect.js'
 import '../ft-manage-connections/ft-manage-connections.js'
+import '../ft-view-documents/ft-view-documents.js'
 
 
 export class FtFixture extends FtHttpMixin(LitElement) {
@@ -400,6 +401,21 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             </ft-manage-connections>
                         </div>
 
+                        <div id="ft-view-documents-wrapper">
+                            <div id="ft-view-documents-wrapper-label" class="code">&lt;ft-view-documents&gt;</div>
+
+                            <ft-view-documents id="ft-view-documents" class="screen"
+                                server="${this.server}"
+                                apiPath="${this.apiPath}"
+                                apiKey="${this.apiKey}"
+                                apiSecret="${this.apiSecret}"
+                                userAccountId="${this.userAccountId}"
+                                userAccessToken="${this.userAccessToken}"
+                                isLive="${this.isLive}"
+                            >
+                            </ft-view-documents>
+                        </div>
+
                     </div>
 
                     <div id="dead">
@@ -412,6 +428,11 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                         <div id="dotted-ft-manage-connections-wrapper">
                             <div id="dotted-ft-manage-connections-wrapper-label" class="code">&lt;ft-manage-connections&gt;</div>
                             <div id="dotted-ft-manage-connections"></div>
+                        </div>
+                        
+                        <div id="dotted-ft-view-documents-wrapper">
+                            <div id="dotted-ft-view-documents-wrapper-label" class="code">&lt;ft-view-documents&gt;</div>
+                            <div id="dotted-ft-view-documents"></div>
                         </div>
 
                     </div>
@@ -561,8 +582,8 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     }
                                     #ft-connect {
                                     }
-                                #ft-manage-connections-wrapper {
-                                    margin-left: 100px;
+                                    #ft-manage-connections-wrapper {
+                                    margin-left: 50px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
@@ -571,6 +592,17 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     #ft-connect-manage-label {
                                     }
                                     #ft-manage-connections {
+                                    }
+                                #ft-view-documents-wrapper {
+                                    margin-left: 50px;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: flex-start;
+                                    align-items: center;
+                                }
+                                    #ft-view-documents-wrapper-label {
+                                    }
+                                    #ft-view-documents {
                                     }
                             #dead {
                                 width:100%;
@@ -600,7 +632,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                         align-items: center;
                                     }
                                 #dotted-ft-manage-connections-wrapper {
-                                    margin-left: 100px;
+                                    margin-left: 50px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
@@ -609,6 +641,26 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     #dotted-ft-manage-connections-wrapper-label {
                                     }
                                     #dotted-ft-manage-connections {
+                                        width: 400px;
+                                        height: 650px;
+                                        border-style:dashed;
+                                        border-color:black;
+                                        border-width:2px;
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: flex-start;
+                                        align-items: center;
+                                    }
+                                #dotted-ft-view-documents-wrapper {
+                                    margin-left: 50px;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: flex-start;
+                                    align-items: center;
+                                }
+                                    #dotted-ft-view-documents-wrapper-label {
+                                        }
+                                    #dotted-ft-view-documents {
                                         width: 400px;
                                         height: 650px;
                                         border-style:dashed;

@@ -25,7 +25,7 @@ import '../ft-manage-connections/ft-manage-connections.js'
 import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
-import '../ft-manage-connections-connections/ft-manage-connections-connections.js'
+import '../ft-manage-connections-panel/ft-manage-connections-panel.js'
 import '../ft-challenge/ft-challenge.js'
 
 
@@ -92,14 +92,14 @@ export class FtGallery extends LitElement {
                 </ft-enter-credentials>
             </ft-component-panel>
 
-            <ft-component-panel name="ft-manage-connections-connections">
-                <ft-manage-connections-connections
-                    id="ft-manage-connections-connections"
+            <ft-component-panel name="ft-manage-connections-panel">
+                <ft-manage-connections-panel
+                    id="ft-manage-connections-panel"
                     class="screen"
                     slot="component"
                     connections=${JSON.stringify(this.connections)}
                 >
-                </ft-manage-connections-connections>
+                </ft-manage-connections-panel>
             </ft-component-panel>
         </div>
 

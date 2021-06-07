@@ -1,4 +1,4 @@
-NAME=ft-connect-to-your-account
+NAME=ft-view-documents
 
 include ../common/common.make
 

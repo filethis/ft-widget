@@ -14,61 +14,62 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Figma design: https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=109%3A671
+// Figma design: https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=109%3A628
 
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
-import '@material/mwc-textfield';
-import '../../components/ft-connection-list/ft-connection-list.js';
-import '../../components/ft-private-and-secure/ft-private-and-secure.js';
+import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
+import '../ft-manage-connections-panel/ft-manage-connections-panel.js'
+import '../ft-edit-connection/ft-edit-connection.js'
 
-export class FtManageConnectionsConnections extends LitElement {
+export class FtManageConnections extends FtClientMixin(LitElement) {
 
     static get properties() {
         return {
-            connections: { type: Array },
-            _connectionCount: { type: Number },
-            fake: { type: Object }
+            _selectedConnection: { type: Object },
+            _selectedInstitution: { type: Object }
         };
     }
 
     constructor() {
         super();
-        this.connections = [];
-        this._connectionCount = 0;
-        this.fake = false;
+
+        this.live = false;
+
+        this._selectedConnection = null;
+        this._selectedInstitution = null;
+
+        this.addEventListener('edit-connection-button-clicked', this._onEditConnectionButtonClicked);
     }
 
     render() {
         return html`
 
         <div id="wrapper" part="wrapper">
-        
-            <div id="header" part="header">
-                <div id="title" part="title">
-                    Connections
-                </div>
-                <div id="subtitle" part="subtitle">
-                    Manage connected accounts
-                </div>
-                <div id="connection-count" part="connection-count">
-                    ${this._connectionCount} connected institutions
-                </div>
-            </div>
-        
-            <ft-connection-list id="ft-connection-list" part="ft-connection-list"
+
+            <ft-manage-connections-panel id="ft-manage-connections-panel" part="ft-manage-connections-panel"
                 connections=${JSON.stringify(this.connections)}
-                fake="${this.fake}"
             >
-            </ft-connection-list>
-        
-            <div id="footer" part="footer">
-                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
-                </ft-private-and-secure>
-            </div>
-        
+            </ft-manage-connections-panel>
+
+            <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
+                connection=${JSON.stringify(this._selectedConnection)}
+                institution=${JSON.stringify(this._selectedInstitution)}
+                @delete-connection-button-clicked="${this._onDeleteConnectionButtonClicked}"
+                @edit-connection-back-button-clicked="${this._onEditConnectionBackButtonClicked}"
+            >
+            </ft-edit-connection>
+
         </div>
+
+        <mwc-dialog id="delete-connection-confirm-dialog"
+            @closed="${this._onDeleteConnectionConfirmDialog}"
+        >
+            <div>Are you sure you want to delete this connection?</div>
+            <mwc-button slot="primaryAction" dialogAction="confirmed">Delete</mwc-button>
+            <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
+        </mwc-dialog>
 
         `;
     }
@@ -86,80 +87,83 @@ export class FtManageConnectionsConnections extends LitElement {
                 #wrapper {
                     position:relative;
                     width: 100%; height: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    align-items: stretch;
                 }
-                    #header{
-                        margin-top: 24px;
-                        margin-left: 24px;
-                        margin-right: 24px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: flex-start;
+                    #ft-manage-connections-panel {
+                        display: block;
                     }
-                        #title {
-                            height: 40px;
-                            font-size: ${unsafeCSS(light.FontSize.H1)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                            line-height: ${unsafeCSS(light.LineHeight.H1)}px;
-                            text-align: left;
-                            color: ${unsafeCSS(light.Color.Neutral900)};
-                        }
-                        #subtitle{
-                            margin-top: 8px;
-                            height: 24px;
-                            font-size: ${unsafeCSS(light.FontSize._loadFakeConnections)}px;
-                            line-height: ${unsafeCSS(light.LineHeight._loadFakeConnections)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Normal)};
-                            color: ${unsafeCSS(light.Color.Neutral900)};
-                        }
-                        #connection-count {
-                            margin-top: 23px;
-                            height: 16px;
-                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                            color: ${unsafeCSS(light.Color.Neutral900)};
-                        }
-                    #ft-connection-list {
-                        margin-left: 12px;
-                        width: 376px;
+                    #ft-edit-connection {
+                        display: none;
                     }
-                    #footer {
-                        flex: 1;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: flex-start;
-                        background-color: ${unsafeCSS(light.Color.Neutral100)};
-                    }
-                        #private-and-secure {
-                            margin-top: 20px;
-                            margin-bottom: 20px;
-                        }
         `
         ];
     }
 
-    enter() {
+    _onDeleteConnectionConfirmDialog(event)
+    {
+        if (event.detail.action == "confirmed")
+        {
+            const newEvent = new CustomEvent('delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
+            this.dispatchEvent(newEvent);
+
+            this._goToPanel("ft-manage-connections-panel");
+        }
     }
 
-    updated(changedProperties) {
-        if (changedProperties.has('connections'))
-            this._onConnectionsChanged();
+    _onEditConnectionButtonClicked(event) {
+        this._selectedConnection = event.detail;
+        this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
+        this._goToPanel("ft-edit-connection");
     }
 
-    _onConnectionsChanged() {
-        var count = 0;
-        if (!!this.connections)
-            count = this.connections.length;
-        this._connectionCount = count;
+    _onDeleteConnectionButtonClicked() {
+        var dialog = this.shadowRoot.querySelector("#delete-connection-confirm-dialog");
+        dialog.open = true;
+    }
+
+    _onEditConnectionBackButtonClicked() {
+        this._goToPanel("ft-manage-connections-panel");
+    }
+    
+    _findInstitutionForConnection(connection)
+    {
+        if (!connection)
+            return null;
+        const institution = this.institutions.find(institution => institution.id == connection.sourceId);
+        return institution;
+    }
+
+    _goToPanel(name) {
+        var showFirst = false;
+        var showSecond = false;
+
+        let nextPanel;
+
+        switch (name) {
+            case "ft-manage-connections-panel":
+                showFirst = true;
+                nextPanel = this.shadowRoot.getElementById("ft-manage-connections-panel");
+                break;
+            case "ft-edit-connection":
+                showSecond = true;
+                nextPanel = this.shadowRoot.getElementById("ft-edit-connection");
+                break;
+        }
+
+        nextPanel.enter();
+
+        this._setPanelShown("ft-manage-connections-panel", showFirst);
+        this._setPanelShown("ft-edit-connection", showSecond);
+    }
+
+    _setPanelShown(panelId, show) {
+        var panel = this.shadowRoot.getElementById(panelId)
+        if (show)
+            panel.style.display = "block";
+        else
+            panel.style.display = "none";
     }
 
 }
 
-window.customElements.define('ft-manage-connections-connections', FtManageConnectionsConnections);
+window.customElements.define('ft-manage-connections', FtManageConnections);
 
