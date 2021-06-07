@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { light } from "../../mx-design-tokens/index.js";
+
 
 // InteractionFormGenerator_1_0_0
 
@@ -79,7 +81,7 @@ InteractionFormGenerator_1_0_0.prototype.begin = function()
 
     this.rootView.style.display = "flex";
     this.rootView.style.flexDirection = "column";
-    this.rootView.style.alignItems = "flex-start";
+    this.rootView.style.alignItems = "stretch";
 };
 
 InteractionFormGenerator_1_0_0.prototype.end = function()
@@ -103,11 +105,10 @@ InteractionFormGenerator_1_0_0.prototype.generateTitle = function(title)
     element.style.fontWeight = "bold";
     element.style.lineHeight = "20pt";
     element.style.color = "#121417";
-    // font-size: ${unsafeCSS(light.FontSize.H2)}px;
-    // font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-    // line-height: ${unsafeCSS(light.LineHeight.H2)}px;
-    // text-align: left;
-    // color: ${unsafeCSS(light.Color.Neutral900)};
+    element.style.fontSize = light.FontSize.H2 + "px";
+    element.style.fontWeight = light.FontWeight.Bold;
+    element.style.lineHeight = light.LineHeight.H2 + "px";
+    element.style.color = light.Color.Neutral900;
 };
 
 InteractionFormGenerator_1_0_0.prototype.generateStaticText = function(id, text)
@@ -125,6 +126,11 @@ InteractionFormGenerator_1_0_0.prototype.generateTextInput = function(id, label,
 {
     var element = document.createElement('mwc-textfield');
     element.setAttribute('outlined', 'outlined');
+    element.style.setProperty("--mdc-theme-primary", light.Color.Primary300);
+    element.style.setProperty("--mdc-text-field-outlined-idle-border-color", light.Color.Neutral600);
+    element.style.setProperty("--mdc-text-field-outlined-hover-border-color", light.Color.Neutral900);
+    element.style.setProperty("--mdc-text-field-ink-color", light.Color.Neutral900);
+    element.style.setProperty("--mdc-text-field-label-ink-color", light.Color.Neutral600);
     this.rootView.appendChild(element);
 
     // TODO: Fix this in the server code

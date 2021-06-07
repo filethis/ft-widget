@@ -60,7 +60,7 @@ export class FtWidget extends LitElement {
             <div id="header">
 
                 <div id="title">
-                    FileThis Widget SDK
+                    FileThis Connect Widget SDK
                 </div>
 
                 <mwc-tab-bar id="tab-bar"

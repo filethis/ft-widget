@@ -195,7 +195,7 @@ export class FtConnect extends FtClientMixin(LitElement) {
         var showFourth = false;
 
         let nextPanel;
-
+        
         switch (name)
         {
             case "ft-connect-to-your-account":
