@@ -49,6 +49,8 @@ export class FtClient extends FtHttpMixin(LitElement)
             /** The list of all the user's FileThis connection resources. */
             connections: { type: Array },
 
+            lastCreatedConnection: { type: Object },
+
             /** The list of all the user's FileThis fetched document resources. */
             documents: { type: Array },
 
@@ -96,6 +98,7 @@ export class FtClient extends FtHttpMixin(LitElement)
         this.fakeData = false;
         this.fakeDataPath = "../node_modules/ft-connect-behavior/demo/data/";
         this.pollForChangeNotifications = true;
+        this.lastCreatedConnection = null;
 
         // Non-reactive instance variable initialization
         this._interactionRequest = null;  // The current user interaction request being handled
@@ -121,6 +124,7 @@ export class FtClient extends FtHttpMixin(LitElement)
         this._derivativePattern = /^\/documents\/([a-zA-Z0-9]+)\/derivatives\/(thumbnail-medium)$/;  // TODO: For now
         this._createdInteractionRequests = {};
         this._deletedInteractionRequests = {};
+        this._lastCreatedConnectionId = null;
 
         // Command event listeners
         this.addEventListener('create-connection-command', this._onCreateConnectionCommandInternal);
@@ -247,7 +251,9 @@ export class FtClient extends FtHttpMixin(LitElement)
         var username = createConnectionDialog.username;
         var password = createConnectionDialog.password;
         var institution = createConnectionDialog.institution;
-        this._createConnection(username, password, institution);
+        this._lastCreatedConnectionId = null;
+        this.lastCreatedConnection = null;
+        this._lastCreatedConnectionId = this._createConnection(username, password, institution);
     }
 
     _onDownloadDocumentsCommand(event)
@@ -539,8 +545,25 @@ export class FtClient extends FtHttpMixin(LitElement)
                     this._injectLogoUrlIntoConnection(connection);
                     this._injectHomePageUrlIntoConnection(connection);
                 }.bind(this));
+                this._updateLastCreatedConnection();
                 return connections;
             }.bind(this));
+    }
+
+    _updateLastCreatedConnection() {
+        const count = this.connections.length;
+        const lastCreatedConnectionId = this._lastCreatedConnectionId;
+        for (var index = 0; index < count; index++)
+        {
+            var connection = this.connections[index];
+            if (connection.id == lastCreatedConnectionId)
+            {
+                this.lastCreatedConnection = connection;
+                return;
+            }
+        }
+        this.lastCreatedConnection = null;
+        this._lastCreatedConnectionId = null;
     }
 
     _getConnection(connectionId)

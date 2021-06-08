@@ -29,10 +29,11 @@ export class FtAddConnections extends FtClient {
 
     static get properties() {
         return {
-            selectedInstitution: { type: Object },
+            _currentInstitution: { type: Object },
             _selectedPanel: { type: String },
             _panelUnderModal: { type: String },
-            _interactionRequest: { type: Object }
+            _currentInteractionRequest: { type: Object },
+            _currentConnection: { type: Object }
         };
     }
 
@@ -41,10 +42,11 @@ export class FtAddConnections extends FtClient {
 
         this.live = false;
 
-        this.selectedInstitution = null;
+        this._currentInstitution = null;
         this._selectedPanel = "ft-connect-to-your-account";
         this._panelUnderModal = "ft-connect-to-your-account";
-        this._interactionRequest = null;
+        this._currentInteractionRequest = null;
+        this._currentConnection = null;
 
         // Command event listeners
        this.addEventListener('ft-connect-to-your-account-continue-command', this._onConnectToYourAccountContinueCommand);
@@ -66,15 +68,15 @@ export class FtAddConnections extends FtClient {
             </ft-select-your-institution>
 
             <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials"
-                institution=${JSON.stringify(this.selectedInstitution)}
+                institution=${JSON.stringify(this._currentInstitution)}
                 @credentials-back-button-clicked="${this._onCredentialsBackButtonClicked}"
                 @credentials-continue-button-clicked="${this._onCredentialsContinueButtonClicked}"
             >
             </ft-enter-credentials>
 
             <ft-challenge id="ft-challenge" part="ft-challenge"
-                institution=${JSON.stringify(this.selectedInstitution)}
-                request=${JSON.stringify(this._interactionRequest)}
+                institution=${JSON.stringify(this._currentInstitution)}
+                request=${JSON.stringify(this._currentInteractionRequest)}
                 @challenge-back-button-clicked="${this._onChallengeBackButtonClicked}"
                 @submit-response-command="${this._onChallengeContinueButtonClicked}"
             >
@@ -146,7 +148,7 @@ export class FtAddConnections extends FtClient {
 
         // Pose the first request
         var interactionRequest = this.interactionRequests[0];
-        this._interactionRequest = interactionRequest;
+        this._currentInteractionRequest = interactionRequest;
         this._panelUnderModal = this._selectedPanel;
         this._goToPanel("ft-challenge")
     }
@@ -186,10 +188,10 @@ export class FtAddConnections extends FtClient {
     }
 
     _onInstitutionSelected(event) {
-        const selectedInstitution = event.detail;
-        if (!selectedInstitution)
+        const _currentInstitution = event.detail;
+        if (!_currentInstitution)
             return;
-        this.selectedInstitution = selectedInstitution;
+        this._currentInstitution = _currentInstitution;
         this._goToPanel("ft-enter-credentials");
     }
 

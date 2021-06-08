@@ -102,7 +102,7 @@ export class FtConnectionListItem extends LitElement {
                         min-width: 100px;
                         display: flex;
                         flex-direction: row;
-                        justify-content: flex-start;
+                        justify-content: center;
                         align-items: center;
                     }
                         #logo-image {
