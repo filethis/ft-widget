@@ -17,13 +17,13 @@ limitations under the License.
 // Figma design: https://www.figma.com/file/S6a4nOaB1T3zhe3HmyRzkt/FileThis?node-id=109%3A628
 
 
-import { LitElement, html, css, unsafeCSS } from 'lit';
+import { html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import { FtClient } from '../ft-client/ft-client.js';
 import '../ft-manage-connections-panel/ft-manage-connections-panel.js'
 import '../ft-edit-connection/ft-edit-connection.js'
 
-export class FtManageConnections extends FtClient(LitElement) {
+export class FtManageConnections extends FtClient {
 
     static get properties() {
         return {

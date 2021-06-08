@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 
-import { LitElement, html, css, unsafeCSS } from 'lit';
+import { html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import { FtClient } from '../ft-client/ft-client.js';
 import '../ft-view-documents-panel/ft-view-documents-panel.js'
 
-export class FtViewDocuments extends FtClient(LitElement) {
+export class FtViewDocuments extends FtClient {
 
     static get properties() {
         return {
@@ -39,7 +39,7 @@ export class FtViewDocuments extends FtClient(LitElement) {
         <div id="wrapper" part="wrapper">
 
             <ft-view-documents-panel id="ft-view-documents-panel" part="ft-view-documents-panel"
-            documents=${JSON.stringify(this.documents)}
+                documents=${JSON.stringify(this.documents)}
             >
             </ft-view-documents-panel>
 

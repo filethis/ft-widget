@@ -20,7 +20,7 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import './ft-component-panel.js'
-import '../ft-connect/ft-connect.js'
+import '../ft-add-connections/ft-add-connections.js'
 import '../ft-manage-connections/ft-manage-connections.js'
 import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
@@ -46,13 +46,13 @@ export class FtGallery extends LitElement {
 
         <div id="wrapper" part="wrapper">
 
-            <ft-component-panel name="ft-connect">
-                <ft-connect
-                    id="ft-connect"
+            <ft-component-panel name="ft-add-connections">
+                <ft-add-connections
+                    id="ft-add-connections"
                     class="screen" 
                     slot="component"
                 >
-                </ft-connect>
+                </ft-add-connections>
             </ft-component-panel> 
 
             <ft-component-panel name="ft-manage-connections">

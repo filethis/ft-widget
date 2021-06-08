@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-import { LitElement, html, css, unsafeCSS } from 'lit';
+import { html, css, unsafeCSS } from 'lit';
 import '@material/mwc-button';
 import { light } from "../../mx-design-tokens/index.js";
 import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
@@ -25,7 +25,7 @@ import '../ft-challenge/ft-challenge.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
 
-export class FtAddConnections extends FtClient(LitElement) {
+export class FtAddConnections extends FtClient {
 
     static get properties() {
         return {
@@ -119,6 +119,12 @@ export class FtAddConnections extends FtClient(LitElement) {
 
         if (changedProperties.has('interactionRequests'))
             this._onInteractionRequestsChanged();
+        if (changedProperties.has('connections'))
+            this._onConnectionsChanged();
+    }
+
+    _onConnectionsChanged() {
+        var foo = "bar";
     }
 
     _onInteractionRequestsChanged() {
