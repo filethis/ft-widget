@@ -19,7 +19,7 @@ limitations under the License.
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
-import { FtClient } from '../ft-client-mixin/ft-client-mixin.js';
+import { FtClient } from '../ft-client/ft-client.js';
 import '../ft-manage-connections-panel/ft-manage-connections-panel.js'
 import '../ft-edit-connection/ft-edit-connection.js'
 

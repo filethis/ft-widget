@@ -22,10 +22,10 @@ import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
 import '../ft-challenge/ft-challenge.js'
-import { FtClient } from '../ft-client/ft-client.js';
+import { FtClientMixin } from '../ft-client/ft-client.js';
 
 
-export class FtAddConnections extends FtClient(LitElement) {
+export class FtConnect extends FtClientMixin(LitElement) {
 
     static get properties() {
         return {
@@ -195,7 +195,7 @@ export class FtAddConnections extends FtClient(LitElement) {
         var showFourth = false;
 
         let nextPanel;
-        
+
         switch (name)
         {
             case "ft-connect-to-your-account":
@@ -236,5 +236,5 @@ export class FtAddConnections extends FtClient(LitElement) {
 
 }
 
-window.customElements.define('ft-add-connections', FtAddConnections);
+window.customElements.define('ft-connect', FtConnect);
 
