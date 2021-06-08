@@ -21,6 +21,7 @@ import { light } from "../../mx-design-tokens/index.js";
 import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
+import '../ft-connecting/ft-connecting.js'
 import '../ft-challenge/ft-challenge.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
@@ -74,6 +75,12 @@ export class FtAddConnections extends FtClient {
             >
             </ft-enter-credentials>
 
+            <ft-connecting id="ft-connecting" part="ft-connecting"
+                institution=${JSON.stringify(this._currentInstitution)}
+                @connecting-back-button-clicked="${this._onConnectingBackButtonClicked}"
+            >
+            </ft-connecting>
+
             <ft-challenge id="ft-challenge" part="ft-challenge"
                 institution=${JSON.stringify(this._currentInstitution)}
                 request=${JSON.stringify(this._currentInteractionRequest)}
@@ -109,6 +116,9 @@ export class FtAddConnections extends FtClient {
                     #ft-enter-credentials {
                         display: none;
                     }
+                    #ft-connecting {
+                        display: none;
+                    }
                     #ft-challenge {
                         display: none;
                     }
@@ -121,12 +131,6 @@ export class FtAddConnections extends FtClient {
 
         if (changedProperties.has('interactionRequests'))
             this._onInteractionRequestsChanged();
-        if (changedProperties.has('connections'))
-            this._onConnectionsChanged();
-    }
-
-    _onConnectionsChanged() {
-        var foo = "bar";
     }
 
     _onInteractionRequestsChanged() {
@@ -180,6 +184,10 @@ export class FtAddConnections extends FtClient {
     }
 
     _onCredentialsContinueButtonClicked() {
+        this._goToPanel("ft-connecting");
+    }
+
+    _onConnectingBackButtonClicked() {
         this._goToPanel("ft-connect-to-your-account");
     }
 
@@ -201,6 +209,7 @@ export class FtAddConnections extends FtClient {
         var showSecond = false;
         var showThird = false;
         var showFourth = false;
+        var showFifth = false;
 
         let nextPanel;
         
@@ -222,7 +231,11 @@ export class FtAddConnections extends FtClient {
                 showFourth = true;
                 nextPanel = this.shadowRoot.getElementById("ft-challenge");
                 break;
-            }
+            case "ft-connecting":
+                showFifth = true;
+                nextPanel = this.shadowRoot.getElementById("ft-connecting");
+                break;
+        }
 
         nextPanel.enter();
 
@@ -230,6 +243,7 @@ export class FtAddConnections extends FtClient {
         this._setPanelShown("ft-select-your-institution", showSecond);
         this._setPanelShown("ft-enter-credentials", showThird);
         this._setPanelShown("ft-challenge", showFourth);
+        this._setPanelShown("ft-connecting", showFifth);
 
         this._selectedPanel = name;
     }
