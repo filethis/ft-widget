@@ -33,7 +33,7 @@ export class FtConnectToYourAccount extends LitElement {
     constructor() {
         super();
 
-        this.companyName = "Acme";
+        this.companyName = "We";
         this.companyLogoUrl = null;
     }
 

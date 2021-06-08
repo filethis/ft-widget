@@ -150,10 +150,6 @@ export const FtClientMixin = (base) =>
                 this._onSelectedFilterIdChanged();
             if (changedProperties.has('isLive'))
                 this._onLiveChanged();
-            if (changedProperties.has('institutions'))
-            {
-                var foo = "bar";
-            }
         }
 
         _onLiveChanged()
