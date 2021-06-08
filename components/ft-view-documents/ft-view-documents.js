@@ -17,10 +17,10 @@ limitations under the License.
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
-import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
+import { FtClient } from '../ft-client-mixin/ft-client-mixin.js';
 import '../ft-view-documents-panel/ft-view-documents-panel.js'
 
-export class FtViewDocuments extends FtClientMixin(LitElement) {
+export class FtViewDocuments extends FtClient(LitElement) {
 
     static get properties() {
         return {

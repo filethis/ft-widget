@@ -18,7 +18,7 @@ limitations under the License.
 import { FtHttpMixin } from '../ft-http-mixin/ft-http-mixin.js';
 
 
-export const FtClientMixin = (base) =>
+export const FtClient = (base) =>
     class FtClient extends FtHttpMixin(base)
     {
         static get properties() {

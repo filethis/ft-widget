@@ -22,10 +22,10 @@ import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
 import '../ft-challenge/ft-challenge.js'
-import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
+import { FtClient } from '../ft-client-mixin/ft-client-mixin.js';
 
 
-export class FtAddConnections extends FtClientMixin(LitElement) {
+export class FtAddConnections extends FtClient(LitElement) {
 
     static get properties() {
         return {
