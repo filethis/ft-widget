@@ -85,7 +85,7 @@ export class FtAddConnections extends FtClient {
                 institution=${JSON.stringify(this._currentInstitution)}
                 request=${JSON.stringify(this._currentInteractionRequest)}
                 @challenge-back-button-clicked="${this._onChallengeBackButtonClicked}"
-                @submit-response-command="${this._onChallengeContinueButtonClicked}"
+                @challenge-submit-button-clicked="${this._onChallengeSubmitButtonClicked}"
             >
             </ft-challenge>
 
@@ -184,6 +184,15 @@ export class FtAddConnections extends FtClient {
     }
 
     _onCredentialsContinueButtonClicked() {
+        var enterCredentialsElement = this.shadowRoot.querySelector("#ft-enter-credentials");
+        var payload = {
+            institution: this._currentInstitution,
+            username: enterCredentialsElement.getUsername(),
+            password: enterCredentialsElement.getPassword()
+        }
+        const connectEvent = new CustomEvent('client-create-connection-command', { detail: payload, bubbles: true, composed: true });
+        this.dispatchEvent(connectEvent);
+
         this._goToPanel("ft-connecting");
     }
 
@@ -193,6 +202,13 @@ export class FtAddConnections extends FtClient {
 
     _onChallengeBackButtonClicked() {
         this._goToPanel(this._panelUnderModal);
+    }
+
+    _onChallengeSubmitButtonClicked() {
+        const connectEvent = new CustomEvent('client-submit-interaction-response-command', { bubbles: true, composed: true });
+        this.dispatchEvent(connectEvent);
+
+        this._goToPanel("ft-connect-to-your-account");
     }
 
     _onInstitutionSelected(event) {

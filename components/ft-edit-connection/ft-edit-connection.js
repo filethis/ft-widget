@@ -214,23 +214,6 @@ export class FtEditConnection extends LitElement {
         this.dispatchEvent(newEvent);
     }
     
-    _onConnectButtonClicked()
-    {
-        var usernameField = this.shadowRoot.querySelector("#username");
-        var passwordField = this.shadowRoot.querySelector("#password");
-        var payload = {
-            connection: this.connection,
-            username: usernameField.value,
-            password: passwordField.value,
-        }
-
-        const connectEvent = new CustomEvent('create-connection-command', { detail: payload, bubbles: true, composed: true });
-        this.dispatchEvent(connectEvent);
- 
-        const continueEvent = new CustomEvent('credentials-continue-button-clicked', { bubbles: true, composed: true });
-        this.dispatchEvent(continueEvent);
-    }
-
     _handleVisibilityClicked(event) {
         alert("_handleVisibilityClicked");
     }

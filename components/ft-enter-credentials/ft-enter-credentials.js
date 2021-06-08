@@ -42,8 +42,20 @@ export class FtEnterCredentials extends LitElement {
         this.fake = false;
     }
 
+    getUsername() {
+        const usernameField = this.shadowRoot.querySelector("#username");
+        return usernameField.value;
+    }
+
+    getPassword() {
+        const passwordField = this.shadowRoot.querySelector("#password");
+        return passwordField.value;
+    }
+
     firstUpdated()
     {
+        this.shadowRoot.addEventListener("keyup", this._onKeyUp.bind(this));
+    
         // TODO: This still doesn't work
         // See: https://lit-element.polymer-project.org/guide/events
         this.shadowRoot.addEventListener('MDCTextField:icon', this._handleVisibilityClicked.bind(this));
@@ -223,6 +235,15 @@ export class FtEnterCredentials extends LitElement {
         this.clear();
     }
 
+    _onKeyUp(event) {
+        if (event.keyCode === 13)
+        {
+            event.preventDefault();
+            // TODO: Must be enabled
+            document.getElementById("button").click();
+        }
+    }
+
     clear() {
         var usernameField = this.shadowRoot.querySelector("#username");
         var passwordField = this.shadowRoot.querySelector("#password");
@@ -246,23 +267,12 @@ export class FtEnterCredentials extends LitElement {
     }
 
     _onConnectButtonClicked()
-    {
-        var usernameField = this.shadowRoot.querySelector("#username");
-        var passwordField = this.shadowRoot.querySelector("#password");
-        var payload = {
-            institution: this.institution,
-            username: usernameField.value,
-            password: passwordField.value,
-        }
-
-        const connectEvent = new CustomEvent('create-connection-command', { detail: payload, bubbles: true, composed: true });
-        this.dispatchEvent(connectEvent);
- 
+    { 
         const continueEvent = new CustomEvent('credentials-continue-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(continueEvent);
     }
 
-    _handleVisibilityClicked(event) {
+    _handleVisibilityClicked() {
         alert("_handleVisibilityClicked");
     }
 

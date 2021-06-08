@@ -65,6 +65,11 @@ export class FtChallenge extends LitElement {
         this._formGenerator = null;
     }
 
+    firstUpdated()
+    {
+        this.shadowRoot.addEventListener("keyup", this._onKeyUp.bind(this));
+    }
+
     render() {
         return html`
 
@@ -208,6 +213,15 @@ export class FtChallenge extends LitElement {
     enter() {
     }
 
+    _onKeyUp(event) {
+        if (event.keyCode === 13)
+        {
+            event.preventDefault();
+            // TODO: Must be enabled
+            document.getElementById("continue-button").click();
+        }
+    }
+
     updated(changedProperties) {
         if (changedProperties.has("version"))
             this._onVersionChanged();
@@ -297,7 +311,7 @@ export class FtChallenge extends LitElement {
     {
         this.generateResponse();
 
-        const event = new CustomEvent('submit-response-command', { detail: this.response, bubbles: true, composed: true });
+        const event = new CustomEvent('challenge-submit-button-clicked', { detail: this.response, bubbles: true, composed: true });
         this.dispatchEvent(event);
     }
 

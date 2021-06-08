@@ -127,12 +127,13 @@ export class FtClient extends FtHttpMixin(LitElement)
         this._lastCreatedConnectionId = null;
 
         // Command event listeners
-        this.addEventListener('create-connection-command', this._onCreateConnectionCommandInternal);
-        this.addEventListener('download-documents-command', this._onDownloadDocumentsCommand);
-        this.addEventListener('upload-documents-command', this._onUploadDocumentsCommand);
-        this.addEventListener('delete-connection-command', this._onDeleteConnectionCommand);
-        this.addEventListener('delete-document-command', this._onDeleteDocumentCommand);
-        this.addEventListener('action-command', this._onActionCommand);
+        this.addEventListener('client-create-connection-command', this._onCreateConnectionCommandInternal);
+        this.addEventListener('client-download-documents-command', this._onDownloadDocumentsCommand);
+        this.addEventListener('client-upload-documents-command', this._onUploadDocumentsCommand);
+        this.addEventListener('client-delete-connection-command', this._onDeleteConnectionCommand);
+        this.addEventListener('client-delete-document-command', this._onDeleteDocumentCommand);
+        this.addEventListener('client-submit-interaction-response-command', this._onSubmitInteractionResponseCommand);
+        this.addEventListener('client-action-command', this._onActionCommand);
     }
 
     connectedCallback()
@@ -725,6 +726,30 @@ export class FtClient extends FtHttpMixin(LitElement)
                 return interactionRequests;
             }.bind(this));
     }
+
+    _onSubmitInteractionResponseCommand()
+    {
+        var interactionRequest = this._interactionRequest;
+        var interactionResponse = this._interactionResponse;
+  
+        var connectionId = interactionRequest.connectionId;
+        var interactionId = interactionRequest.id;
+        var url = this.server + this.apiPath +
+            "/accounts/" + this.account.id +
+            "/connections/" + connectionId +
+            "/interactions/" + interactionId +
+            "/response";
+        var options = this._buildHttpOptions();
+  
+        return this.httpPut(url, interactionResponse, options)
+            .then(function()
+            {
+            }.bind(this))
+            .catch(function(reason)
+            {
+                this._handleError(reason);
+            }.bind(this));
+    }  
 
     _createConnection(username, password, institution)
     {

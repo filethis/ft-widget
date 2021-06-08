@@ -55,12 +55,12 @@ FileThis.ConnectBehavior = {
 
     listeners:
     {
-        'create-connection-command': '_onCreateConnectionCommandInternal',
-        'download-documents-command': '_onDownloadDocumentsCommand',
-        'upload-documents-command': '_onUploadDocumentsCommand',
-        'delete-connection-command': '_onDeleteConnectionCommand',
-        'delete-document-command': '_onDeleteDocumentCommand',
-        'action-command': '_onActionCommand',
+        'client-create-connection-command': '_onCreateConnectionCommandInternal',
+        'client-download-documents-command': '_onDownloadDocumentsCommand',
+        'client-upload-documents-command': '_onUploadDocumentsCommand',
+        'client-delete-connection-command': '_onDeleteConnectionCommand',
+        'client-delete-document-command': '_onDeleteDocumentCommand',
+        'client-action-command': '_onActionCommand',
         'visit-source-site-command': '_onVisitSourceSiteCommand',
         'is-this-safe-command': '_onIsThisSafeCommand'
     },

@@ -102,7 +102,7 @@ export class FtManageConnections extends FtClient {
     {
         if (event.detail.action == "confirmed")
         {
-            const newEvent = new CustomEvent('delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
+            const newEvent = new CustomEvent('client-delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
             this.dispatchEvent(newEvent);
 
             this._goToPanel("ft-manage-connections-panel");
