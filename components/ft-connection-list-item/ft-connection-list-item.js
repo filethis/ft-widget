@@ -156,6 +156,87 @@ export class FtConnectionListItem extends LitElement {
     updated(changedProperties) {
         if (changedProperties.has("fake"))
             this._onFakeChanged();
+        if (changedProperties.has("connection"))
+            this._onConnectionChanged();
+    }
+
+    _onConnectionChanged()
+    {
+        if (!this.connection)
+            return;
+  
+        var isActive;
+        var label;
+        var showQuiescentButton = false;
+        var showQuiescentSubtext = false;
+        var quiescentButtonIcon = "refresh";
+  
+        switch (this.connection.state)
+        {
+            case "waiting":
+                isActive = false;
+                label = "Refresh";
+                showQuiescentButton = this.ftConnectionListItemAllowManualFetch;
+                showQuiescentSubtext = true;
+                break;
+                
+            case "created":
+            case "manual":
+            case "connecting":
+                isActive = true;
+                label = "Connecting";
+                break;
+                
+            case "uploading":
+                isActive = true;
+                var documentCount = this.connection.documentCount;
+                if (documentCount === 0 ||
+                    !this.ftConnectionListItemShowDocumentCount)
+                    label = "Retrieving";
+                else
+                    label = "Retrieved " + documentCount.toString();
+                break;
+                
+            case "question":
+                isActive = false;
+                label = "Fix It";
+                showQuiescentButton = true;
+                quiescentButtonIcon = "report-problem";
+                break;
+                
+            case "answered":
+                isActive = true;
+                label = "Answered";
+                break;
+                
+            case "completed":
+                isActive = true;
+                label = "Closing";
+                break;
+                
+            case "error":
+                isActive = false;
+                label = "Fix It";
+                showQuiescentButton = true;
+                quiescentButtonIcon = "report-problem";
+                break;
+                
+            case "incorrect":
+            default:
+                isActive = true;
+                label = "Refresh";
+                break;
+        }
+  
+        // this._activePanelHidden = !isActive;
+        // this.$.activeSpinnerLabel.innerHTML = label;
+        // this.$.activeSpinner.active = isActive;
+  
+        // this._quiescentPanelHidden = isActive;
+        // this._quiescentButtonHidden = !showQuiescentButton;
+        // this._quiescentSubtextHidden = !showQuiescentSubtext;
+        // this.$.quiescentButtonLabel.innerHTML = label;
+        // this.$.quiescentButtonIcon.icon = quiescentButtonIcon;
     }
 
     _onEditButtonClicked() {

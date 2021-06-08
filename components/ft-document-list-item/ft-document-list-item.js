@@ -45,8 +45,11 @@ export class FtDocumentListItem extends LitElement {
 
         <div id="wrapper" part="wrapper">
         
-            <div id="logo" part="logo" on-tap="_onSourceClicked">
-                <img id="logo-image" part="logo-image" src="${!this.document ? '' : this.document.logoUrl}">
+            <div id="thumbnail">
+                <img id="thumbnail-image"
+                    src="${!this.document ? '' : this.document.thumbnailUrl}"
+                    alt="Thumbnail"
+                >
             </div>
 
             <div id="text-and-buttons" part="text-and-buttons">
@@ -75,7 +78,7 @@ export class FtDocumentListItem extends LitElement {
                 overflow: hidden;
                 font-family: ${unsafeCSS(light.Font.Regular)};
                 width: 376px;
-                height: 64px;
+                height: 130px;
             }
                 #wrapper {
                     position:relative;
@@ -83,30 +86,24 @@ export class FtDocumentListItem extends LitElement {
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;
-                    align-items: stretch;
+                    align-items: center;
                 }
-                    #logo {
-                        width: 100px;
-                        height: 50px;
-                        min-width: 100px;
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: flex-start;
-                        align-items: center;
+                    #thumbnail {
+                        box-shadow: 3px 3px 3px #888888;
+                        border:1px solid #DDD;
                     }
-                        #logo-image {
-                            width:auto;
-                            max-width:100%;
+                        #thumbnail-image {
+                            width: 80px;
+                            height: 100px;
                         }
                     #text-and-buttons {
                         flex: 1;
-                        margin-left: 12px;
+                        margin-left: 16px;
                         min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
                         display: flex;
                         flex-direction: row;
                         justify-content: flex-start;
                         align-items: center;
-                        border-bottom: solid 1px ${unsafeCSS(light.Color.Neutral300)};
                     }
                         #text {
                             flex: 1;

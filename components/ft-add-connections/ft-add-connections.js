@@ -25,7 +25,7 @@ import '../ft-challenge/ft-challenge.js'
 import { FtClientMixin } from '../ft-client-mixin/ft-client-mixin.js';
 
 
-export class FtConnect extends FtClientMixin(LitElement) {
+export class FtAddConnections extends FtClientMixin(LitElement) {
 
     static get properties() {
         return {
@@ -236,5 +236,5 @@ export class FtConnect extends FtClientMixin(LitElement) {
 
 }
 
-window.customElements.define('ft-connect', FtConnect);
+window.customElements.define('ft-add-connections', FtAddConnections);
 

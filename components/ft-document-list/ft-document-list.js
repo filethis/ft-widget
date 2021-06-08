@@ -86,7 +86,7 @@ export class FtDocumentList extends LitElement {
                     }
                         mwc-list-item {
                             width: 376px;
-                            height: 64px;
+                            height: 130px;
                             --mdc-list-side-padding: 0;
                             --mdc-list-vertical-padding: 0;
                         }

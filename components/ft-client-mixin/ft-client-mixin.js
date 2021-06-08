@@ -517,8 +517,8 @@ export const FtClientMixin = (base) =>
             var options = this._buildHttpOptions();
             return this.httpGet(url, options)
                 .then(function (institutions) {
-                    // if (this.fakeInstitutions && this.selectedFilterId === "all")
-                    //     this._prependFakeInstitution(institutions);
+                    if (this.fakeInstitutions)  // && this.selectedFilterId === "all")
+                        this._prependFakeInstitution(institutions);
                     this.institutions = institutions;
                     return institutions;
                 }.bind(this));
@@ -742,6 +742,11 @@ export const FtClientMixin = (base) =>
         // Helpers -------------------------------------------------------------------------------
 
         _getInstitutionLogoUrl(institutionId) {
+
+            // HACK
+            if (institutionId > 100000)
+                return "https://filethis.com/static/logos/72/Logo_FakeBank.png";
+
             var institution = this._findInstitutionWithId(institutionId);
             if (institution === null)
                 return null;
@@ -1436,24 +1441,24 @@ export const FtClientMixin = (base) =>
             institutions.unshift(fakeInstitution);
 
             // The fake internal institution
-            fakeInstitution =
-            {
-                "id": 100301,
-                "name": "Fake Internal Bills",
-                "type": "util",
-                "state": "live",
-                "homePageUrl": "https://fake-company-site.herokuapp.com",
-                "phone": "(800) 555-5555",
-                "logoPath": "logos/Logo_FakeBank.png",
-                "logo": "Logo_FakeBank.png",
-                "logoUrl": "https://filethis.com/static/logos/72/Logo_FakeBank.png",
-                "note": "",
-                "info": "",
-                "pattern": "",
-                "isNew": false,
-                "isPopular": false
-            };
-            institutions.unshift(fakeInstitution);
+            // fakeInstitution =
+            // {
+            //     "id": 100301,
+            //     "name": "Fake Internal Bills",
+            //     "type": "util",
+            //     "state": "live",
+            //     "homePageUrl": "https://fake-company-site.herokuapp.com",
+            //     "phone": "(800) 555-5555",
+            //     "logoPath": "logos/Logo_FakeBank.png",
+            //     "logo": "Logo_FakeBank.png",
+            //     "logoUrl": "https://filethis.com/static/logos/72/Logo_FakeBank.png",
+            //     "note": "",
+            //     "info": "",
+            //     "pattern": "",
+            //     "isNew": false,
+            //     "isPopular": false
+            // };
+            // institutions.unshift(fakeInstitution);
 
             // The fake internal institution
             //            fakeInstitution =

@@ -1,4 +1,4 @@
-NAME=ft-connect-to-your-account
+NAME=ft-add-connections
 
 include ../common/common.make
 
