@@ -218,7 +218,7 @@ export class FtChallenge extends LitElement {
         {
             event.preventDefault();
             // TODO: Must be enabled
-            document.getElementById("continue-button").click();
+            this.shadowRoot.getElementById("continue-button").click();
         }
     }
 

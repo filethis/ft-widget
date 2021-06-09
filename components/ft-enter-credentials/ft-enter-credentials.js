@@ -240,7 +240,7 @@ export class FtEnterCredentials extends LitElement {
         {
             event.preventDefault();
             // TODO: Must be enabled
-            document.getElementById("button").click();
+            this.shadowRoot.getElementById("button").click();
         }
     }
 

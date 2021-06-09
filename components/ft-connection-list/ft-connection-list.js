@@ -78,9 +78,11 @@ export class FtConnectionList extends LitElement {
                     overflow-x: hidden;
                     overscroll-behavior: contain;
                 }
-                    mwc-list {
+                    #list {
+                        --mdc-ripple-color: transparent;
                     }
                         mwc-list-item {
+                            cursor: default;
                             width: 376px;
                             height: 64px;
                             --mdc-list-side-padding: 0;

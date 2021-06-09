@@ -101,7 +101,6 @@ export class FtClient extends FtHttpMixin(LitElement)
         this.lastCreatedConnection = null;
 
         // Non-reactive instance variable initialization
-        this._interactionRequest = null;  // The current user interaction request being handled
         this._uploadableFileTypes = "application/pdf";
         this._downloadUrl = "";  // The URL for the current document download
         this._downloadFilename = "";  // The filename for the current document download
@@ -163,68 +162,6 @@ export class FtClient extends FtHttpMixin(LitElement)
         if (this.isLive)
             this.getAllData();
     }
-
-    // TODO: Move this outside of the client !!!
-    /**
-     * Poses dialog window for the next pending user interaction request, if there is one.
-     */
-    // poseNextPendingInteractionRequest() {
-    //     if (this.interactionRequests.length === 0)
-    //         return;
-
-    //     // If we already have a dialog posed
-    //     if (this.$.modalInteractionDialog.opened)
-    //         return;
-
-    //     // Pose the first request
-    //     var interactionRequest = this.interactionRequests[0];
-    //     this._interactionRequest = interactionRequest;
-    //     this.$.modalInteractionDialog.open();
-    //     return interactionRequest;
-    // }
-    // _poseNextPendingInteractionRequest() {
-    //     return this.poseNextPendingInteractionRequest();
-    // }
-    // _poseInteractionForConnection(connection) {
-    //     var count = this.interactionRequests.length;
-    //     if (count === 0)
-    //         return;
-
-    //     // If we already have a dialog posed
-    //     if (this.$.modalInteractionDialog.opened) {
-    //         this.logInfo("There is already a user interaction request dialog posed");
-    //         return;
-    //     }
-
-    //     var connectionId = connection.id;
-
-    //     var interactionRequestForConnection = null;
-    //     for (var index = 0; index < count; index++) {
-    //         var interactionRequest = this.interactionRequests[index];
-    //         if (interactionRequest.connectionId === connectionId) {
-    //             interactionRequestForConnection = interactionRequest;
-    //             break;
-    //         }
-    //     }
-    //     if (interactionRequestForConnection === null)
-    //         return;
-
-    //     this._interactionRequest = interactionRequestForConnection;
-    //     this.$.modalInteractionDialog.open();
-    // }
-    // _onInteractionRequestsListChanged(to, from) {
-    //     var alreadyInitialized = (from !== undefined);
-    //     if (alreadyInitialized)
-    //         this._poseNextPendingInteractionRequest();
-    // }
-    // _onInteractionRequestsSplicesChanged(changeRecord) {
-    //     if (!changeRecord)
-    //         return;
-
-    //     var alreadyInitialized = (changeRecord !== undefined);
-    //     if (alreadyInitialized)
-    //         this._poseNextPendingInteractionRequest();
-    // }
 
     _changeNotificationPoller()
     {
@@ -727,11 +664,11 @@ export class FtClient extends FtHttpMixin(LitElement)
             }.bind(this));
     }
 
-    _onSubmitInteractionResponseCommand()
-    {
-        var interactionRequest = this._interactionRequest;
-        var interactionResponse = this._interactionResponse;
-  
+    _onSubmitInteractionResponseCommand(event)
+    { 
+        const interactionRequest = event.detail.request;
+        const interactionResponse = event.detail.response;
+
         var connectionId = interactionRequest.connectionId;
         var interactionId = interactionRequest.id;
         var url = this.server + this.apiPath +

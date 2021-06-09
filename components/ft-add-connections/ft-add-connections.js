@@ -205,8 +205,13 @@ export class FtAddConnections extends FtClient {
     }
 
     _onChallengeSubmitButtonClicked() {
-        const connectEvent = new CustomEvent('client-submit-interaction-response-command', { bubbles: true, composed: true });
-        this.dispatchEvent(connectEvent);
+        var challengeElement = this.shadowRoot.querySelector("#ft-challenge");
+        const payload = {
+            request: challengeElement.request,
+            response: challengeElement.response
+        }
+        const event = new CustomEvent('client-submit-interaction-response-command', { detail: payload, bubbles: true, composed: true });
+        this.dispatchEvent(event);
 
         this._goToPanel("ft-connect-to-your-account");
     }
