@@ -47,14 +47,6 @@ export class FtConnecting extends LitElement {
 
         <div id="wrapper" part="wrapper">
         
-            <div id="header" part="header">
-                <mwc-icon-button id="back-button" part="back-button"
-                    icon="arrow_back"
-                    @click=${this._onBackButtonClicked}
-                >
-                </mwc-icon-button>
-            </div>
-
             <ft-institution-list-item id="institution" part="institution"
                 institution=${JSON.stringify(this.institution)}
                 fake="${this.fake}"
@@ -71,6 +63,30 @@ export class FtConnecting extends LitElement {
                 >
                 </mwc-circular-progress>
             </div>
+
+            <div id="message1" part="message1" class="message">
+                Connecting may take some time.
+            </div>
+            <div id="message2" part="message2" class="message">
+                Feel free to add another while you wait,
+            </div>
+            <div id="message3" part="message3" class="message">
+                or check back later.
+            </div>
+            
+            <mwc-button id="another-button" part="another-button" class="button"
+                unelevated
+                label="Connect another account"
+                @click=${this._onAnotherButtonClicked}
+            >
+            </mwc-button>
+            
+            <mwc-button id="done-button" part="done-button" class="button"
+                label="Done for now"
+                outlined
+                @click=${this._onDoneButtonClicked}
+            >
+            </mwc-button>
 
         </div>
         `;
@@ -94,19 +110,9 @@ export class FtConnecting extends LitElement {
                 justify-content: flex-start;
                 align-items: stretch;
             }
-                #header{
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    align-items: flex-start;
-                    height: 56px;
-                }
-                    #back-button{
-                        margin-left: 5px;
-                        margin-top: 4px;
-                    }
                 #institution {
                     margin-left: 24px;
+                    margin-top: 24px;
                     margin-right: 24px;
                     height: 64px;
                 }
@@ -132,6 +138,36 @@ export class FtConnecting extends LitElement {
                         height: 48px;
                         --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
                     }
+                .message {
+                    margin-left: 24px;
+                    margin-right: 24px;
+                    text-align: center;
+                    color: ${unsafeCSS(light.Color.Neutral900)};
+                    font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                    font-weight: ${unsafeCSS(light.FontWeight.Regular)};
+                    line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                }
+                #message1 {
+                    margin-top: 40px;
+                }
+                .button {
+                    margin-left: 24px;
+                    margin-right: 24px;
+                    height: 44px;
+                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
+                    --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
+                    --mdc-typography-button-text-transform: none;
+                }
+                #another-button {
+                    margin-top: 25px;
+                    --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                    --mdc-theme-on-primary: white;
+                }
+                #done-button {
+                    margin-top: 10px;
+                    --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                }
         `
         ];
     }
@@ -144,8 +180,13 @@ export class FtConnecting extends LitElement {
             this._onFakeChanged();
     }
 
-    _onBackButtonClicked() {
-        const newEvent = new CustomEvent('connecting-back-button-clicked', { bubbles: true, composed: true });
+    _onAnotherButtonClicked() {
+        const newEvent = new CustomEvent('connecting-another-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(newEvent);
+    }
+
+    _onDoneButtonClicked() {
+        const newEvent = new CustomEvent('connecting-done-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(newEvent);
     }
 

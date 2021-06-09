@@ -77,7 +77,8 @@ export class FtAddConnections extends FtClient {
 
             <ft-connecting id="ft-connecting" part="ft-connecting"
                 institution=${JSON.stringify(this._currentInstitution)}
-                @connecting-back-button-clicked="${this._onConnectingBackButtonClicked}"
+                @connecting-another-button-clicked="${this._onConnectingAnotherButtonClicked}"
+                @connecting-done-button-clicked="${this._onConnectingDoneButtonClicked}"
             >
             </ft-connecting>
 
@@ -196,7 +197,11 @@ export class FtAddConnections extends FtClient {
         this._goToPanel("ft-connecting");
     }
 
-    _onConnectingBackButtonClicked() {
+    _onConnectingAnotherButtonClicked() {
+        this._goToPanel("ft-select-your-institution");
+    }
+
+    _onConnectingDoneButtonClicked() {
         this._goToPanel("ft-connect-to-your-account");
     }
 
