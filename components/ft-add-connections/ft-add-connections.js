@@ -22,6 +22,7 @@ import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
 import '../ft-connecting/ft-connecting.js'
+import '../ft-success/ft-success.js'
 import '../ft-challenge/ft-challenge.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
@@ -81,6 +82,12 @@ export class FtAddConnections extends FtClient {
                 @connecting-done-button-clicked="${this._onConnectingDoneButtonClicked}"
             >
             </ft-connecting>
+
+            <ft-success id="ft-success" part="ft-success"
+                institution=${JSON.stringify(this._currentInstitution)}
+                @success-continue-button-clicked="${this._onSuccessContinueButtonClicked}"
+            >
+            </ft-success>
 
             <ft-challenge id="ft-challenge" part="ft-challenge"
                 institution=${JSON.stringify(this._currentInstitution)}
@@ -201,6 +208,10 @@ export class FtAddConnections extends FtClient {
         this._goToPanel("ft-select-your-institution");
     }
 
+    _onSuccessContinueButtonClicked() {
+        this._goToPanel("ft-connect-to-your-account");
+    }
+   
     _onConnectingDoneButtonClicked() {
         this._goToPanel("ft-connect-to-your-account");
     }
@@ -236,6 +247,7 @@ export class FtAddConnections extends FtClient {
         var showThird = false;
         var showFourth = false;
         var showFifth = false;
+        var showSixth = false;
 
         let nextPanel;
         
@@ -261,7 +273,11 @@ export class FtAddConnections extends FtClient {
                 showFifth = true;
                 nextPanel = this.shadowRoot.getElementById("ft-connecting");
                 break;
-        }
+            case "ft-success":
+                showSixth = true;
+                nextPanel = this.shadowRoot.getElementById("ft-success");
+                break;
+            }
 
         nextPanel.enter();
 
@@ -270,6 +286,7 @@ export class FtAddConnections extends FtClient {
         this._setPanelShown("ft-enter-credentials", showThird);
         this._setPanelShown("ft-challenge", showFourth);
         this._setPanelShown("ft-connecting", showFifth);
+        this._setPanelShown("ft-success", showSixth);
 
         this._selectedPanel = name;
     }
