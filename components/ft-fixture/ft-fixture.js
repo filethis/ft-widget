@@ -375,6 +375,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <div id="ft-add-connections-wrapper-label" class="code">&lt;ft-add-connections&gt;</div>
 
                             <ft-add-connections id="ft-add-connections" class="screen"
+                                workflow="ADD_CONNECTIONS"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -390,7 +391,8 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                         <div id="ft-manage-connections-wrapper">
                             <div id="ft-manage-connections-wrapper-label" class="code">&lt;ft-manage-connections&gt;</div>
 
-                            <ft-manage-connections id="ft-manage-connections" class="screen"
+                            <ft-add-connections id="ft-manage-connections" class="screen"
+                                workflow="MANAGE_CONNECTIONS"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -399,7 +401,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 userAccessToken="${this.userAccessToken}"
                                 isLive="${this.isLive}"
                             >
-                            </ft-manage-connections>
+                            </ft-add-connections>
                         </div>
 
                         <div id="ft-view-documents-wrapper">

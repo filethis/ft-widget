@@ -24,13 +24,21 @@ import '../ft-enter-credentials/ft-enter-credentials.js'
 import '../ft-connecting/ft-connecting.js'
 import '../ft-success/ft-success.js'
 import '../ft-challenge/ft-challenge.js'
+import '../ft-manage-connections-panel/ft-manage-connections-panel.js'
+import '../ft-edit-connection/ft-edit-connection.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
-
+export const Workflow = {
+    ADD_CONNECTIONS: "ADD_CONNECTIONS",
+    MANAGE_CONNECTIONS: "MANAGE_CONNECTIONS"
+};
 export class FtAddConnections extends FtClient {
 
     static get properties() {
         return {
+            workflow: { type: String },
+            _selectedConnection: { type: Object },
+            _selectedInstitution: { type: Object },  // Same as next one?
             _currentInstitution: { type: Object },
             _selectedPanelName: { type: String },
             _panelUnderModal: { type: String },
@@ -39,19 +47,21 @@ export class FtAddConnections extends FtClient {
         };
     }
 
-   constructor() {
+    constructor() {
         super();
 
+        this.workflow = Workflow.ADD_CONNECTIONS;
         this.live = false;
 
+        this._selectedConnection = null;
+        this._selectedInstitution = null;  // Same as next one?
         this._currentInstitution = null;
-        this._selectedPanelName = "ft-connect-to-your-account";
-        this._panelUnderModal = "ft-connect-to-your-account";
+        this._selectedPanelName = null;
+        this._panelUnderModal = null;
         this._currentInteractionRequest = null;
         this._currentConnection = null;
 
-        // Command event listeners
-       this.addEventListener('ft-connect-to-your-account-continue-command', this._onConnectToYourAccountContinueCommand);
+        this.addEventListener('edit-connection-button-clicked', this._transition);
     }
 
     render() {
@@ -59,45 +69,68 @@ export class FtAddConnections extends FtClient {
 
         <div id="wrapper" part="wrapper">
 
-            <ft-connect-to-your-account id="ft-connect-to-your-account" part="ft-connect-to-your-account">
+            <ft-connect-to-your-account id="ft-connect-to-your-account" part="ft-connect-to-your-account"
+                @connect-continue-button-clicked="${this._transition}"
+            >
             </ft-connect-to-your-account>
 
             <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution"
                 institutions=${JSON.stringify(this.institutions)}
                 @selected-institution-changed="${this._onInstitutionSelected}"
-                @institution-back-button-clicked="${this._onInstitutionBackButtonClicked}"
+                @institution-back-button-clicked="${this._transition}"
             >
             </ft-select-your-institution>
 
             <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials"
                 institution=${JSON.stringify(this._currentInstitution)}
-                @credentials-back-button-clicked="${this._onCredentialsBackButtonClicked}"
-                @credentials-continue-button-clicked="${this._onCredentialsContinueButtonClicked}"
+                @credentials-back-button-clicked="${this._transition}"
+                @credentials-continue-button-clicked="${this._transition}"
             >
             </ft-enter-credentials>
 
             <ft-connecting id="ft-connecting" part="ft-connecting"
                 institution=${JSON.stringify(this._currentInstitution)}
-                @connecting-another-button-clicked="${this._onConnectingAnotherButtonClicked}"
-                @connecting-done-button-clicked="${this._onConnectingDoneButtonClicked}"
+                @connecting-another-button-clicked="${this._transition}"
+                @connecting-done-button-clicked="${this._transition}"
             >
             </ft-connecting>
 
             <ft-success id="ft-success" part="ft-success"
                 institution=${JSON.stringify(this._currentInstitution)}
-                @success-continue-button-clicked="${this._onSuccessContinueButtonClicked}"
+                @success-continue-button-clicked="${this._transition}"
             >
             </ft-success>
 
             <ft-challenge id="ft-challenge" part="ft-challenge"
                 institution=${JSON.stringify(this._currentInstitution)}
                 request=${JSON.stringify(this._currentInteractionRequest)}
-                @challenge-back-button-clicked="${this._onChallengeBackButtonClicked}"
-                @challenge-submit-button-clicked="${this._onChallengeSubmitButtonClicked}"
+                @challenge-back-button-clicked="${this._transition}"
+                @challenge-submit-button-clicked="${this._transition}"
             >
             </ft-challenge>
 
+            <ft-manage-connections-panel id="ft-manage-connections-panel" part="ft-manage-connections-panel"
+                connections=${JSON.stringify(this.connections)}
+            >
+            </ft-manage-connections-panel>
+
+            <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
+                connection=${JSON.stringify(this._selectedConnection)}
+                institution=${JSON.stringify(this._selectedInstitution)}
+                @delete-connection-button-clicked="${this._transition}"
+                @edit-connection-back-button-clicked="${this._transition}"
+            >
+            </ft-edit-connection>
+
         </div>
+
+        <mwc-dialog id="delete-connection-confirm-dialog"
+            @closed="${this._onDeleteConnectionConfirmDialog}"
+        >
+            <div>Are you sure you want to delete this connection?</div>
+            <mwc-button slot="primaryAction" dialogAction="confirmed">Delete</mwc-button>
+            <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
+        </mwc-dialog>
         `;
     }
 
@@ -116,7 +149,7 @@ export class FtAddConnections extends FtClient {
                     width: 100%; height: 100%;
                 }
                     #ft-connect-to-your-account {
-                        display: block;
+                        display: none;
                     }
                     #ft-select-your-institution {
                         display: none;
@@ -127,7 +160,16 @@ export class FtAddConnections extends FtClient {
                     #ft-connecting {
                         display: none;
                     }
+                    #ft-success {
+                        display: none;
+                    }
                     #ft-challenge {
+                        display: none;
+                    }
+                    #ft-manage-connections-panel {
+                        display: none;
+                    }
+                    #ft-edit-connection {
                         display: none;
                     }
         `
@@ -139,6 +181,21 @@ export class FtAddConnections extends FtClient {
 
         if (changedProperties.has('interactionRequests'))
             this._onInteractionRequestsChanged();
+        if (changedProperties.has('workflow'))
+            this._onWorkflowChanged();
+    }
+
+    _onWorkflowChanged() {
+        switch (this.workflow)
+        {
+            case Workflow.ADD_CONNECTIONS:
+                this._goToPanel("ft-connect-to-your-account");
+            break;
+
+            case Workflow.MANAGE_CONNECTIONS:
+                this._goToPanel("ft-manage-connections-panel");
+            break;
+        }
     }
 
     _onInteractionRequestsChanged() {
@@ -183,61 +240,107 @@ export class FtAddConnections extends FtClient {
         this._goToPanel("ft-select-your-institution");
     }
 
-    _onInstitutionBackButtonClicked() {
-        this._goToPanel("ft-connect-to-your-account");
-    }
-
-    _onCredentialsBackButtonClicked() {
-        this._goToPanel("ft-select-your-institution");
-    }
-
-    _onCredentialsContinueButtonClicked() {
-        var enterCredentialsElement = this.shadowRoot.querySelector("#ft-enter-credentials");
-        var payload = {
-            institution: this._currentInstitution,
-            username: enterCredentialsElement.getUsername(),
-            password: enterCredentialsElement.getPassword()
-        }
-        const connectEvent = new CustomEvent('client-create-connection-command', { detail: payload, bubbles: true, composed: true });
-        this.dispatchEvent(connectEvent);
-
-        this._goToPanel("ft-connecting");
-    }
-
-    _onConnectingAnotherButtonClicked() {
-        this._goToPanel("ft-select-your-institution");
-    }
-
-    _onSuccessContinueButtonClicked() {
-        this._goToPanel("ft-connect-to-your-account");
-    }
-   
-    _onConnectingDoneButtonClicked() {
-        this._goToPanel("ft-connect-to-your-account");
-    }
-
-    _onChallengeBackButtonClicked() {
-        this._goToPanel(this._panelUnderModal);
-    }
-
-    _onChallengeSubmitButtonClicked() {
-        var challengeElement = this.shadowRoot.querySelector("#ft-challenge");
-        const payload = {
-            request: challengeElement.request,
-            response: challengeElement.response
-        }
-        const event = new CustomEvent('client-submit-interaction-response-command', { detail: payload, bubbles: true, composed: true });
-        this.dispatchEvent(event);
-
-        this._goToPanel("ft-connect-to-your-account");
-    }
-
     _onInstitutionSelected(event) {
         const _currentInstitution = event.detail;
         if (!_currentInstitution)
             return;
         this._currentInstitution = _currentInstitution;
         this._goToPanel("ft-enter-credentials");
+    }
+
+    _transition(event) {
+        switch (this.workflow)
+        {
+            case Workflow.ADD_CONNECTIONS:
+                this._transitionForAddConnections(event);
+                break;
+
+            case Workflow.MANAGE_CONNECTIONS:
+                this._transitionForManageConnections(event);
+                break;
+        }
+    }
+
+    _transitionForAddConnections(event) {
+        const eventName = event.type;
+        switch (eventName)
+        {
+            case "connect-continue-button-clicked":
+                this._goToPanel("ft-select-your-institution");
+                break;
+
+            case "institution-back-button-clicked":
+                this._goToPanel("ft-connect-to-your-account");
+                break;
+    
+            case "credentials-back-button-clicked":
+                this._goToPanel("ft-select-your-institution");
+                break;
+
+            case "credentials-continue-button-clicked":
+                {
+                    var enterCredentialsElement = this.shadowRoot.querySelector("#ft-enter-credentials");
+                    var payload = {
+                        institution: this._currentInstitution,
+                        username: enterCredentialsElement.getUsername(),
+                        password: enterCredentialsElement.getPassword()
+                    };
+                    const connectEvent = new CustomEvent('client-create-connection-command', { detail: payload, bubbles: true, composed: true });
+                    this.dispatchEvent(connectEvent);
+                }
+                this._goToPanel("ft-connecting");
+                break;
+
+            case "connecting-another-button-clicked":
+                this._goToPanel("ft-select-your-institution");
+                break;
+
+            case "connecting-done-button-clicked":
+                this._goToPanel("ft-connect-to-your-account");
+                break;
+
+            case "success-continue-button-clicked":
+                this._goToPanel("ft-connect-to-your-account");
+                break;
+
+            case "challenge-back-button-clicked":
+                this._goToPanel(this._panelUnderModal);
+                break;
+
+            case "challenge-submit-button-clicked":
+                {
+                    var challengeElement = this.shadowRoot.querySelector("#ft-challenge");
+                    const payload = {
+                        request: challengeElement.request,
+                        response: challengeElement.response
+                    }
+                    const event = new CustomEvent('client-submit-interaction-response-command', { detail: payload, bubbles: true, composed: true });
+                    this.dispatchEvent(event);
+                }
+                this._goToPanel("ft-connect-to-your-account");
+                break;
+        }
+    }
+
+    _transitionForManageConnections(event) {
+        const eventName = event.type;
+        switch (eventName)
+        {
+            case "delete-connection-button-clicked":
+                var dialog = this.shadowRoot.querySelector("#delete-connection-confirm-dialog");
+                dialog.open = true;
+                break;
+
+            case "edit-connection-back-button-clicked":
+                this._goToPanel("ft-manage-connections-panel");
+                break;
+            
+            case "edit-connection-button-clicked":
+                this._selectedConnection = event.detail;
+                this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
+                this._goToPanel("ft-edit-connection");
+                break;
+        }
     }
 
     _goToPanel(nextPanelName)
@@ -254,6 +357,8 @@ export class FtAddConnections extends FtClient {
         var showFourth = false;
         var showFifth = false;
         var showSixth = false;
+        var showSeventh = false;
+        var showEigth = false;
 
         let nextPanel;
         
@@ -283,9 +388,18 @@ export class FtAddConnections extends FtClient {
                 showSixth = true;
                 nextPanel = this.shadowRoot.getElementById("ft-success");
                 break;
+            case "ft-manage-connections-panel":
+                showSeventh = true;
+                nextPanel = this.shadowRoot.getElementById("ft-manage-connections-panel");
+                break;
+            case "ft-edit-connection":
+                showEigth = true;
+                nextPanel = this.shadowRoot.getElementById("ft-edit-connection");
+                break;
         }
 
-        currentPanel.exit();
+        if (!!currentPanel)
+            currentPanel.exit();
         nextPanel.enter();
 
         this._setPanelShown("ft-connect-to-your-account", showFirst);
@@ -294,6 +408,8 @@ export class FtAddConnections extends FtClient {
         this._setPanelShown("ft-challenge", showFourth);
         this._setPanelShown("ft-connecting", showFifth);
         this._setPanelShown("ft-success", showSixth);
+        this._setPanelShown("ft-manage-connections-panel", showSeventh);
+        this._setPanelShown("ft-edit-connection", showEigth);
 
         this._selectedPanelName = nextPanelName;
     }
@@ -304,6 +420,14 @@ export class FtAddConnections extends FtClient {
             panel.style.display = "block";
         else
             panel.style.display = "none";
+    }
+    
+    _findInstitutionForConnection(connection)
+    {
+        if (!connection)
+            return null;
+        const institution = this.institutions.find(institution => institution.id == connection.sourceId);
+        return institution;
     }
 
 }

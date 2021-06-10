@@ -248,7 +248,7 @@ export class FtConnectToYourAccount extends LitElement {
 
     _onContinueButtonClicked()
     {
-        const event = new CustomEvent('ft-connect-to-your-account-continue-command', { bubbles: true, composed: true });
+        const event = new CustomEvent('connect-continue-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(event);
     }
 
