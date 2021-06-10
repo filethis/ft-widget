@@ -26,7 +26,7 @@ import { FtHttpMixin } from '../ft-http-mixin/ft-http-mixin.js';
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
-import '../ft-add-connections/ft-add-connections.js'
+import { Workflow } from '../ft-add-connections/ft-add-connections.js'
 import '../ft-manage-connections/ft-manage-connections.js'
 import '../ft-view-documents/ft-view-documents.js'
 
@@ -375,7 +375,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <div id="ft-add-connections-wrapper-label" class="code">&lt;ft-add-connections&gt;</div>
 
                             <ft-add-connections id="ft-add-connections" class="screen"
-                                workflow="ADD_CONNECTIONS"
+                                workflow="${Workflow.ADD_CONNECTIONS}"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -392,7 +392,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <div id="ft-manage-connections-wrapper-label" class="code">&lt;ft-manage-connections&gt;</div>
 
                             <ft-add-connections id="ft-manage-connections" class="screen"
-                                workflow="MANAGE_CONNECTIONS"
+                                workflow="${Workflow.MANAGE_CONNECTIONS}"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
