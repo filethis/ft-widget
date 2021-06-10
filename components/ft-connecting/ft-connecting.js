@@ -175,6 +175,9 @@ export class FtConnecting extends LitElement {
     enter() {
     }
 
+    exit() {
+    }
+
     updated(changedProperties) {
         if (changedProperties.has("fake"))
             this._onFakeChanged();

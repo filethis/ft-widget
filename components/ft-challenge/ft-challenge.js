@@ -213,6 +213,9 @@ export class FtChallenge extends LitElement {
     enter() {
     }
 
+    exit() {
+    }
+
     _onKeyUp(event) {
         if (event.keyCode === 13)
         {

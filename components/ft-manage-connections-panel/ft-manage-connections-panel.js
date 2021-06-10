@@ -147,6 +147,9 @@ export class FtManageConnectionsPanel extends LitElement {
     enter() {
     }
 
+    exit() {
+    }
+
     updated(changedProperties) {
         if (changedProperties.has('connections'))
             this._onConnectionsChanged();

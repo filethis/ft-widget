@@ -232,6 +232,9 @@ export class FtEnterCredentials extends LitElement {
     }
 
     enter() {
+    }
+
+    exit() {
         this.clear();
     }
 

@@ -32,7 +32,7 @@ export class FtAddConnections extends FtClient {
     static get properties() {
         return {
             _currentInstitution: { type: Object },
-            _selectedPanel: { type: String },
+            _selectedPanelName: { type: String },
             _panelUnderModal: { type: String },
             _currentInteractionRequest: { type: Object },
             _currentConnection: { type: Object }
@@ -45,7 +45,7 @@ export class FtAddConnections extends FtClient {
         this.live = false;
 
         this._currentInstitution = null;
-        this._selectedPanel = "ft-connect-to-your-account";
+        this._selectedPanelName = "ft-connect-to-your-account";
         this._panelUnderModal = "ft-connect-to-your-account";
         this._currentInteractionRequest = null;
         this._currentConnection = null;
@@ -150,31 +150,31 @@ export class FtAddConnections extends FtClient {
             return;
 
         // If we already have a dialog posed
-        if (this._selectedPanel == "ft-challenge")
+        if (this._selectedPanelName == "ft-challenge")
             return;
         
-        // HACK: Make a guess about which institution the request is for
-        var institution = this._hackGuessInteractionRequestInstitution();
-        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
-        challengeElement.institution = institution;
-
         // Pose the first request
         var interactionRequest = this.interactionRequests[0];
         this._currentInteractionRequest = interactionRequest;
-        this._panelUnderModal = this._selectedPanel;
+
+        const connectionId = interactionRequest.connectionId;
+        const connection = this._findConnectionWithId(connectionId);
+        const institutionId = connection.institutionId;
+        const institution = this._findInstitutionWithId(institutionId);
+        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
+        challengeElement.institution = institution;
+
+        this._panelUnderModal = this._selectedPanelName;
         this._goToPanel("ft-challenge")
     }
 
-    _hackGuessInteractionRequestInstitution() {
+    _findConnectionWithId(connectionId) {
         const count = this.connections.length;
         for (var index = 0; index < count; index++)
         {
             var connection = this.connections[index];
-            if (connection.state == "question")
-            {
-                var institutionId = parseInt(connection.sourceId);
-                return this._findInstitutionWithId(institutionId);
-            }
+            if (connection.id == connectionId)
+                return connection;
         }
         return null;
     }
@@ -240,8 +240,14 @@ export class FtAddConnections extends FtClient {
         this._goToPanel("ft-enter-credentials");
     }
 
-    _goToPanel(name)
+    _goToPanel(nextPanelName)
     {
+        var currentPanelName = this._selectedPanelName;
+        if (nextPanelName == currentPanelName)
+            return;
+        
+        const currentPanel = this.shadowRoot.getElementById(currentPanelName);
+
         var showFirst = false;
         var showSecond = false;
         var showThird = false;
@@ -251,7 +257,7 @@ export class FtAddConnections extends FtClient {
 
         let nextPanel;
         
-        switch (name)
+        switch (nextPanelName)
         {
             case "ft-connect-to-your-account":
                 showFirst = true;
@@ -277,8 +283,9 @@ export class FtAddConnections extends FtClient {
                 showSixth = true;
                 nextPanel = this.shadowRoot.getElementById("ft-success");
                 break;
-            }
+        }
 
+        currentPanel.exit();
         nextPanel.enter();
 
         this._setPanelShown("ft-connect-to-your-account", showFirst);
@@ -288,7 +295,7 @@ export class FtAddConnections extends FtClient {
         this._setPanelShown("ft-connecting", showFifth);
         this._setPanelShown("ft-success", showSixth);
 
-        this._selectedPanel = name;
+        this._selectedPanelName = nextPanelName;
     }
 
     _setPanelShown(panelId, show) {

@@ -125,6 +125,9 @@ export class FtSuccess extends LitElement {
     enter() {
     }
 
+    exit() {
+    }
+
     updated(changedProperties) {
         if (changedProperties.has("fake"))
             this._onFakeChanged();

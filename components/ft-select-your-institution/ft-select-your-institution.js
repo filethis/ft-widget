@@ -170,11 +170,16 @@ export class FtSelectYourInstitution extends LitElement {
     }
 
     enter() {
+    }
+
+    exit() {
+        this._clear();
+    }
+
+    _clear() {
         var list = this.shadowRoot.getElementById("ft-institution-list");
         list.selectedInstitution = null;
 
-        // TODO: Do this in a "leave" method because it takes a while to reload all the items
-        // and we'd rather do that when the panel is hidden
         this._clearSearchField();
     }
 

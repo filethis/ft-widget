@@ -24,12 +24,14 @@ export class FtViewDocuments extends FtClient {
 
     static get properties() {
         return {
+            _selectedPanelName: { type: String }
         };
     }
 
     constructor() {
         super();
 
+        this._selectedPanelName = "ft-view-documents-panel";
         this.live = false;
     }
 
@@ -68,21 +70,30 @@ export class FtViewDocuments extends FtClient {
         ];
     }
 
-    _goToPanel(name) {
+    _goToPanel(nextPanelName) {
+        var currentPanelName = this._selectedPanelName;
+        if (nextPanelName == currentPanelName)
+            return;
+        
+        const currentPanel = this.shadowRoot.getElementById(currentPanelName);
+
         var showFirst = false;
 
         let nextPanel;
 
-        switch (name) {
+        switch (nextPanelName) {
             case "ft-view-documents-panel":
                 showFirst = true;
                 nextPanel = this.shadowRoot.getElementById("ft-view-documents-panel");
                 break;
         }
 
+        currentPanel.exit();
         nextPanel.enter();
 
         this._setPanelShown("ft-view-documents-panel", showFirst);
+
+        this._selectedPanelName = nextPanelName;
     }
 
     _setPanelShown(panelId, show) {

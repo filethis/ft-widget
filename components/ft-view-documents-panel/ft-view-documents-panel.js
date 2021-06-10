@@ -129,6 +129,9 @@ export class FtViewDocumentsPanel extends LitElement {
     enter() {
     }
 
+    exit() {
+    }
+
     updated(changedProperties) {
         if (changedProperties.has('documents'))
             this._onDocumentsChanged();

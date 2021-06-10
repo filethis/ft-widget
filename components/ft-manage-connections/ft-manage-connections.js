@@ -28,7 +28,8 @@ export class FtManageConnections extends FtClient {
     static get properties() {
         return {
             _selectedConnection: { type: Object },
-            _selectedInstitution: { type: Object }
+            _selectedInstitution: { type: Object },
+            _selectedPanelName: { type: String }
         };
     }
 
@@ -39,6 +40,7 @@ export class FtManageConnections extends FtClient {
 
         this._selectedConnection = null;
         this._selectedInstitution = null;
+        this._selectedPanelName = "ft-manage-connections-panel";
 
         this.addEventListener('edit-connection-button-clicked', this._onEditConnectionButtonClicked);
     }
@@ -132,13 +134,19 @@ export class FtManageConnections extends FtClient {
         return institution;
     }
 
-    _goToPanel(name) {
+    _goToPanel(nextPanelName) {
+        var currentPanelName = this._selectedPanelName;
+        if (nextPanelName == currentPanelName)
+            return;
+        
+        const currentPanel = this.shadowRoot.getElementById(currentPanelName);
+        
         var showFirst = false;
         var showSecond = false;
 
         let nextPanel;
 
-        switch (name) {
+        switch (nextPanelName) {
             case "ft-manage-connections-panel":
                 showFirst = true;
                 nextPanel = this.shadowRoot.getElementById("ft-manage-connections-panel");
@@ -149,10 +157,13 @@ export class FtManageConnections extends FtClient {
                 break;
         }
 
+        currentPanel.exit();
         nextPanel.enter();
 
         this._setPanelShown("ft-manage-connections-panel", showFirst);
         this._setPanelShown("ft-edit-connection", showSecond);
+
+        this._selectedPanelName = nextPanelName;
     }
 
     _setPanelShown(panelId, show) {
