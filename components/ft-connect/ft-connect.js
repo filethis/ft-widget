@@ -60,7 +60,7 @@ export class FtConnect extends FtClient {
         this._currentInteractionRequest = null;
         this._currentConnection = null;
 
-        this.addEventListener('edit-connection-button-clicked', this._transition);
+        this.addEventListener('edit-connection-button-clicked', this._transitionByCustomEvent);
     }
 
     render() {
@@ -69,42 +69,42 @@ export class FtConnect extends FtClient {
         <div id="wrapper" part="wrapper">
 
             <ft-connect-to-your-account id="ft-connect-to-your-account" part="ft-connect-to-your-account"
-                @connect-continue-button-clicked="${this._transition}"
+                @connect-continue-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-connect-to-your-account>
 
             <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution"
                 institutions=${JSON.stringify(this.institutions)}
                 @selected-institution-changed="${this._onInstitutionSelected}"
-                @institution-back-button-clicked="${this._transition}"
+                @institution-back-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-select-your-institution>
 
             <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials"
                 institution=${JSON.stringify(this._currentInstitution)}
-                @credentials-back-button-clicked="${this._transition}"
-                @credentials-continue-button-clicked="${this._transition}"
+                @credentials-back-button-clicked="${this._transitionByCustomEvent}"
+                @credentials-continue-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-enter-credentials>
 
             <ft-connecting id="ft-connecting" part="ft-connecting"
                 institution=${JSON.stringify(this._currentInstitution)}
-                @connecting-another-button-clicked="${this._transition}"
-                @connecting-done-button-clicked="${this._transition}"
+                @connecting-another-button-clicked="${this._transitionByCustomEvent}"
+                @connecting-done-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-connecting>
 
             <ft-success id="ft-success" part="ft-success"
                 institution=${JSON.stringify(this._currentInstitution)}
-                @success-continue-button-clicked="${this._transition}"
+                @success-continue-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-success>
 
             <ft-challenge id="ft-challenge" part="ft-challenge"
                 institution=${JSON.stringify(this._currentInstitution)}
                 request=${JSON.stringify(this._currentInteractionRequest)}
-                @challenge-back-button-clicked="${this._transition}"
-                @challenge-submit-button-clicked="${this._transition}"
+                @challenge-back-button-clicked="${this._transitionByCustomEvent}"
+                @challenge-submit-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-challenge>
 
@@ -116,23 +116,23 @@ export class FtConnect extends FtClient {
             <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
                 connection=${JSON.stringify(this._selectedConnection)}
                 institution=${JSON.stringify(this._selectedInstitution)}
-                @delete-connection-button-clicked="${this._transition}"
-                @edit-connection-back-button-clicked="${this._transition}"
+                @delete-connection-button-clicked="${this._transitionByCustomEvent}"
+                @edit-connection-back-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-edit-connection>
 
         </div>
 
         <mwc-dialog id="delete-connection-confirm-dialog"
-            @closed="${this._onDeleteConnectionConfirmDialog}"
+            @closed="${this._transitionByDialogCloseEvent}"
         >
             <div>Are you sure you want to delete this connection?</div>
-            <mwc-button slot="primaryAction" dialogAction="confirmed">Delete</mwc-button>
-            <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
+            <mwc-button slot="primaryAction" dialogAction="delete-connection-confirmed">Delete</mwc-button>
+            <mwc-button slot="secondaryAction" dialogAction="delete-connection-canceled">Cancel</mwc-button>
         </mwc-dialog>
         `;
     }
-
+    
     static get styles() {
         return [
             css`
@@ -220,8 +220,7 @@ export class FtConnect extends FtClient {
         var challengeElement = this.shadowRoot.getElementById("ft-challenge");
         challengeElement.institution = institution;
 
-        this._panelUnderModal = this._selectedPanelName;
-        this._goToPanel("ft-challenge")
+        this._transition("challenge-posed");
     }
 
     _findConnectionWithId(connectionId) {
@@ -247,22 +246,33 @@ export class FtConnect extends FtClient {
         this._goToPanel("ft-enter-credentials");
     }
 
-    _transition(event) {
+    _transitionByDialogCloseEvent(event) {
+        const trigger = event.detail.action;
+        const detail = event.detail;
+        this._transition(trigger, detail);
+    }
+
+    _transitionByCustomEvent(event) {
+        const trigger = event.type;
+        const detail = event.detail;
+        this._transition(trigger, detail);
+    }
+
+    _transition(trigger, detail) {
         switch (this.workflow)
         {
             case Workflow.ADD:
-                this._transitionForAddConnections(event);
+                this._transitionForAddConnections(trigger, detail);
                 break;
 
             case Workflow.MANAGE:
-                this._transitionForManageConnections(event);
+                this._transitionForManageConnections(trigger, detail);
                 break;
         }
     }
 
-    _transitionForAddConnections(event) {
-        const eventName = event.type;
-        switch (eventName)
+    _transitionForAddConnections(trigger, detail) {
+        switch (trigger)
         {
             case "connect-continue-button-clicked":
                 this._goToPanel("ft-select-your-institution");
@@ -301,6 +311,11 @@ export class FtConnect extends FtClient {
             case "success-continue-button-clicked":
                 this._goToPanel("ft-connect-to-your-account");
                 break;
+            
+            case "challenge-posed":
+                this._panelUnderModal = this._selectedPanelName;
+                this._goToPanel("ft-challenge");
+                break;
 
             case "challenge-back-button-clicked":
                 this._goToPanel(this._panelUnderModal);
@@ -316,14 +331,13 @@ export class FtConnect extends FtClient {
                     const event = new CustomEvent('client-submit-interaction-response-command', { detail: payload, bubbles: true, composed: true });
                     this.dispatchEvent(event);
                 }
-                this._goToPanel("ft-connect-to-your-account");
+                this._goToPanel(this._panelUnderModal);
                 break;
         }
     }
 
-    _transitionForManageConnections(event) {
-        const eventName = event.type;
-        switch (eventName)
+    _transitionForManageConnections(trigger, detail) {
+        switch (trigger)
         {
             case "delete-connection-button-clicked":
                 var dialog = this.shadowRoot.querySelector("#delete-connection-confirm-dialog");
@@ -335,11 +349,19 @@ export class FtConnect extends FtClient {
                 break;
             
             case "edit-connection-button-clicked":
-                this._selectedConnection = event.detail;
+                this._selectedConnection = detail;
                 this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
                 this._goToPanel("ft-edit-connection");
                 break;
-        }
+
+            case "delete-connection-confirmed":
+                {
+                    const newEvent = new CustomEvent('client-delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
+                    this.dispatchEvent(newEvent);
+                }
+                this._goToPanel("ft-manage-connections-panel");
+                break;
+            }
     }
 
     _goToPanel(nextPanelName)
