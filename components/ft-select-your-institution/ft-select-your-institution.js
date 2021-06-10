@@ -79,16 +79,10 @@ export class FtSelectYourInstitution extends LitElement {
             </ft-institution-list>
         
             <div id="footer" part="footer">
-                <mwc-icon-button id="add-button" part="add-button"
-                    icon="add_circle_outline"
-                    @click=${this._onAddButtonClicked}
-                >
-                </mwc-icon-button>
-                <div id="add-text" part="add-text">
-                    Add company manually
-                </div>
+                <ft-private-and-secure id="private-and-secure" part="private-and-secure">
+                </ft-private-and-secure>
             </div>
-        
+                
         </div>
 
         `;
@@ -153,17 +147,14 @@ export class FtSelectYourInstitution extends LitElement {
                     }
                     #footer {
                         display: flex;
-                        flex-direction: row;
-                        justify-content: flex-start;
+                        flex-direction: column;
                         align-items: center;
+                        justify-content: flex-start;
                         background-color: ${unsafeCSS(light.Color.Neutral100)};
-                        height: 55px;
                     }
-                        #add-button {
-                            color: ${unsafeCSS(light.Color.Primary300)};
-                        }
-                        #add-text {
-                            color: ${unsafeCSS(light.Color.Primary300)};
+                        #private-and-secure {
+                            margin-top: 20px;
+                            margin-bottom: 20px;
                         }
         `
         ];

@@ -51,7 +51,6 @@ export class FtConnect extends FtClient {
         super();
 
         this.workflow = Workflow.ADD;
-        this.live = false;
 
         this._selectedConnection = null;
         this._selectedInstitution = null;  // Same as next one?
@@ -179,10 +178,10 @@ export class FtConnect extends FtClient {
     updated(changedProperties) {
         super.updated?.(changedProperties);
 
-        if (changedProperties.has('interactionRequests'))
-            this._onInteractionRequestsChanged();
         if (changedProperties.has('workflow'))
             this._onWorkflowChanged();
+        if (changedProperties.has('interactionRequests'))
+            this._onInteractionRequestsChanged();
     }
 
     _onWorkflowChanged() {
