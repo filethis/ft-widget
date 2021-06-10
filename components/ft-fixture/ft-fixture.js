@@ -26,8 +26,7 @@ import { FtHttpMixin } from '../ft-http-mixin/ft-http-mixin.js';
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
-import { Workflow } from '../ft-add-connections/ft-add-connections.js'
-import '../ft-manage-connections/ft-manage-connections.js'
+import { Workflow } from '../ft-connect/ft-connect.js'
 import '../ft-view-documents/ft-view-documents.js'
 
 
@@ -371,11 +370,11 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
                     <div id="live">
 
-                        <div id="ft-add-connections-wrapper">
-                            <div id="ft-add-connections-wrapper-label" class="code">&lt;ft-add-connections&gt;</div>
+                        <div id="ft-connect-add-wrapper">
+                            <div id="ft-connect-add-wrapper-label" class="code">&lt;ft-connect workflow="add"&gt;</div>
 
-                            <ft-add-connections id="ft-add-connections" class="screen"
-                                workflow="${Workflow.ADD_CONNECTIONS}"
+                            <ft-connect id="ft-connect-add" class="screen"
+                                workflow="${Workflow.ADD}"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -385,14 +384,14 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 isLive="${this.isLive}"
                                 fakeInstitutions="true"
                             >
-                            </ft-add-connections>
+                            </ft-connect>
                         </div>
 
-                        <div id="ft-manage-connections-wrapper">
-                            <div id="ft-manage-connections-wrapper-label" class="code">&lt;ft-manage-connections&gt;</div>
+                        <div id="ft-connect-manage-wrapper">
+                            <div id="ft-connect-manage-wrapper-label" class="code">&lt;ft-connect workflow="manage"&gt;</div>
 
-                            <ft-add-connections id="ft-manage-connections" class="screen"
-                                workflow="${Workflow.MANAGE_CONNECTIONS}"
+                            <ft-connect id="ft-connect-manage" class="screen"
+                                workflow="${Workflow.MANAGE}"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -401,7 +400,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 userAccessToken="${this.userAccessToken}"
                                 isLive="${this.isLive}"
                             >
-                            </ft-add-connections>
+                            </ft-connect>
                         </div>
 
                         <div id="ft-view-documents-wrapper">
@@ -423,14 +422,14 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
                     <div id="dead">
 
-                        <div id="dotted-ft-add-connections-wrapper">
-                            <div id="dotted-ft-add-connections-wrapper-label" class="code">&lt;ft-add-connections&gt;</div>
-                            <div id="dotted-ft-add-connections"></div>
+                        <div id="dotted-ft-connect-add-wrapper">
+                            <div id="dotted-ft-connect-add-wrapper-label" class="code">&lt;ft-connect workflow="add"&gt;</div>
+                            <div id="dotted-ft-connect-add"></div>
                         </div>
                         
-                        <div id="dotted-ft-manage-connections-wrapper">
-                            <div id="dotted-ft-manage-connections-wrapper-label" class="code">&lt;ft-manage-connections&gt;</div>
-                            <div id="dotted-ft-manage-connections"></div>
+                        <div id="dotted-ft-connect-manage-wrapper">
+                            <div id="dotted-ft-connect-manage-wrapper-label" class="code">&lt;ft-connect workflow="manage"&gt;</div>
+                            <div id="dotted-ft-connect-manage"></div>
                         </div>
                         
                         <div id="dotted-ft-view-documents-wrapper">
@@ -575,26 +574,26 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 justify-content: center;
                                 align-items: center;
                             }
-                                #ft-add-connections-wrapper {
+                                #ft-connect-add-wrapper {
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #ft-add-connections-wrapper-label {
+                                    #ft-connect-add-wrapper-label {
                                     }
-                                    #ft-add-connections {
+                                    #ft-connect-add {
                                     }
-                                    #ft-manage-connections-wrapper {
+                                    #ft-connect-manage-wrapper {
                                     margin-left: 50px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #ft-add-connections-manage-label {
+                                    #ft-connect-manage-label {
                                     }
-                                    #ft-manage-connections {
+                                    #ft-connect-manage {
                                     }
                                 #ft-view-documents-wrapper {
                                     margin-left: 50px;
@@ -615,15 +614,15 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 justify-content: center;
                                 align-items: center;
                             }
-                                #dotted-ft-add-connections-wrapper {
+                                #dotted-ft-connect-add-wrapper {
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #dotted-ft-add-connections-wrapper-label {
+                                    #dotted-ft-connect-add-wrapper-label {
                                     }
-                                    #dotted-ft-add-connections {
+                                    #dotted-ft-connect-add {
                                         width: 400px;
                                         height: 650px;
                                         border-style:dashed;
@@ -634,16 +633,16 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                         justify-content: flex-start;
                                         align-items: center;
                                     }
-                                #dotted-ft-manage-connections-wrapper {
+                                #dotted-ft-connect-manage-wrapper {
                                     margin-left: 50px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #dotted-ft-manage-connections-wrapper-label {
+                                    #dotted-ft-connect-manage-wrapper-label {
                                     }
-                                    #dotted-ft-manage-connections {
+                                    #dotted-ft-connect-manage {
                                         width: 400px;
                                         height: 650px;
                                         border-style:dashed;

@@ -77,7 +77,7 @@ export class FtWidget extends LitElement {
                     Start
                 </div>
 
-                <ft-fixture id="fixture-panel" foo="bar">
+                <ft-fixture id="fixture-panel">
                 </ft-fixture>
 
             </div>

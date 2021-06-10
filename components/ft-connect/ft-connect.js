@@ -29,10 +29,10 @@ import '../ft-edit-connection/ft-edit-connection.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
 export const Workflow = {
-    ADD_CONNECTIONS: "ADD_CONNECTIONS",
-    MANAGE_CONNECTIONS: "MANAGE_CONNECTIONS"
+    ADD: "add",
+    MANAGE: "manage"
 };
-export class FtAddConnections extends FtClient {
+export class FtConnect extends FtClient {
 
     static get properties() {
         return {
@@ -50,7 +50,7 @@ export class FtAddConnections extends FtClient {
     constructor() {
         super();
 
-        this.workflow = Workflow.ADD_CONNECTIONS;
+        this.workflow = Workflow.ADD;
         this.live = false;
 
         this._selectedConnection = null;
@@ -188,11 +188,11 @@ export class FtAddConnections extends FtClient {
     _onWorkflowChanged() {
         switch (this.workflow)
         {
-            case Workflow.ADD_CONNECTIONS:
+            case Workflow.ADD:
                 this._goToPanel("ft-connect-to-your-account");
             break;
 
-            case Workflow.MANAGE_CONNECTIONS:
+            case Workflow.MANAGE:
                 this._goToPanel("ft-manage-connections-panel");
             break;
         }
@@ -251,11 +251,11 @@ export class FtAddConnections extends FtClient {
     _transition(event) {
         switch (this.workflow)
         {
-            case Workflow.ADD_CONNECTIONS:
+            case Workflow.ADD:
                 this._transitionForAddConnections(event);
                 break;
 
-            case Workflow.MANAGE_CONNECTIONS:
+            case Workflow.MANAGE:
                 this._transitionForManageConnections(event);
                 break;
         }
@@ -432,5 +432,5 @@ export class FtAddConnections extends FtClient {
 
 }
 
-window.customElements.define('ft-add-connections', FtAddConnections);
+window.customElements.define('ft-connect', FtConnect);
 
