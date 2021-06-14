@@ -37,6 +37,8 @@ export class FtConnect extends FtClient {
     static get properties() {
         return {
             workflow: { type: String },
+            autoPoseChallenges: { type: Object },
+            _autoPoseChallengesInterval: { type: Object },
             _selectedConnection: { type: Object },
             _selectedInstitution: { type: Object },  // Same as next one?
             _currentInstitution: { type: Object },
@@ -51,6 +53,8 @@ export class FtConnect extends FtClient {
         super();
 
         this.workflow = Workflow.ADD;
+        this.autoPoseChallenges = false;
+        this._autoPoseChallengesInterval = null;
 
         this._selectedConnection = null;
         this._selectedInstitution = null;  // Same as next one?
@@ -182,8 +186,22 @@ export class FtConnect extends FtClient {
 
         if (changedProperties.has('workflow'))
             this._onWorkflowChanged();
-        if (changedProperties.has('interactionRequests'))
-            this._onInteractionRequestsChanged();
+        if (changedProperties.has('autoPoseChallenges'))
+            this._onAutoPoseChallengesChanged();
+    }
+
+    _onAutoPoseChallengesChanged()
+    {
+        // Remove any previous poller
+        if (!!this._autoPoseChallengesInterval)
+        {
+            clearInterval(this._autoPoseChallengesInterval);
+            this._autoPoseChallengesInterval = null;
+        }
+        
+        // If want to start polling, add poller
+        if (this.autoPoseChallenges)
+            this._autoPoseChallengesInterval = setInterval(this._poseNextPendingInteractionRequest.bind(this), 1000);
     }
 
     _onWorkflowChanged() {
@@ -197,10 +215,6 @@ export class FtConnect extends FtClient {
                 this._goToPanel("ft-manage-connections-panel");
             break;
         }
-    }
-
-    _onInteractionRequestsChanged() {
-        this._poseNextPendingInteractionRequest();
     }
 
     _poseNextPendingInteractionRequest () {
@@ -383,7 +397,6 @@ export class FtConnect extends FtClient {
                     this.dispatchEvent(event);
                 }
                 this._goToPanel(this._panelUnderModal);
-                return true;
         }
         return false;
     }

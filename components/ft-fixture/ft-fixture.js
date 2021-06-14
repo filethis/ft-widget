@@ -382,6 +382,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
                                 isLive="${this.isLive}"
+                                autoPoseChallenges="true"
                                 fakeInstitutions="true"
                             >
                             </ft-connect>

@@ -68,7 +68,6 @@ export class FtConnectionList extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                width: 400px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
                 #wrapper {
@@ -83,14 +82,14 @@ export class FtConnectionList extends LitElement {
                     }
                         mwc-list-item {
                             cursor: default;
-                            width: 400px;
+                            width: 376px;
                             height: 64px;
                             --mdc-list-side-padding: 0;
                             --mdc-list-vertical-padding: 0;
                         }
                             ft-connection-list-item {
-                                width: 400px;
                                 padding-left:12px;
+                                width: 376px;
                                 box-sizing: border-box;
                             }
         `

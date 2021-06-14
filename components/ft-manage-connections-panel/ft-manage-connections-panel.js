@@ -143,6 +143,7 @@ export class FtManageConnectionsPanel extends LitElement {
                         }
                     #ft-connection-list {
                         margin-left: 12px;
+                        width: 376px;
                     }
                     #footer {
                         flex: 1;

@@ -68,7 +68,6 @@ export class FtInstitutionList extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                width: 400px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
                 #wrapper {
@@ -87,6 +86,7 @@ export class FtInstitutionList extends LitElement {
                             --mdc-list-vertical-padding: 0;
                         }
                         ft-institution-list-item {
+                            width: 376px;
                             padding-left:12px;
                             padding-right:12px;
                             box-sizing: border-box;
