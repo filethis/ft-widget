@@ -20,6 +20,7 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-textfield';
+import '@material/mwc-icon-button';
 import '../ft-connection-list/ft-connection-list.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 
@@ -46,8 +47,15 @@ export class FtManageConnectionsPanel extends LitElement {
         <div id="wrapper" part="wrapper">
         
             <div id="header" part="header">
-                <div id="title" part="title">
-                    Connections
+                <div id="title-and-add-button" part="title-and-add-button">
+                    <div id="title" part="title">
+                        Connections
+                    </div>
+                    <mwc-icon-button id="add-button" part="add-button"
+                        icon="add"
+                        @click=${this._onAddButtonClicked}
+                    >
+                    </mwc-icon-button>
                 </div>
                 <div id="subtitle" part="subtitle">
                     Manage connected accounts
@@ -98,16 +106,25 @@ export class FtManageConnectionsPanel extends LitElement {
                         display: flex;
                         flex-direction: column;
                         justify-content: flex-start;
-                        align-items: flex-start;
+                        align-items: stretch;
                     }
-                        #title {
-                            height: 40px;
-                            font-size: ${unsafeCSS(light.FontSize.H1)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                            line-height: ${unsafeCSS(light.LineHeight.H1)}px;
-                            text-align: left;
-                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        #title-and-add-button {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: flex-start;
+                            align-items: center;
                         }
+                            #title {
+                                flex: 1;
+                                height: 40px;
+                                font-size: ${unsafeCSS(light.FontSize.H1)}px;
+                                font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                                line-height: ${unsafeCSS(light.LineHeight.H1)}px;
+                                text-align: left;
+                                color: ${unsafeCSS(light.Color.Neutral900)};
+                            }
+                            #add-button {
+                            }
                         #subtitle{
                             margin-top: 8px;
                             height: 24px;
@@ -126,7 +143,6 @@ export class FtManageConnectionsPanel extends LitElement {
                         }
                     #ft-connection-list {
                         margin-left: 12px;
-                        width: 376px;
                     }
                     #footer {
                         flex: 1;
@@ -160,6 +176,11 @@ export class FtManageConnectionsPanel extends LitElement {
         if (!!this.connections)
             count = this.connections.length;
         this._connectionCount = count;
+    }
+
+    _onAddButtonClicked() {
+        const event = new CustomEvent('manage-connections-add-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
 
 }

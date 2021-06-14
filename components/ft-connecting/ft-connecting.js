@@ -154,9 +154,9 @@ export class FtConnecting extends LitElement {
                     margin-left: 24px;
                     margin-right: 24px;
                     height: 44px;
-                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
+                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)}px;
                     --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
+                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                     --mdc-typography-button-text-transform: none;
                 }
                 #another-button {

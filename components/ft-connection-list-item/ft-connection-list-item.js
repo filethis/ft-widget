@@ -20,6 +20,8 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import '@material/mwc-icon';
 import '@material/mwc-icon-button';
+import '@material/mwc-button';
+import '@material/mwc-circular-progress';
 import { light } from "../../mx-design-tokens/index.js";
 
 export class FtConnectionListItem extends LitElement {
@@ -46,26 +48,34 @@ export class FtConnectionListItem extends LitElement {
         <div id="wrapper" part="wrapper">
         
             <div id="logo" part="logo" on-tap="_onSourceClicked">
-                <img id="logo-image" part="logo-image" src="${!this.connection ? '' : this.connection.logoUrl}">
+                <img id="logo-image" part="logo-image"
+                    src="${!this.connection ? '' : this.connection.logoUrl}"
+                >
             </div>
 
-            <div id="text-and-buttons" part="text-and-buttons">
+            <div id="panel" part="panel">
 
                 <div id="text" part="text">
-            
-                    <div id="name" part="name">
-                        ${!this.connection ? '' : this.connection.name}
+                    
+                    <div id="title" part="title">
+                        ${this.connection.name}
                     </div>
-            
-                    <div id="message" part="message">
-                        ${this._message}
+
+                    <div id="subtitle" part="subtitle">
                     </div>
-            
+
                 </div>
 
-                <mwc-icon id="emblem" part="emblem">
-                    error_outline
-                </mwc-icon>
+                <mwc-icon-button id="fix-button" part="fix-button"
+                    icon="error"
+                    @click=${this._onFixButtonClicked}
+                >
+                </mwc-icon-button>
+
+                <mwc-circular-progress id="spinner" part="spinner"
+                    indeterminate
+                >
+                </mwc-circular-progress>
 
                 <mwc-icon-button id="edit-button" part="edit-button"
                     icon="chevron_right"
@@ -85,7 +95,6 @@ export class FtConnectionListItem extends LitElement {
                 display: block;
                 overflow: hidden;
                 font-family: ${unsafeCSS(light.Font.Regular)};
-                width: 376px;
                 height: 64px;
             }
                 #wrapper {
@@ -98,7 +107,6 @@ export class FtConnectionListItem extends LitElement {
                 }
                     #logo {
                         width: 100px;
-                        height: 50px;
                         min-width: 100px;
                         display: flex;
                         flex-direction: row;
@@ -109,10 +117,12 @@ export class FtConnectionListItem extends LitElement {
                             width:auto;
                             max-width:100%;
                         }
-                    #text-and-buttons {
+                    #panel {
+                        min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
                         flex: 1;
                         margin-left: 12px;
-                        min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
+                        padding-right: 12px;
+                        box-sizing: border-box;
                         display: flex;
                         flex-direction: row;
                         justify-content: flex-start;
@@ -120,34 +130,42 @@ export class FtConnectionListItem extends LitElement {
                         border-bottom: solid 1px ${unsafeCSS(light.Color.Neutral300)};
                     }
                         #text {
+                            margin-left: 12px;
                             flex: 1;
                             min-width: 0;  /* Override flex default of "auto" which prevents shrinking past content */
-                            margin-right: 12px;
                             display: flex;
                             flex-direction: column;
                             justify-content: flex-start;
                             align-items: stretch;
                         }
-                            #name {
+                            #title {
                                 font-size: ${unsafeCSS(light.FontSize.Body)}px;
-                                font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                                font-weight: ${unsafeCSS(light.FontWeight.Regular)};
                                 line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                             }
-                            #message {
-                                font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                                line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                            #subtitle {
+                                font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
+                                line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
                                 color: ${unsafeCSS(light.Color.Neutral700)};
+                                white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                             }
-                        #emblem {
+                        #fix-button {
                             display: none;
+                            margin-left: 12px;
                             color: ${unsafeCSS(light.Color.Error300)};
                         }
+                        #spinner {
+                            margin-left: 12px;
+                            height: 48px;
+                            --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                        }
                         #edit-button {
+                            margin-left: 5px;
                         }
         `
         ];
@@ -166,25 +184,21 @@ export class FtConnectionListItem extends LitElement {
             return;
   
         var isActive;
-        var label;
-        var showQuiescentButton = false;
-        var showQuiescentSubtext = false;
-        var quiescentButtonIcon = "refresh";
+        var subtitle = "";
+        var showFixButton = false;
   
         switch (this.connection.state)
         {
             case "waiting":
                 isActive = false;
-                label = "Refresh";
-                showQuiescentButton = this.ftConnectionListItemAllowManualFetch;
-                showQuiescentSubtext = true;
+                subtitle = this._getRefreshDateString();
                 break;
                 
             case "created":
             case "manual":
             case "connecting":
                 isActive = true;
-                label = "Connecting";
+                subtitle = "Connecting...";
                 break;
                 
             case "uploading":
@@ -192,58 +206,97 @@ export class FtConnectionListItem extends LitElement {
                 var documentCount = this.connection.documentCount;
                 if (documentCount === 0 ||
                     !this.ftConnectionListItemShowDocumentCount)
-                    label = "Retrieving";
+                    subtitle = "Retrieving...";
                 else
-                    label = "Retrieved " + documentCount.toString();
+                    subtitle = "Retrieved " + documentCount.toString();
                 break;
                 
             case "question":
                 isActive = false;
-                label = "Fix It";
-                showQuiescentButton = true;
-                quiescentButtonIcon = "report-problem";
+                subtitle = "Fix It";
+                showFixButton = true;
                 break;
                 
             case "answered":
                 isActive = true;
-                label = "Answered";
+                subtitle = "Answered...";
                 break;
                 
             case "completed":
                 isActive = true;
-                label = "Closing";
+                subtitle = "Closing...";
                 break;
                 
             case "error":
                 isActive = false;
-                label = "Fix It";
-                showQuiescentButton = true;
-                quiescentButtonIcon = "report-problem";
+                subtitle = "Error";
+                showFixButton = true;
                 break;
                 
             case "incorrect":
             default:
                 isActive = true;
-                label = "Refresh";
+                subtitle = "Incorrect...";
                 break;
         }
   
-        // this._activePanelHidden = !isActive;
-        // this.$.activeSpinnerLabel.innerHTML = label;
-        // this.$.activeSpinner.active = isActive;
-  
-        // this._quiescentPanelHidden = isActive;
-        // this._quiescentButtonHidden = !showQuiescentButton;
-        // this._quiescentSubtextHidden = !showQuiescentSubtext;
-        // this.$.quiescentButtonLabel.innerHTML = label;
-        // this.$.quiescentButtonIcon.icon = quiescentButtonIcon;
+        var subtitleElement = this.shadowRoot.getElementById("subtitle");
+        subtitleElement.innerHTML = subtitle;
+
+        var quiescentButtonElement = this.shadowRoot.getElementById("fix-button");
+        this._showOrHideElement(quiescentButtonElement, showFixButton, "block");
+
+        var spinnerElement = this.shadowRoot.getElementById("spinner");
+        this._showOrHideElement(spinnerElement, isActive, "block");
+        spinnerElement.closed = !isActive;
+    }
+
+    _showOrHideElement(element, show, display) {
+        if (show)
+            element.style.display = display;
+        else
+            element.style.display = "none";
+    }
+    
+    _onFixButtonClicked() {
+        this.shadowRoot.getElementById("fix-button").blur();
+        
+        const event = new CustomEvent("connection-list-item-fix-button-clicked", { detail: this.connection, bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
 
     _onEditButtonClicked() {
         this.shadowRoot.getElementById("edit-button").blur();
         
-        const event = new CustomEvent('edit-connection-button-clicked', { detail: this.connection, bubbles: true, composed: true });
+        const event = new CustomEvent('connection-list-item-edit-button-clicked', { detail: this.connection, bubbles: true, composed: true });
         this.dispatchEvent(event);
+    }
+
+    _getRefreshDateString()
+    {
+        if (this.connection === null)
+            return "";
+  
+        var checkedDate = new Date(this.connection.checkedDate);
+  
+        var checkedYear = checkedDate.getYear();
+        var year2001 = 101;
+        var hasNeverFetched = (checkedYear < year2001);
+        if (hasNeverFetched)
+            return "";
+  
+        var monthNames =
+            [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct",
+                "Nov", "Dec"
+            ];
+  
+        var day = checkedDate.getDate();
+        var monthIndex = checkedDate.getMonth();
+  
+        return "Refreshed " + monthNames[monthIndex] + ' ' + day;
     }
 
     _onFakeChanged() {

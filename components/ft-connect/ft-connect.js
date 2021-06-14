@@ -60,7 +60,7 @@ export class FtConnect extends FtClient {
         this._currentInteractionRequest = null;
         this._currentConnection = null;
 
-        this.addEventListener('edit-connection-button-clicked', this._transitionByCustomEvent);
+        this.addEventListener('connection-list-item-edit-button-clicked', this._transitionByCustomEvent);
     }
 
     render() {
@@ -75,7 +75,7 @@ export class FtConnect extends FtClient {
 
             <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution"
                 institutions=${JSON.stringify(this.institutions)}
-                @selected-institution-changed="${this._onInstitutionSelected}"
+                @selected-institution-changed="${this._transitionByCustomEvent}"
                 @institution-back-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-select-your-institution>
@@ -101,7 +101,6 @@ export class FtConnect extends FtClient {
             </ft-success>
 
             <ft-challenge id="ft-challenge" part="ft-challenge"
-                institution=${JSON.stringify(this._currentInstitution)}
                 request=${JSON.stringify(this._currentInteractionRequest)}
                 @challenge-back-button-clicked="${this._transitionByCustomEvent}"
                 @challenge-submit-button-clicked="${this._transitionByCustomEvent}"
@@ -110,6 +109,9 @@ export class FtConnect extends FtClient {
 
             <ft-manage-connections-panel id="ft-manage-connections-panel" part="ft-manage-connections-panel"
                 connections=${JSON.stringify(this.connections)}
+                @manage-connections-add-button-clicked="${this._transitionByCustomEvent}"
+                @connection-list-item-edit-button-clicked="${this._transitionByCustomEvent}"
+                @connection-list-item-fix-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-manage-connections-panel>
 
@@ -215,7 +217,7 @@ export class FtConnect extends FtClient {
 
         const connectionId = interactionRequest.connectionId;
         const connection = this._findConnectionWithId(connectionId);
-        const institutionId = connection.institutionId;
+        const institutionId = parseInt(connection.sourceId);
         const institution = this._findInstitutionWithId(institutionId);
         var challengeElement = this.shadowRoot.getElementById("ft-challenge");
         challengeElement.institution = institution;
@@ -232,10 +234,6 @@ export class FtConnect extends FtClient {
                 return connection;
         }
         return null;
-    }
-
-    _onConnectToYourAccountContinueCommand() {
-        this._goToPanel("ft-select-your-institution");
     }
 
     _onInstitutionSelected(event) {
@@ -272,19 +270,72 @@ export class FtConnect extends FtClient {
     }
 
     _transitionForAddConnections(trigger, detail) {
+        if (this._transitionAdding(trigger, detail, "ft-connect-to-your-account"))
+            return;
+    }
+
+    _transitionForManageConnections(trigger, detail) {        
+        switch (trigger)
+        {
+            case "edit-connection-back-button-clicked":
+                this._goToPanel("ft-manage-connections-panel");
+                return true;
+            
+            case "delete-connection-button-clicked":
+                var dialog = this.shadowRoot.querySelector("#delete-connection-confirm-dialog");
+                dialog.open = true;
+                return true;
+            
+            case "connection-list-item-edit-button-clicked":
+                this._selectedConnection = detail;
+                this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
+                this._goToPanel("ft-edit-connection");
+                return true;
+            
+            case "connection-list-item-fix-button-clicked":
+                // TODO
+                return true;
+
+            case "delete-connection-confirmed":
+                {
+                    const newEvent = new CustomEvent('client-delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
+                    this.dispatchEvent(newEvent);
+                }
+                this._goToPanel("ft-manage-connections-panel");
+                return true;
+
+            case "manage-connections-add-button-clicked":
+                this._goToPanel("ft-select-your-institution");
+                return true;
+        }
+
+        return this._transitionAdding(trigger, detail, "ft-manage-connections-panel");
+    }
+
+    _transitionAdding(trigger, detail, base) {
         switch (trigger)
         {
             case "connect-continue-button-clicked":
                 this._goToPanel("ft-select-your-institution");
-                break;
+                return true;
+
+            case "selected-institution-changed":
+                {
+                    const _currentInstitution = detail;
+                    if (!_currentInstitution)
+                        return true;
+                    this._currentInstitution = _currentInstitution;
+                }
+                this._goToPanel("ft-enter-credentials");
+                return true;
 
             case "institution-back-button-clicked":
-                this._goToPanel("ft-connect-to-your-account");
-                break;
+                this._goToPanel(base);
+                return true;
     
             case "credentials-back-button-clicked":
                 this._goToPanel("ft-select-your-institution");
-                break;
+                return true;
 
             case "credentials-continue-button-clicked":
                 {
@@ -298,28 +349,28 @@ export class FtConnect extends FtClient {
                     this.dispatchEvent(connectEvent);
                 }
                 this._goToPanel("ft-connecting");
-                break;
+                return true;
 
             case "connecting-another-button-clicked":
                 this._goToPanel("ft-select-your-institution");
-                break;
+                return true;
 
             case "connecting-done-button-clicked":
-                this._goToPanel("ft-connect-to-your-account");
-                break;
+                this._goToPanel(base);
+                return true;
 
             case "success-continue-button-clicked":
-                this._goToPanel("ft-connect-to-your-account");
-                break;
+                this._goToPanel(base);
+                return true;
             
             case "challenge-posed":
                 this._panelUnderModal = this._selectedPanelName;
                 this._goToPanel("ft-challenge");
-                break;
+                return true;
 
             case "challenge-back-button-clicked":
                 this._goToPanel(this._panelUnderModal);
-                break;
+                return true;
 
             case "challenge-submit-button-clicked":
                 {
@@ -332,36 +383,9 @@ export class FtConnect extends FtClient {
                     this.dispatchEvent(event);
                 }
                 this._goToPanel(this._panelUnderModal);
-                break;
+                return true;
         }
-    }
-
-    _transitionForManageConnections(trigger, detail) {
-        switch (trigger)
-        {
-            case "delete-connection-button-clicked":
-                var dialog = this.shadowRoot.querySelector("#delete-connection-confirm-dialog");
-                dialog.open = true;
-                break;
-
-            case "edit-connection-back-button-clicked":
-                this._goToPanel("ft-manage-connections-panel");
-                break;
-            
-            case "edit-connection-button-clicked":
-                this._selectedConnection = detail;
-                this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
-                this._goToPanel("ft-edit-connection");
-                break;
-
-            case "delete-connection-confirmed":
-                {
-                    const newEvent = new CustomEvent('client-delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
-                    this.dispatchEvent(newEvent);
-                }
-                this._goToPanel("ft-manage-connections-panel");
-                break;
-            }
+        return false;
     }
 
     _goToPanel(nextPanelName)

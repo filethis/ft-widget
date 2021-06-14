@@ -32,7 +32,7 @@
         "name": "Betty's Comcast Account",
         "period": "2d",
         "sourceId": "2",
-        "state": "waiting",
+        "state": "connecting",
         "successDate": "2016-03-15T01:05:14+00:00",
         "tries": 0,
         "validation": "done"
@@ -51,7 +51,7 @@
         "name": "Best Buy",
         "period": "2d",
         "sourceId": "3",
-        "state": "waiting",
+        "state": "uploading",
         "successDate": "2016-08-15T08:12:48+00:00",
         "tries": 0,
         "validation": "done"
@@ -70,7 +70,7 @@
         "name": "Bank of America",
         "period": "2d",
         "sourceId": "3",
-        "state": "waiting",
+        "state": "question",
         "successDate": "2016-08-15T08:12:48+00:00",
         "tries": 0,
         "validation": "done"
@@ -89,7 +89,7 @@
         "name": "Marin Municipal Water District",
         "period": "2d",
         "sourceId": "3",
-        "state": "waiting",
+        "state": "answered",
         "successDate": "2016-08-15T08:12:48+00:00",
         "tries": 0,
         "validation": "done"
@@ -108,7 +108,7 @@
         "name": "Anthem",
         "period": "2d",
         "sourceId": "3",
-        "state": "waiting",
+        "state": "completed",
         "successDate": "2016-08-15T08:12:48+00:00",
         "tries": 0,
         "validation": "done"
@@ -127,7 +127,7 @@
         "name": "DirecTV",
         "period": "2d",
         "sourceId": "3",
-        "state": "waiting",
+        "state": "error",
         "successDate": "2016-08-15T08:12:48+00:00",
         "tries": 0,
         "validation": "done"

@@ -83,14 +83,14 @@ export class FtConnectionList extends LitElement {
                     }
                         mwc-list-item {
                             cursor: default;
-                            width: 376px;
+                            width: 400px;
                             height: 64px;
                             --mdc-list-side-padding: 0;
                             --mdc-list-vertical-padding: 0;
                         }
                             ft-connection-list-item {
+                                width: 400px;
                                 padding-left:12px;
-                                padding-right:12px;
                                 box-sizing: border-box;
                             }
         `

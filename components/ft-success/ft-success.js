@@ -110,9 +110,9 @@ export class FtSuccess extends LitElement {
                     height: 44px;
                     --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
                     --mdc-theme-on-primary: white;
-                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)};
+                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)}px;
                     --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)};
+                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                     --mdc-typography-button-text-transform: none;
                 }
                 #private-and-secure {
