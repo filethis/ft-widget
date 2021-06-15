@@ -21,7 +21,7 @@ import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 
-export class FtSuccess extends LitElement {
+export class FtSuccessPanel extends LitElement {
 
     static get properties() {
         return {
@@ -180,5 +180,5 @@ export class FtSuccess extends LitElement {
 
 }
 
-window.customElements.define('ft-success', FtSuccess);
+window.customElements.define('ft-success-panel', FtSuccessPanel);
 

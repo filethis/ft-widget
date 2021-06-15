@@ -26,7 +26,7 @@ import '@material/mwc-icon-button';
 import '../ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 
-export class FtEnterCredentials extends LitElement {
+export class FtCredentialsPanel extends LitElement {
 
     static get properties() {
         return {
@@ -291,5 +291,5 @@ export class FtEnterCredentials extends LitElement {
 
 }
 
-window.customElements.define('ft-enter-credentials', FtEnterCredentials);
+window.customElements.define('ft-credentials-panel', FtCredentialsPanel);
 

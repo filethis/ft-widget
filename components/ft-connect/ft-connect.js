@@ -19,7 +19,7 @@ import { html, css, unsafeCSS } from 'lit';
 import '@material/mwc-button';
 import { light } from "../../mx-design-tokens/index.js";
 import '../ft-add-connections-panel/ft-add-connections-panel.js'
-import '../ft-select-your-institution/ft-select-your-institution.js'
+import '../ft-institutions-panel/ft-institutions-panel.js'
 import '../ft-credentials-panel/ft-credentials-panel.js'
 import '../ft-connecting-panel/ft-connecting-panel.js'
 import '../ft-success-panel/ft-success-panel.js'
@@ -63,52 +63,52 @@ export class FtConnect extends FtClient {
 
         <div id="wrapper" part="wrapper">
 
-            <ft-connect-to-your-account id="ft-connect-to-your-account" part="ft-connect-to-your-account"
+            <ft-add-connections-panel id="ft-add-connections-panel" part="ft-add-connections-panel"
                 @connect-continue-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-connect-to-your-account>
+            </ft-add-connections-panel>
 
-            <ft-select-your-institution id="ft-select-your-institution" part="ft-select-your-institution"
+            <ft-institutions-panel id="ft-institutions-panel" part="ft-institutions-panel"
                 institutions=${JSON.stringify(this.institutions)}
                 @selected-institution-changed="${this._transitionByCustomEvent}"
                 @institution-back-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-select-your-institution>
+            </ft-institutions-panel>
 
-            <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials"
+            <ft-credentials-panel id="ft-credentials-panel" part="ft-credentials-panel"
                 institution=${JSON.stringify(this._selectedInstitution)}
                 @credentials-back-button-clicked="${this._transitionByCustomEvent}"
                 @credentials-continue-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-enter-credentials>
+            </ft-credentials-panel>
 
-            <ft-connecting id="ft-connecting" part="ft-connecting"
+            <ft-connecting-panel id="ft-connecting-panel" part="ft-connecting-panel"
                 institution=${JSON.stringify(this._selectedInstitution)}
                 @connecting-another-button-clicked="${this._transitionByCustomEvent}"
                 @connecting-done-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-connecting>
+            </ft-connecting-panel>
 
-            <ft-success id="ft-success" part="ft-success"
+            <ft-success-panel id="ft-success-panel" part="ft-success-panel"
                 institution=${JSON.stringify(this._selectedInstitution)}
                 @success-continue-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-success>
+            </ft-success-panel>
 
-            <ft-challenge id="ft-challenge" part="ft-challenge"
+            <ft-challenge-panel id="ft-challenge-panel" part="ft-challenge-panel"
                 request=${JSON.stringify(this.challenge)}
                 @challenge-back-button-clicked="${this._transitionByCustomEvent}"
                 @challenge-submit-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-challenge>
+            </ft-challenge-panel>
 
-            <ft-manage-connections-panel id="ft-manage-connections-panel" part="ft-manage-connections-panel"
+            <ft-connections-panel id="ft-connections-panel" part="ft-connections-panel"
                 connections=${JSON.stringify(this.connections)}
                 @manage-connections-add-button-clicked="${this._transitionByCustomEvent}"
                 @connection-list-item-edit-button-clicked="${this._transitionByCustomEvent}"
                 @connection-list-item-fix-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-manage-connections-panel>
+            </ft-connections-panel>
 
             <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
                 connection=${JSON.stringify(this._selectedConnection)}
@@ -144,25 +144,25 @@ export class FtConnect extends FtClient {
                     position: relative;
                     width: 100%; height: 100%;
                 }
-                    #ft-connect-to-your-account {
+                    #ft-add-connections-panel {
                         display: none;
                     }
-                    #ft-select-your-institution {
+                    #ft-institutions-panel {
                         display: none;
                     }
-                    #ft-enter-credentials {
+                    #ft-credentials-panel {
                         display: none;
                     }
-                    #ft-connecting {
+                    #ft-connecting-panel {
                         display: none;
                     }
-                    #ft-success {
+                    #ft-success-panel {
                         display: none;
                     }
-                    #ft-challenge {
+                    #ft-challenge-panel {
                         display: none;
                     }
-                    #ft-manage-connections-panel {
+                    #ft-connections-panel {
                         display: none;
                     }
                     #ft-edit-connection {
@@ -185,11 +185,11 @@ export class FtConnect extends FtClient {
         switch (this.workflow)
         {
             case Workflow.ADD:
-                this._goToPanel("ft-connect-to-your-account");
+                this._goToPanel("ft-add-connections-panel");
             break;
 
             case Workflow.MANAGE:
-                this._goToPanel("ft-manage-connections-panel");
+                this._goToPanel("ft-connections-panel");
             break;
         }
     }
@@ -202,7 +202,7 @@ export class FtConnect extends FtClient {
         const connection = this._findConnectionWithId(connectionId);
         const institutionId = parseInt(connection.sourceId);
         const institution = this._findInstitutionWithId(institutionId);
-        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
+        var challengeElement = this.shadowRoot.getElementById("ft-challenge-panel");
         challengeElement.institution = institution;
 
         this._transition("challenge-posed");
@@ -224,7 +224,7 @@ export class FtConnect extends FtClient {
         if (!_selectedInstitution)
             return;
         this._selectedInstitution = _selectedInstitution;
-        this._goToPanel("ft-enter-credentials");
+        this._goToPanel("ft-credentials-panel");
     }
 
     _transitionByDialogCloseEvent(event) {
@@ -253,7 +253,7 @@ export class FtConnect extends FtClient {
     }
 
     _transitionForAddConnections(trigger, detail) {
-        if (this._transitionAdding(trigger, detail, "ft-connect-to-your-account"))
+        if (this._transitionAdding(trigger, detail, "ft-add-connections-panel"))
             return;
     }
 
@@ -261,7 +261,7 @@ export class FtConnect extends FtClient {
         switch (trigger)
         {
             case "edit-connection-back-button-clicked":
-                this._goToPanel("ft-manage-connections-panel");
+                this._goToPanel("ft-connections-panel");
                 return true;
             
             case "delete-connection-button-clicked":
@@ -282,22 +282,22 @@ export class FtConnect extends FtClient {
 
             case "delete-connection-confirmed":
                 this.deleteConnection(this._selectedConnection);
-                this._goToPanel("ft-manage-connections-panel");
+                this._goToPanel("ft-connections-panel");
                 return true;
 
             case "manage-connections-add-button-clicked":
-                this._goToPanel("ft-select-your-institution");
+                this._goToPanel("ft-institutions-panel");
                 return true;
         }
 
-        return this._transitionAdding(trigger, detail, "ft-manage-connections-panel");
+        return this._transitionAdding(trigger, detail, "ft-connections-panel");
     }
 
     _transitionAdding(trigger, detail, base) {
         switch (trigger)
         {
             case "connect-continue-button-clicked":
-                this._goToPanel("ft-select-your-institution");
+                this._goToPanel("ft-institutions-panel");
                 return true;
 
             case "selected-institution-changed":
@@ -307,7 +307,7 @@ export class FtConnect extends FtClient {
                         return true;
                     this._selectedInstitution = _selectedInstitution;
                 }
-                this._goToPanel("ft-enter-credentials");
+                this._goToPanel("ft-credentials-panel");
                 return true;
 
             case "institution-back-button-clicked":
@@ -315,22 +315,22 @@ export class FtConnect extends FtClient {
                 return true;
     
             case "credentials-back-button-clicked":
-                this._goToPanel("ft-select-your-institution");
+                this._goToPanel("ft-institutions-panel");
                 return true;
 
             case "credentials-continue-button-clicked":
                 {
-                    const enterCredentialsElement = this.shadowRoot.querySelector("#ft-enter-credentials");
+                    const enterCredentialsElement = this.shadowRoot.querySelector("#ft-credentials-panel");
                     const username = enterCredentialsElement.getUsername();
                     const password = enterCredentialsElement.getPassword();
                     const institution = this._selectedInstitution;
                     this.createConnection(username, password, institution);
                 }
-                this._goToPanel("ft-connecting");
+                this._goToPanel("ft-connecting-panel");
                 return true;
 
             case "connecting-another-button-clicked":
-                this._goToPanel("ft-select-your-institution");
+                this._goToPanel("ft-institutions-panel");
                 return true;
 
             case "connecting-done-button-clicked":
@@ -343,7 +343,7 @@ export class FtConnect extends FtClient {
             
             case "challenge-posed":
                 this._panelUnderModal = this._selectedPanelName;
-                this._goToPanel("ft-challenge");
+                this._goToPanel("ft-challenge-panel");
                 return true;
 
             case "challenge-back-button-clicked":
@@ -354,7 +354,7 @@ export class FtConnect extends FtClient {
             case "challenge-submit-button-clicked":
                 {
                     this.posedChallenge();
-                    var challengeElement = this.shadowRoot.querySelector("#ft-challenge");
+                    var challengeElement = this.shadowRoot.querySelector("#ft-challenge-panel");
                     this.submitInteractionResponse(challengeElement.request, challengeElement.response);
                 }
                 this._goToPanel(this._panelUnderModal);
@@ -383,33 +383,33 @@ export class FtConnect extends FtClient {
         
         switch (nextPanelName)
         {
-            case "ft-connect-to-your-account":
+            case "ft-add-connections-panel":
                 showFirst = true;
-                nextPanel = this.shadowRoot.getElementById("ft-connect-to-your-account");
+                nextPanel = this.shadowRoot.getElementById("ft-add-connections-panel");
                 break;
-            case "ft-select-your-institution":
+            case "ft-institutions-panel":
                 showSecond = true;
-                nextPanel = this.shadowRoot.getElementById("ft-select-your-institution");
+                nextPanel = this.shadowRoot.getElementById("ft-institutions-panel");
                 break;
-            case "ft-enter-credentials":
+            case "ft-credentials-panel":
                 showThird = true;
-                nextPanel = this.shadowRoot.getElementById("ft-enter-credentials");
+                nextPanel = this.shadowRoot.getElementById("ft-credentials-panel");
                 break;
-            case "ft-challenge":
+            case "ft-challenge-panel":
                 showFourth = true;
-                nextPanel = this.shadowRoot.getElementById("ft-challenge");
+                nextPanel = this.shadowRoot.getElementById("ft-challenge-panel");
                 break;
-            case "ft-connecting":
+            case "ft-connecting-panel":
                 showFifth = true;
-                nextPanel = this.shadowRoot.getElementById("ft-connecting");
+                nextPanel = this.shadowRoot.getElementById("ft-connecting-panel");
                 break;
-            case "ft-success":
+            case "ft-success-panel":
                 showSixth = true;
-                nextPanel = this.shadowRoot.getElementById("ft-success");
+                nextPanel = this.shadowRoot.getElementById("ft-success-panel");
                 break;
-            case "ft-manage-connections-panel":
+            case "ft-connections-panel":
                 showSeventh = true;
-                nextPanel = this.shadowRoot.getElementById("ft-manage-connections-panel");
+                nextPanel = this.shadowRoot.getElementById("ft-connections-panel");
                 break;
             case "ft-edit-connection":
                 showEigth = true;
@@ -421,13 +421,13 @@ export class FtConnect extends FtClient {
             currentPanel.exit();
         nextPanel.enter();
 
-        this._setPanelShown("ft-connect-to-your-account", showFirst);
-        this._setPanelShown("ft-select-your-institution", showSecond);
-        this._setPanelShown("ft-enter-credentials", showThird);
-        this._setPanelShown("ft-challenge", showFourth);
-        this._setPanelShown("ft-connecting", showFifth);
-        this._setPanelShown("ft-success", showSixth);
-        this._setPanelShown("ft-manage-connections-panel", showSeventh);
+        this._setPanelShown("ft-add-connections-panel", showFirst);
+        this._setPanelShown("ft-institutions-panel", showSecond);
+        this._setPanelShown("ft-credentials-panel", showThird);
+        this._setPanelShown("ft-challenge-panel", showFourth);
+        this._setPanelShown("ft-connecting-panel", showFifth);
+        this._setPanelShown("ft-success-panel", showSixth);
+        this._setPanelShown("ft-connections-panel", showSeventh);
         this._setPanelShown("ft-edit-connection", showEigth);
 
         this._selectedPanelName = nextPanelName;

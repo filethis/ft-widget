@@ -24,7 +24,7 @@ import '@material/mwc-circular-progress';
 import '../ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 
-export class FtConnecting extends LitElement {
+export class FtConnectingPanel extends LitElement {
 
     static get properties() {
         return {
@@ -235,5 +235,5 @@ export class FtConnecting extends LitElement {
 
 }
 
-window.customElements.define('ft-connecting', FtConnecting);
+window.customElements.define('ft-connecting-panel', FtConnectingPanel);
 

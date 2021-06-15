@@ -24,7 +24,7 @@ import '@material/mwc-icon-button';
 import '../ft-connection-list/ft-connection-list.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 
-export class FtManageConnectionsPanel extends LitElement {
+export class FtConnectionsPanel extends LitElement {
 
     static get properties() {
         return {
@@ -189,5 +189,5 @@ export class FtManageConnectionsPanel extends LitElement {
 
 }
 
-window.customElements.define('ft-manage-connections-panel', FtManageConnectionsPanel);
+window.customElements.define('ft-connections-panel', FtConnectionsPanel);
 

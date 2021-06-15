@@ -54,8 +54,8 @@
       ]
     },
     {
-      "name": "ft-connect-to-your-account",
-      "path": "./components/ft-connect-to-your-account/ft-connect-to-your-account.js",
+      "name": "ft-add-connections-panel",
+      "path": "./components/ft-add-connections-panel/ft-add-connections-panel.js",
       "properties": [
         {
           "name": "renderRoot",

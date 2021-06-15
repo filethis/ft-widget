@@ -21,7 +21,7 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-button';
 
-export class FtConnectToYourAccount extends LitElement {
+export class FtAddConnectionsPanel extends LitElement {
 
     static get properties() {
         return {
@@ -42,7 +42,7 @@ export class FtConnectToYourAccount extends LitElement {
 
         <div id="wrapper" part="wrapper">
         
-            <img id="illustration" part="illustration" src="./components/ft-connect-to-your-account/assets/illustration.png" />
+            <img id="illustration" part="illustration" src="./components/ft-add-connections-panel/assets/illustration.png" />
         
             <div id="title" part="title">
                 Connect your account
@@ -65,7 +65,7 @@ export class FtConnectToYourAccount extends LitElement {
             </div>
         
             <img id="lock" part="lock"
-                src="./components/ft-connect-to-your-account/assets/lock.png"
+                src="./components/ft-add-connections-panel/assets/lock.png"
             />
         
             <div id="protected" part="protected" class="body">
@@ -88,7 +88,7 @@ export class FtConnectToYourAccount extends LitElement {
                     Data access powered by
                 </div>
                 <img id="logo" part="logo"
-                    src="./components/ft-connect-to-your-account/assets/mx-logo.png"
+                    src="./components/ft-add-connections-panel/assets/mx-logo.png"
                 />
             </div>
         
@@ -254,5 +254,5 @@ export class FtConnectToYourAccount extends LitElement {
 
 }
 
-window.customElements.define('ft-connect-to-your-account', FtConnectToYourAccount);
+window.customElements.define('ft-add-connections-panel', FtAddConnectionsPanel);
 

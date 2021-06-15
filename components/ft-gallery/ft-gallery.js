@@ -22,11 +22,11 @@ import { light } from "../../mx-design-tokens/index.js";
 import './ft-component-panel.js'
 import '../ft-connect/ft-connect.js'
 import '../ft-manage-connections/ft-manage-connections.js'
-import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
+import '../ft-add-connections-panel/ft-add-connections-panel.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
-import '../ft-manage-connections-panel/ft-manage-connections-panel.js'
-import '../ft-challenge/ft-challenge.js'
+import '../ft-connections-panel/ft-connections-panel.js'
+import '../ft-challenge-panel/ft-challenge-panel.js'
 
 
 export class FtGallery extends LitElement {
@@ -64,13 +64,13 @@ export class FtGallery extends LitElement {
                 </ft-manage-connections>
             </ft-component-panel> 
 
-            <ft-component-panel name="ft-connect-to-your-account">
-                <ft-connect-to-your-account
-                    id="ft-connect-to-your-account" 
+            <ft-component-panel name="ft-add-connections-panel">
+                <ft-add-connections-panel
+                    id="ft-add-connections-panel" 
                     class="screen" 
                     slot="component"
                 >
-                </ft-connect-to-your-account>
+                </ft-add-connections-panel>
             </ft-component-panel> 
 
             <ft-component-panel name="ft-select-your-institution">
@@ -83,7 +83,7 @@ export class FtGallery extends LitElement {
                 </ft-select-your-institution>
             </ft-component-panel>
 
-            <ft-component-panel name="ft-connect-to-your-account">
+            <ft-component-panel name="ft-add-connections-panel">
                 <ft-enter-credentials 
                     id="ft-enter-credentials"
                     class="floating"
@@ -92,14 +92,14 @@ export class FtGallery extends LitElement {
                 </ft-enter-credentials>
             </ft-component-panel>
 
-            <ft-component-panel name="ft-manage-connections-panel">
-                <ft-manage-connections-panel
-                    id="ft-manage-connections-panel"
+            <ft-component-panel name="ft-connections-panel">
+                <ft-connections-panel
+                    id="ft-connections-panel"
                     class="screen"
                     slot="component"
                     connections=${JSON.stringify(this.connections)}
                 >
-                </ft-manage-connections-panel>
+                </ft-connections-panel>
             </ft-component-panel>
         </div>
 

@@ -1,4 +1,4 @@
-NAME=ft-connecting
+NAME=ft-connecting-panel
 
 include ../common/common.make
 

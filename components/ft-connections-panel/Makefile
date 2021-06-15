@@ -1,4 +1,4 @@
-NAME=ft-manage-connections-panel
+NAME=ft-connections-panel
 
 include ../common/common.make
 

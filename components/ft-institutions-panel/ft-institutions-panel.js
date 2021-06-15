@@ -24,7 +24,7 @@ import '@material/mwc-icon';
 import '@material/mwc-icon-button';
 import '../ft-institution-list/ft-institution-list.js';
 
-export class FtSelectYourInstitution extends LitElement {
+export class FtInstitutionsPanel extends LitElement {
 
     static get properties() {
         return {
@@ -257,5 +257,5 @@ export class FtSelectYourInstitution extends LitElement {
     }
 }
 
-window.customElements.define('ft-select-your-institution', FtSelectYourInstitution);
+window.customElements.define('ft-institutions-panel', FtInstitutionsPanel);
 
