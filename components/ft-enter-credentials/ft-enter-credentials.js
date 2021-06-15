@@ -43,12 +43,12 @@ export class FtEnterCredentials extends LitElement {
     }
 
     getUsername() {
-        const usernameField = this.shadowRoot.querySelector("#username");
+        const usernameField = this.shadowRoot.getElementById("username");
         return usernameField.value;
     }
 
     getPassword() {
-        const passwordField = this.shadowRoot.querySelector("#password");
+        const passwordField = this.shadowRoot.getElementById("password");
         return passwordField.value;
     }
 
@@ -248,8 +248,8 @@ export class FtEnterCredentials extends LitElement {
     }
 
     clear() {
-        var usernameField = this.shadowRoot.querySelector("#username");
-        var passwordField = this.shadowRoot.querySelector("#password");
+        var usernameField = this.shadowRoot.getElementById("username");
+        var passwordField = this.shadowRoot.getElementById("password");
         usernameField.value = "";
         passwordField.value = "";
     }

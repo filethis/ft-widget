@@ -190,7 +190,7 @@ export class FtSelectYourInstitution extends LitElement {
 
     _onSearchFieldChanged()
     {
-        var field = this.shadowRoot.querySelector("#search");
+        var field = this.shadowRoot.getElementById("search");
         const value = field.value;
         this._searchPattern = value;
         this._haveSearchPattern = (!!value)

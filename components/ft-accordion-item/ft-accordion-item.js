@@ -189,16 +189,16 @@ export class FtAccordionItem extends LitElement {
     }
 
     _open() {
-        var openElement = this.shadowRoot.querySelector("#open");
-        var closedElement = this.shadowRoot.querySelector("#closed");
+        var openElement = this.shadowRoot.getElementById("open");
+        var closedElement = this.shadowRoot.getElementById("closed");
 
         openElement.style.display = "flex";
         closedElement.style.display = "none";
     }
 
     _close() {
-        var openElement = this.shadowRoot.querySelector("#open");
-        var closedElement = this.shadowRoot.querySelector("#closed");
+        var openElement = this.shadowRoot.getElementById("open");
+        var closedElement = this.shadowRoot.getElementById("closed");
 
         openElement.style.display = "none";
         closedElement.style.display = "flex";
