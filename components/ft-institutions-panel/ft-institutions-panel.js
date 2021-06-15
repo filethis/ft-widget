@@ -22,7 +22,7 @@ import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-textfield';
 import '@material/mwc-icon';
 import '@material/mwc-icon-button';
-import '../../components/ft-institution-list/ft-institution-list.js';
+import '../ft-institution-list/ft-institution-list.js';
 
 export class FtSelectYourInstitution extends LitElement {
 

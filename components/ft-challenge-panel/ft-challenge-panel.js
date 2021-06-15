@@ -27,7 +27,7 @@ import '@material/mwc-icon-button';
 import '@material/mwc-radio';
 import '@material/mwc-textfield';
 import '@material/mwc-formfield';
-import '../../components/ft-institution-list-item/ft-institution-list-item.js';
+import '../ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 import { InteractionFormGenerator_1_0_0 } from './ft-user-interaction-form-generator-1_0_0.js';
 import { InteractionFormGenerator_2_0_0 } from './ft-user-interaction-form-generator-2_0_0.js';

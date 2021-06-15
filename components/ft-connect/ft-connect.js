@@ -18,13 +18,13 @@ limitations under the License.
 import { html, css, unsafeCSS } from 'lit';
 import '@material/mwc-button';
 import { light } from "../../mx-design-tokens/index.js";
-import '../ft-connect-to-your-account/ft-connect-to-your-account.js'
+import '../ft-add-connections-panel/ft-add-connections-panel.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
-import '../ft-enter-credentials/ft-enter-credentials.js'
-import '../ft-connecting/ft-connecting.js'
-import '../ft-success/ft-success.js'
-import '../ft-challenge/ft-challenge.js'
-import '../ft-manage-connections-panel/ft-manage-connections-panel.js'
+import '../ft-credentials-panel/ft-credentials-panel.js'
+import '../ft-connecting-panel/ft-connecting-panel.js'
+import '../ft-success-panel/ft-success-panel.js'
+import '../ft-challenge-panel/ft-challenge-panel.js'
+import '../ft-connections-panel/ft-connections-panel.js'
 import '../ft-edit-connection/ft-edit-connection.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
