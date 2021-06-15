@@ -26,7 +26,7 @@ import '@material/mwc-icon-button';
 import '../ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
 
-export class FtEditConnection extends LitElement {
+export class FtEditConnectionPanel extends LitElement {
 
     static get properties() {
         return {
@@ -233,5 +233,5 @@ export class FtEditConnection extends LitElement {
 
 }
 
-window.customElements.define('ft-edit-connection', FtEditConnection);
+window.customElements.define('ft-edit-connection-panel', FtEditConnectionPanel);
 

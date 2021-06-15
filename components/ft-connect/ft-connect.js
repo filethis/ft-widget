@@ -25,7 +25,7 @@ import '../ft-connecting-panel/ft-connecting-panel.js'
 import '../ft-success-panel/ft-success-panel.js'
 import '../ft-challenge-panel/ft-challenge-panel.js'
 import '../ft-connections-panel/ft-connections-panel.js'
-import '../ft-edit-connection/ft-edit-connection.js'
+import '../ft-edit-connection-panel/ft-edit-connection-panel.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
 export const Workflow = {
@@ -110,13 +110,13 @@ export class FtConnect extends FtClient {
             >
             </ft-connections-panel>
 
-            <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
+            <ft-edit-connection-panel id="ft-edit-connection-panel" part="ft-edit-connection-panel"
                 connection=${JSON.stringify(this._selectedConnection)}
                 institution=${JSON.stringify(this._selectedConnectionInstitution)}
                 @delete-connection-button-clicked="${this._transitionByCustomEvent}"
                 @edit-connection-back-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-edit-connection>
+            </ft-edit-connection-panel>
 
         </div>
 
@@ -165,7 +165,7 @@ export class FtConnect extends FtClient {
                     #ft-connections-panel {
                         display: none;
                     }
-                    #ft-edit-connection {
+                    #ft-edit-connection-panel {
                         display: none;
                     }
         `
@@ -272,7 +272,7 @@ export class FtConnect extends FtClient {
             case "connection-list-item-edit-button-clicked":
                 this._selectedConnection = detail;
                 this._selectedConnectionInstitution = this._findInstitutionForConnection(this._selectedConnection);
-                this._goToPanel("ft-edit-connection");
+                this._goToPanel("ft-edit-connection-panel");
                 return true;
             
             case "connection-list-item-fix-button-clicked":
@@ -411,9 +411,9 @@ export class FtConnect extends FtClient {
                 showSeventh = true;
                 nextPanel = this.shadowRoot.getElementById("ft-connections-panel");
                 break;
-            case "ft-edit-connection":
+            case "ft-edit-connection-panel":
                 showEigth = true;
-                nextPanel = this.shadowRoot.getElementById("ft-edit-connection");
+                nextPanel = this.shadowRoot.getElementById("ft-edit-connection-panel");
                 break;
         }
 
@@ -428,7 +428,7 @@ export class FtConnect extends FtClient {
         this._setPanelShown("ft-connecting-panel", showFifth);
         this._setPanelShown("ft-success-panel", showSixth);
         this._setPanelShown("ft-connections-panel", showSeventh);
-        this._setPanelShown("ft-edit-connection", showEigth);
+        this._setPanelShown("ft-edit-connection-panel", showEigth);
 
         this._selectedPanelName = nextPanelName;
     }
