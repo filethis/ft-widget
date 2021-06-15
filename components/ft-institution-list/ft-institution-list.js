@@ -95,6 +95,12 @@ export class FtInstitutionList extends LitElement {
         ];
     }
 
+    scrollToTop() {
+        const wrapper = this.shadowRoot.getElementById("wrapper");
+        if (wrapper)
+            wrapper.scrollTop = 0;
+    }
+
     _onInstitutionSelectedInList(event) {
         var institution = null;
         const institutionIndex = event.detail.index;

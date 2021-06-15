@@ -177,6 +177,9 @@ export class FtManageConnectionsPanel extends LitElement {
         if (!!this.connections)
             count = this.connections.length;
         this._connectionCount = count;
+
+        const listElement = this.shadowRoot.getElementById("ft-connection-list");
+        listElement.scrollToTop();
     }
 
     _onAddButtonClicked() {

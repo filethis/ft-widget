@@ -128,7 +128,7 @@ export class FtSelectYourInstitution extends LitElement {
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
                     #search {
-                        margin-top: 10px;
+                        margin-top: 20px;
                         margin-left: 24px;
                         margin-right: 24px;
                         height: 44px;
@@ -161,6 +161,10 @@ export class FtSelectYourInstitution extends LitElement {
     }
 
     enter() {
+        setTimeout(() => {
+            const searchField = this.shadowRoot.getElementById("search");
+            searchField.focus();
+        }, 200);
     }
 
     exit() {

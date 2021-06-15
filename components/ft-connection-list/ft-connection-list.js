@@ -96,6 +96,12 @@ export class FtConnectionList extends LitElement {
         ];
     }
 
+    scrollToTop() {
+        const wrapper = this.shadowRoot.getElementById("wrapper");
+        if (wrapper)
+            wrapper.scrollTop = 0;
+    }
+
     _onConnectionSelectedInList(event) {
         var connection = null;
         const connectionIndex = event.detail.index;
