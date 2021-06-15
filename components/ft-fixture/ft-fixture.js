@@ -381,8 +381,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 apiSecret="${this.apiSecret}"
                                 userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
-                                isLive="${this.isLive}"
-                                autoPoseChallenges="true"
+                                isLive="false"
                                 fakeInstitutions="true"
                             >
                             </ft-connect>
@@ -415,7 +414,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 apiSecret="${this.apiSecret}"
                                 userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
-                                isLive="${this.isLive}"
+                                isLive="false"
                             >
                             </ft-view-documents>
                         </div>

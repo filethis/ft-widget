@@ -56,6 +56,8 @@ export class FtClient extends FtHttpMixin(LitElement)
 
             /** The list of all pending user interaction request resources. */
             interactionRequests: { type: Array },
+            challenge: { type: Object },
+            _oldChallenges: { type: Object },  // Set
 
             /** Version of user interaction schema to use. */
             interactionVersion: { type: Object },  /* JSON */
@@ -90,6 +92,8 @@ export class FtClient extends FtHttpMixin(LitElement)
         this.institutions = [];
         this.selectedFilterId = null;
         this.interactionRequests = [];
+        this.haveNewChallenge = false;
+        this.newChallenges = [];
         this.connections = [];
         this.documents = [];
         this.interactionVersion = "1.0.0";
@@ -101,9 +105,6 @@ export class FtClient extends FtHttpMixin(LitElement)
         this.lastCreatedConnection = null;
 
         // Non-reactive instance variable initialization
-        this._uploadableFileTypes = "application/pdf";
-        this._downloadUrl = "";  // The URL for the current document download
-        this._downloadFilename = "";  // The filename for the current document download
         this._lastChangeNotificationHandledOrdinal = null;
         this._createdDocuments = {};
         this._deletedDocuments = {};
@@ -124,15 +125,8 @@ export class FtClient extends FtHttpMixin(LitElement)
         this._createdInteractionRequests = {};
         this._deletedInteractionRequests = {};
         this._lastCreatedConnectionId = null;
-
-        // Command event listeners
-        this.addEventListener('client-create-connection-command', this._onCreateConnectionCommandInternal);
-        this.addEventListener('client-download-documents-command', this._onDownloadDocumentsCommand);
-        this.addEventListener('client-upload-documents-command', this._onUploadDocumentsCommand);
-        this.addEventListener('client-delete-connection-command', this._onDeleteConnectionCommand);
-        this.addEventListener('client-delete-document-command', this._onDeleteDocumentCommand);
-        this.addEventListener('client-submit-interaction-response-command', this._onSubmitInteractionResponseCommand);
-        this.addEventListener('client-action-command', this._onActionCommand);
+        this._isFirstGetAllDataCall = true;
+        this._oldChallenges = new Set();
     }
 
     connectedCallback()
@@ -152,6 +146,17 @@ export class FtClient extends FtHttpMixin(LitElement)
             this._onSelectedFilterIdChanged();
         if (changedProperties.has('isLive'))
             this._onLiveChanged();
+    }
+
+    posedChallenge() {
+        if (!this.challenge)
+            return;
+        this._oldChallenges.add(this.challenge.id);
+        this.challenge = this._findNextNewChallenge();
+    }
+
+    _findNextNewChallenge() {
+        return this.interactionRequests.find(challenge => !this._oldChallenges.has(challenge.id));
     }
 
     _onLiveChanged()
@@ -183,197 +188,30 @@ export class FtClient extends FtHttpMixin(LitElement)
 
     // User action event handling --------------------------------------------------------------------------
 
-    _onCreateConnectionCommandInternal(event)
+    createConnection(username, password, institution)
     {
-        var createConnectionDialog = event.detail;
-        var username = createConnectionDialog.username;
-        var password = createConnectionDialog.password;
-        var institution = createConnectionDialog.institution;
         this._lastCreatedConnectionId = null;
         this.lastCreatedConnection = null;
         this._lastCreatedConnectionId = this._createConnection(username, password, institution);
     }
 
-    _onDownloadDocumentsCommand(event)
+    deleteConnection(connection)
     {
-        var document = event.detail;
-        this._downloadDocument(document);
-    }
-
-    _downloadDocument(document)
-    {
-        if (this.fakeData)
-            return Promise.resolve();
-
-        // NOTE: This is not an ideal way to download documents, but I could not get the standard method
-        // to work. See: _downloadDocumentShouldWorkButDoesNot(). Here, we have to make a request to get
-        // the filename before we download the actual file. Also, because we can't add headers to the
-        // request, we have to pass both the ticket and the "Accept" type as URL parameters instead.
-        // We had to add a new "accept" URL parameter on the server side to accommodate this. Kind of ugly...
-
-        var documentId = document.id;
-
-        var url = this.server + this.apiPath +
-            "/documents/" + documentId;
-        var options = this._buildHttpOptions();
-        return this.httpGet(url, options)
-            .then(function (document) {
-                this._downloadFilename = document.name;
-                this._downloadUrl = this.server + this.apiPath +
-                    "/documents/" + documentId +
-                    "?ticket=" + this.userAccessToken +
-                    "&accept=application%2Fpdf";
-
-                this.$.downloader.click();
-            }.bind(this))
-            .catch(function (error) {
-                this._handleError(error);
-            }.bind(this));
-    }
-
-    _downloadDocumentShouldWorkButDoesNot(document)
-    {
-        if (this.fakeData)
-            return Promise.resolve();
-
-        // TODO: Spent a lot of time trying to get this standard method for downloading files to work.
-        // Best I can figure, this is some kind of cross-site problem. When call the click() method,
-        // nothing happens...
-        // AN IDEA: Check the "isTrusted" property of the event
-
-        var documentId = document.id;
-        var url = this.server + this.apiPath +
-            "/documents/" + documentId;
-
-        var options = this._buildHttpOptions();
-        options.headers["Accept"] = "application/pdf";
-        options.responseType = "blob";
-
-        return this.httpGet(url, options)
-            .then(function (responseAsBlob) {
-                var url = window.URL.createObjectURL(responseAsBlob);
-                this._downloadUrl = url;
-                this._downloadFilename = "foo.pdf";
-                this.$.downloader.click();
-                window.URL.revokeObjectURL(url);
-            }.bind(this))
-            .catch(function (error) {
-                this._handleError(error);
-            }.bind(this));
-    }
-
-    _onUploadDocumentsCommand()
-    {
-        this._chooseFilesToUpload();
-    }
-
-    _chooseFilesToUpload()
-    {
-        // Simulate a mouse click on our hidden "uploader" element to make it prompt the user to choose files.
-        // If the user does so, the uploader will emit an event that we handle with _onUploaderFilesChanged().
-        var clickEvent = document.createEvent('MouseEvents');
-        clickEvent.initEvent('click', true, false);
-        var uploader = this.$.uploader;
-        uploader.dispatchEvent(clickEvent);
-    }
-
-    _onUploaderFilesChanged(event)
-    {
-        // Turn the given FileList into a proper array
-        var filesAsArray = [];
-        var files = event.target.files;
-        var count = files.length;
-        for (var index = 0; index < count; index++) {
-            var file = files[index];
-            filesAsArray.push(file);
-        }
-
-        this._uploadFiles(filesAsArray);
-    }
-
-    _uploadFiles(files)
-    {
-        // TODO: What we really want here is some nice progress feedback for the user
-
-        var uploads = files.map(this._uploadFile.bind(this));
-
-        return Promise.all(uploads)
-            .catch(function (reason) {
-                this._handleError(reason);
-
-                // TODO: Display something to the user and suggest what they ought to do
-            }.bind(this));
-    }
-
-    _uploadFile(file)
-    {
-        if (this.fakeData)
-            return Promise.resolve([]);
-
-        // Create a FormData instance
-        var formData = new FormData();
-
-        // Add properties to the form
-        var properties = {
-            filename: file.name
-        };
-        var propertiesAsString = JSON.stringify(properties);
-        formData.append("properties", propertiesAsString);
-
-        // Add the file to the form
-        formData.append("file", file);
-
-        var url = this.server + this.apiPath +
-            "/documents/";
-        var options = this._buildHttpOptions();
-
-        // We do NOT want to set the Content-Type to "multipart/form-data" explicitly here, as it MUST be done
-        // by the XMLHttpRequest instance which will add it, appending the "boundary" string to it.
-
-        return this.httpPost(url, formData, options);
-    }
-
-    _onDeleteDocumentCommand(event)
-    {
-        var document = event.detail;
-        this._onDeleteDocument(document)
-            .catch(function (reason) {
-                this._handleError(reason);
-            }.bind(this));
-    }
-
-    _onDeleteConnectionCommand(event)
-    {
-        var connection = event.detail;
         this._onDeleteConnection(connection)
             .catch(function (reason) {
                 this._handleError(reason);
             }.bind(this));
     }
 
-    _onActionCommand(event)
+    deleteDocumentCommand(document)
     {
-        var connection = event.detail;
-        this._handleConnectionAction(connection);
+        this._onDeleteDocument(document)
+            .catch(function (reason) {
+                this._handleError(reason);
+            }.bind(this));
     }
 
-    _handleConnectionAction(connection)
-    {
-        switch (connection.state) {
-            case "waiting":
-                this._startManualFetch(connection);
-                break;
-
-            case "question":
-                this._poseInteractionForConnection(connection);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    _startManualFetch(connection)
+    startJob(connection)
     {
         if (this.fakeData)
             return Promise.resolve();
@@ -407,6 +245,7 @@ export class FtClient extends FtHttpMixin(LitElement)
             .then(this._getInteractionRequests.bind(this))  // Depends on connections, though only for now
             .then(function () {
                 this._processingChangeNotifications = false;  // In case we got here after failing to get them
+                this._isFirstGetAllDataCall = false;
             }.bind(this))
             .catch(function (reason) {
                 this._processingChangeNotifications = false;  // In case we got here after failing to get them
@@ -610,6 +449,13 @@ export class FtClient extends FtHttpMixin(LitElement)
             return this.httpGet(url)
                 .then(function (response) {
                     this.interactionRequests = response;
+
+                    // Set up current challenge properties for first call
+                    if (this._isFirstGetAllDataCall) {
+                        this.challenge = null;
+                        this._oldChallenges = new Set();
+                        this.interactionRequests.forEach(challenge => this._oldChallenges.add(challenge.id));
+                    }
                 }.bind(this));
         }
 
@@ -618,10 +464,20 @@ export class FtClient extends FtHttpMixin(LitElement)
 
         return Promise.all(promises)
             .then(function (interactionRequestsPerConnection) {
+
+                // Consolidate all connection user interaction requests
                 interactionRequestsPerConnection.forEach(function (interactionRequests) {
                     this.interactionRequests = this.interactionRequests.concat(interactionRequests);
                 }.bind(this))
-            }.bind(this));
+
+                // Set up current challenge properties for first call
+                if (this._isFirstGetAllDataCall)
+                {
+                    this.challenge = null;
+                    this._oldChallenges = new Set();
+                    this.interactionRequests.forEach(challenge => this._oldChallenges.add(challenge.id));
+                }
+        }.bind(this));
     }
 
     _getInteractionRequest(connectionId, interactionId)
@@ -636,8 +492,15 @@ export class FtClient extends FtHttpMixin(LitElement)
         var options = this._buildHttpOptions();
         return this.httpGet(url, options)
             .then(function (interactionRequest) {
+
                 // Inject the connection id into the interaction request for future reference
                 interactionRequest.connectionId = connectionId;
+
+                if (!this._isFirstGetAllDataCall)
+                {
+                    if (!this._oldChallenges.has(interactionId))
+                        this.challenge = interactionRequest;
+                }
 
                 return interactionRequest;
             }.bind(this));
@@ -664,11 +527,8 @@ export class FtClient extends FtHttpMixin(LitElement)
             }.bind(this));
     }
 
-    _onSubmitInteractionResponseCommand(event)
+    submitInteractionResponse(interactionRequest, interactionResponse)
     { 
-        const interactionRequest = event.detail.request;
-        const interactionResponse = event.detail.response;
-
         var connectionId = interactionRequest.connectionId;
         var interactionId = interactionRequest.id;
         var url = this.server + this.apiPath +

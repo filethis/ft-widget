@@ -37,15 +37,11 @@ export class FtConnect extends FtClient {
     static get properties() {
         return {
             workflow: { type: String },
-            autoPoseChallenges: { type: Object },
-            _autoPoseChallengesInterval: { type: Object },
             _selectedConnection: { type: Object },
-            _selectedInstitution: { type: Object },  // Same as next one?
-            _currentInstitution: { type: Object },
+            _selectedConnectionInstitution: { type: Object },
+            _selectedInstitution: { type: Object },
             _selectedPanelName: { type: String },
-            _panelUnderModal: { type: String },
-            _currentInteractionRequest: { type: Object },
-            _currentConnection: { type: Object }
+            _panelUnderModal: { type: String }
         };
     }
 
@@ -53,16 +49,11 @@ export class FtConnect extends FtClient {
         super();
 
         this.workflow = Workflow.ADD;
-        this.autoPoseChallenges = false;
-        this._autoPoseChallengesInterval = null;
-
         this._selectedConnection = null;
-        this._selectedInstitution = null;  // Same as next one?
-        this._currentInstitution = null;
+        this._selectedConnectionInstitution = null;  // Same as next one?
+        this._selectedInstitution = null;
         this._selectedPanelName = null;
         this._panelUnderModal = null;
-        this._currentInteractionRequest = null;
-        this._currentConnection = null;
 
         this.addEventListener('connection-list-item-edit-button-clicked', this._transitionByCustomEvent);
     }
@@ -85,27 +76,27 @@ export class FtConnect extends FtClient {
             </ft-select-your-institution>
 
             <ft-enter-credentials id="ft-enter-credentials" part="ft-enter-credentials"
-                institution=${JSON.stringify(this._currentInstitution)}
+                institution=${JSON.stringify(this._selectedInstitution)}
                 @credentials-back-button-clicked="${this._transitionByCustomEvent}"
                 @credentials-continue-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-enter-credentials>
 
             <ft-connecting id="ft-connecting" part="ft-connecting"
-                institution=${JSON.stringify(this._currentInstitution)}
+                institution=${JSON.stringify(this._selectedInstitution)}
                 @connecting-another-button-clicked="${this._transitionByCustomEvent}"
                 @connecting-done-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-connecting>
 
             <ft-success id="ft-success" part="ft-success"
-                institution=${JSON.stringify(this._currentInstitution)}
+                institution=${JSON.stringify(this._selectedInstitution)}
                 @success-continue-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-success>
 
             <ft-challenge id="ft-challenge" part="ft-challenge"
-                request=${JSON.stringify(this._currentInteractionRequest)}
+                request=${JSON.stringify(this.challenge)}
                 @challenge-back-button-clicked="${this._transitionByCustomEvent}"
                 @challenge-submit-button-clicked="${this._transitionByCustomEvent}"
             >
@@ -121,7 +112,7 @@ export class FtConnect extends FtClient {
 
             <ft-edit-connection id="ft-edit-connection" part="ft-edit-connection"
                 connection=${JSON.stringify(this._selectedConnection)}
-                institution=${JSON.stringify(this._selectedInstitution)}
+                institution=${JSON.stringify(this._selectedConnectionInstitution)}
                 @delete-connection-button-clicked="${this._transitionByCustomEvent}"
                 @edit-connection-back-button-clicked="${this._transitionByCustomEvent}"
             >
@@ -186,22 +177,8 @@ export class FtConnect extends FtClient {
 
         if (changedProperties.has('workflow'))
             this._onWorkflowChanged();
-        if (changedProperties.has('autoPoseChallenges'))
-            this._onAutoPoseChallengesChanged();
-    }
-
-    _onAutoPoseChallengesChanged()
-    {
-        // Remove any previous poller
-        if (!!this._autoPoseChallengesInterval)
-        {
-            clearInterval(this._autoPoseChallengesInterval);
-            this._autoPoseChallengesInterval = null;
-        }
-        
-        // If want to start polling, add poller
-        if (this.autoPoseChallenges)
-            this._autoPoseChallengesInterval = setInterval(this._poseNextPendingInteractionRequest.bind(this), 1000);
+        if (changedProperties.has('challenge'))
+            this._onChallengeChanged();
     }
 
     _onWorkflowChanged() {
@@ -217,19 +194,11 @@ export class FtConnect extends FtClient {
         }
     }
 
-    _poseNextPendingInteractionRequest () {
-        if (this.interactionRequests.length === 0)
+    _onChallengeChanged() {
+        if (!this.challenge)
             return;
 
-        // If we already have a dialog posed
-        if (this._selectedPanelName == "ft-challenge")
-            return;
-        
-        // Pose the first request
-        var interactionRequest = this.interactionRequests[0];
-        this._currentInteractionRequest = interactionRequest;
-
-        const connectionId = interactionRequest.connectionId;
+        const connectionId = this.challenge.connectionId;
         const connection = this._findConnectionWithId(connectionId);
         const institutionId = parseInt(connection.sourceId);
         const institution = this._findInstitutionWithId(institutionId);
@@ -251,10 +220,10 @@ export class FtConnect extends FtClient {
     }
 
     _onInstitutionSelected(event) {
-        const _currentInstitution = event.detail;
-        if (!_currentInstitution)
+        const _selectedInstitution = event.detail;
+        if (!_selectedInstitution)
             return;
-        this._currentInstitution = _currentInstitution;
+        this._selectedInstitution = _selectedInstitution;
         this._goToPanel("ft-enter-credentials");
     }
 
@@ -302,19 +271,17 @@ export class FtConnect extends FtClient {
             
             case "connection-list-item-edit-button-clicked":
                 this._selectedConnection = detail;
-                this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
+                this._selectedConnectionInstitution = this._findInstitutionForConnection(this._selectedConnection);
                 this._goToPanel("ft-edit-connection");
                 return true;
             
             case "connection-list-item-fix-button-clicked":
-                // TODO
+                const connection = detail;
+                this.challenge = this._findChallengeForConnection(connection);
                 return true;
 
             case "delete-connection-confirmed":
-                {
-                    const newEvent = new CustomEvent('client-delete-connection-command', { detail: this._selectedConnection, bubbles: true, composed: true });
-                    this.dispatchEvent(newEvent);
-                }
+                this.deleteConnection(this._selectedConnection);
                 this._goToPanel("ft-manage-connections-panel");
                 return true;
 
@@ -335,10 +302,10 @@ export class FtConnect extends FtClient {
 
             case "selected-institution-changed":
                 {
-                    const _currentInstitution = detail;
-                    if (!_currentInstitution)
+                    const _selectedInstitution = detail;
+                    if (!_selectedInstitution)
                         return true;
-                    this._currentInstitution = _currentInstitution;
+                    this._selectedInstitution = _selectedInstitution;
                 }
                 this._goToPanel("ft-enter-credentials");
                 return true;
@@ -353,14 +320,11 @@ export class FtConnect extends FtClient {
 
             case "credentials-continue-button-clicked":
                 {
-                    var enterCredentialsElement = this.shadowRoot.querySelector("#ft-enter-credentials");
-                    var payload = {
-                        institution: this._currentInstitution,
-                        username: enterCredentialsElement.getUsername(),
-                        password: enterCredentialsElement.getPassword()
-                    };
-                    const connectEvent = new CustomEvent('client-create-connection-command', { detail: payload, bubbles: true, composed: true });
-                    this.dispatchEvent(connectEvent);
+                    const enterCredentialsElement = this.shadowRoot.querySelector("#ft-enter-credentials");
+                    const username = enterCredentialsElement.getUsername();
+                    const password = enterCredentialsElement.getPassword();
+                    const institution = this._selectedInstitution;
+                    this.createConnection(username, password, institution);
                 }
                 this._goToPanel("ft-connecting");
                 return true;
@@ -383,18 +347,15 @@ export class FtConnect extends FtClient {
                 return true;
 
             case "challenge-back-button-clicked":
+                this.posedChallenge();
                 this._goToPanel(this._panelUnderModal);
                 return true;
 
             case "challenge-submit-button-clicked":
                 {
+                    this.posedChallenge();
                     var challengeElement = this.shadowRoot.querySelector("#ft-challenge");
-                    const payload = {
-                        request: challengeElement.request,
-                        response: challengeElement.response
-                    }
-                    const event = new CustomEvent('client-submit-interaction-response-command', { detail: payload, bubbles: true, composed: true });
-                    this.dispatchEvent(event);
+                    this.submitInteractionResponse(challengeElement.request, challengeElement.response);
                 }
                 this._goToPanel(this._panelUnderModal);
         }
@@ -486,6 +447,14 @@ export class FtConnect extends FtClient {
             return null;
         const institution = this.institutions.find(institution => institution.id == connection.sourceId);
         return institution;
+    }
+    
+    _findChallengeForConnection(connection)
+    {
+        if (!connection)
+            return null;
+        const challenge = this.interactionRequests.find(challenge => challenge.connectionId == connection.id);
+        return challenge;
     }
 
 }
