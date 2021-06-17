@@ -45,7 +45,8 @@ export class FtDocumentListItem extends LitElement {
 
         <div id="wrapper" part="wrapper">
         
-            <div id="thumbnail">
+            <div id="thumbnail"
+            >
                 <img id="thumbnail-image"
                     src="${!this.document ? '' : this.document.thumbnailUrl}"
                     alt="Thumbnail"
@@ -66,6 +67,7 @@ export class FtDocumentListItem extends LitElement {
             
                 </div>
             </div>
+
         </div>
         `;
     }
@@ -136,11 +138,17 @@ export class FtDocumentListItem extends LitElement {
     updated(changedProperties) {
         if (changedProperties.has("fake"))
             this._onFakeChanged();
+        if (changedProperties.has("document"))
+            this._onDocumentChanged();
     }
 
     _onFakeChanged() {
         if (this.fake)
             this._loadFakeDocument();
+    }
+
+    _onDocumentChanged() {
+        this._message = this.document.deliveredDate;
     }
 
     _loadFakeDocument() {

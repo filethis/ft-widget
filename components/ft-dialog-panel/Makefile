@@ -1,4 +1,4 @@
-NAME=ft-dialog-panel
+NAME=ft-dev
 
 include ../common/common.make
 

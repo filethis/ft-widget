@@ -18,15 +18,14 @@ limitations under the License.
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 
-export class FtDev extends LitElement {
+export class FtDialogPanel extends LitElement {
 
     render() {
         return html`
-            <div id="top"></div>
             <div id="wrapper" part="wrapper">
+                <div id="heading" part="heading">heading</div>
                 <slot></slot>
             </div>
-            <div id="bottom"></div>
         `;
     }
 
@@ -35,27 +34,23 @@ export class FtDev extends LitElement {
             css`
             :host {
                 display: block;
-                width: 100%; height: 100%;
                 overflow: hidden;
                 font-family: ${unsafeCSS(light.Font.Regular)};
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
             }
-                #top {
-                    flex: 1
-                }
                 #wrapper {
-                    border: solid 1px gray;
+                    position:relative;
+                    width: 100%; height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: stretch;
                 }
-                #bottom {
-                    flex: 3
-                }
+                    #heading {
+                    }
         `
         ];
     }
 }
 
-window.customElements.define('ft-dialog-panel', FtDev);
+window.customElements.define('ft-dialog-panel', FtDialogPanel);
 

@@ -30,7 +30,8 @@ import { FtClient } from '../ft-client/ft-client.js';
 
 export const Workflow = {
     ADD: "add",
-    MANAGE: "manage"
+    MANAGE: "manage",
+    DELIVERY: "delivery"
 };
 export class FtConnect extends FtClient {
 
@@ -179,6 +180,16 @@ export class FtConnect extends FtClient {
             this._onWorkflowChanged();
         if (changedProperties.has('challenge'))
             this._onChallengeChanged();
+        if (changedProperties.has('connections'))
+            this._onConnectionsChanged();
+    }
+
+    _onConnectionsChanged() {
+        if (this._selectedPanelName == "ft-connecting-panel")
+        {
+            // This causes NPE
+            // const selectedConnectionId = this._selectedConnection.id;
+        }
     }
 
     _onWorkflowChanged() {
@@ -190,6 +201,10 @@ export class FtConnect extends FtClient {
 
             case Workflow.MANAGE:
                 this._goToPanel("ft-connections-panel");
+            break;
+
+            case Workflow.DELIVERY:
+                this._goToPanel("ft-documents-panel");
             break;
         }
     }
@@ -249,7 +264,11 @@ export class FtConnect extends FtClient {
             case Workflow.MANAGE:
                 this._transitionForManageConnections(trigger, detail);
                 break;
-        }
+
+            case Workflow.DELIVERY:
+                this._transitionForDelivery(trigger, detail);
+                break;
+            }
     }
 
     _transitionForAddConnections(trigger, detail) {
@@ -265,7 +284,7 @@ export class FtConnect extends FtClient {
                 return true;
             
             case "delete-connection-button-clicked":
-                var dialog = this.shadowRoot.querySelector("#delete-connection-confirm-dialog");
+                var dialog = this.shadowRoot.getElementById("delete-connection-confirm-dialog");
                 dialog.open = true;
                 return true;
             
@@ -320,11 +339,11 @@ export class FtConnect extends FtClient {
 
             case "credentials-continue-button-clicked":
                 {
-                    const enterCredentialsElement = this.shadowRoot.querySelector("#ft-credentials-panel");
+                    const enterCredentialsElement = this.shadowRoot.getElementById("ft-credentials-panel");
                     const username = enterCredentialsElement.getUsername();
                     const password = enterCredentialsElement.getPassword();
                     const institution = this._selectedInstitution;
-                    this.createConnection(username, password, institution);
+                    this._createdConnectionId = this.createConnection(username, password, institution);
                 }
                 this._goToPanel("ft-connecting-panel");
                 return true;
@@ -354,12 +373,15 @@ export class FtConnect extends FtClient {
             case "challenge-submit-button-clicked":
                 {
                     this.posedChallenge();
-                    var challengeElement = this.shadowRoot.querySelector("#ft-challenge-panel");
+                    const challengeElement = this.shadowRoot.getElementById("ft-challenge-panel");
                     this.submitInteractionResponse(challengeElement.request, challengeElement.response);
                 }
                 this._goToPanel(this._panelUnderModal);
         }
         return false;
+    }
+
+    _transitionForDelivery(trigger, detail) {
     }
 
     _goToPanel(nextPanelName)
