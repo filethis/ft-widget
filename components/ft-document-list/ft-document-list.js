@@ -135,6 +135,12 @@ export class FtDocumentList extends LitElement {
             this._onSelectedDocumentChanged();
         if (changedProperties.has("fake"))
             this._onFakeChanged();
+        if (changedProperties.has('documents'))
+            this._onDocumentsChanged();
+    }
+
+    _onDocumentsChanged() {
+        var foo = "bar";
     }
 
     _onSelectedDocumentChanged() {

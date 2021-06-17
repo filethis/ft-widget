@@ -15,24 +15,26 @@ limitations under the License.
 */
 
 
-import { html, css, unsafeCSS } from 'lit';
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
-import { FtClient } from '../ft-client/ft-client.js';
-import '../ft-view-documents-panel/ft-view-documents-panel.js'
+import '../ft-document-list/ft-document-list.js';
 
-export class FtViewDocuments extends FtClient {
+export class FtDocumentsPanel extends LitElement {
 
     static get properties() {
         return {
-            _selectedPanelName: { type: String }
+            documents: { type: Array },
+            documentCount: { type: Number },
+            fake: { type: Object }
         };
     }
 
     constructor() {
         super();
 
-        this._selectedPanelName = "ft-view-documents-panel";
-        this.live = false;
+        this.documents = [];
+        this.documentCount = 0;
+        this.fake = false;
     }
 
     render() {
@@ -40,10 +42,23 @@ export class FtViewDocuments extends FtClient {
 
         <div id="wrapper" part="wrapper">
 
-            <ft-view-documents-panel id="ft-view-documents-panel" part="ft-view-documents-panel"
+            <div id="header" part="header">
+                <div id="title" part="title">
+                    Documents
+                </div>
+                <div id="subtitle" part="subtitle">
+                    View documents
+                </div>
+                <div id="document-count" part="document-count">
+                    ${this.documentCount} documents
+                </div>
+            </div>
+        
+            <ft-document-list id="ft-document-list" part="ft-document-list"
                 documents=${JSON.stringify(this.documents)}
+                fake="${this.fake}"
             >
-            </ft-view-documents-panel>
+            </ft-document-list>
 
         </div>
         `;
@@ -59,52 +74,74 @@ export class FtViewDocuments extends FtClient {
                 height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
-                #wrapper {
+            #wrapper {
                     position:relative;
                     width: 100%; height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: stretch;
                 }
-                    #ft-view-documents-panel {
-                        display: block;
+                    #header{
+                        margin-top: 24px;
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                    }
+                        #title {
+                            height: 40px;
+                            font-size: ${unsafeCSS(light.FontSize.H1)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                            line-height: ${unsafeCSS(light.LineHeight.H1)}px;
+                            text-align: left;
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
+                        #subtitle{
+                            margin-top: 8px;
+                            height: 24px;
+                            font-size: ${unsafeCSS(light.FontSize._loadFakeDocuments)}px;
+                            line-height: ${unsafeCSS(light.LineHeight._loadFakeDocuments)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Normal)};
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
+                        #document-count {
+                            margin-top: 23px;
+                            height: 16px;
+                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        }
+                    #ft-document-list {
+                        margin-left: 12px;
+                        width: 376px;
                     }
         `
         ];
     }
 
-    _goToPanel(nextPanelName) {
-        var currentPanelName = this._selectedPanelName;
-        if (nextPanelName == currentPanelName)
-            return;
-        
-        const currentPanel = this.shadowRoot.getElementById(currentPanelName);
-
-        var showFirst = false;
-
-        let nextPanel;
-
-        switch (nextPanelName) {
-            case "ft-view-documents-panel":
-                showFirst = true;
-                nextPanel = this.shadowRoot.getElementById("ft-view-documents-panel");
-                break;
-        }
-
-        currentPanel.exit();
-        nextPanel.enter();
-
-        this._setPanelShown("ft-view-documents-panel", showFirst);
-
-        this._selectedPanelName = nextPanelName;
+    enter() {
     }
 
-    _setPanelShown(panelId, show) {
-        var panel = this.shadowRoot.getElementById(panelId)
-        if (show)
-            panel.style.display = "block";
-        else
-            panel.style.display = "none";
+    exit() {
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has('documents'))
+            this._onDocumentsChanged();
+    }
+
+    _onDocumentsChanged() {
+        var count = 0;
+        if (!!this.documents)
+            count = this.documents.length;
+        this.documentCount = count;
     }
 
 }
 
-window.customElements.define('ft-view-documents', FtViewDocuments);
+window.customElements.define('ft-documents-panel', FtDocumentsPanel);
 

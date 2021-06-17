@@ -26,12 +26,13 @@ import '../ft-success-panel/ft-success-panel.js'
 import '../ft-challenge-panel/ft-challenge-panel.js'
 import '../ft-connections-panel/ft-connections-panel.js'
 import '../ft-edit-connection-panel/ft-edit-connection-panel.js'
+import '../ft-documents-panel/ft-documents-panel.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
 export const Workflow = {
     ADD: "add",
     MANAGE: "manage",
-    DELIVERY: "delivery"
+    DOCUMENTS: "documents"
 };
 export class FtConnect extends FtClient {
 
@@ -119,6 +120,11 @@ export class FtConnect extends FtClient {
             >
             </ft-edit-connection-panel>
 
+            <ft-documents-panel id="ft-documents-panel" part="ft-documents-panel"
+                documents=${JSON.stringify(this.documents)}
+            >
+            </ft-documents-panel>
+
         </div>
 
         <mwc-dialog id="delete-connection-confirm-dialog"
@@ -169,6 +175,9 @@ export class FtConnect extends FtClient {
                     #ft-edit-connection-panel {
                         display: none;
                     }
+                    #ft-documents-panel {
+                        display: none;
+                    }
         `
         ];
     }
@@ -203,7 +212,7 @@ export class FtConnect extends FtClient {
                 this._goToPanel("ft-connections-panel");
             break;
 
-            case Workflow.DELIVERY:
+            case Workflow.DOCUMENTS:
                 this._goToPanel("ft-documents-panel");
             break;
         }
@@ -265,7 +274,7 @@ export class FtConnect extends FtClient {
                 this._transitionForManageConnections(trigger, detail);
                 break;
 
-            case Workflow.DELIVERY:
+            case Workflow.DOCUMENTS:
                 this._transitionForDelivery(trigger, detail);
                 break;
             }
@@ -399,7 +408,8 @@ export class FtConnect extends FtClient {
         var showFifth = false;
         var showSixth = false;
         var showSeventh = false;
-        var showEigth = false;
+        var showEighth = false;
+        var showNinth = false;
 
         let nextPanel;
         
@@ -434,10 +444,14 @@ export class FtConnect extends FtClient {
                 nextPanel = this.shadowRoot.getElementById("ft-connections-panel");
                 break;
             case "ft-edit-connection-panel":
-                showEigth = true;
+                showEighth = true;
                 nextPanel = this.shadowRoot.getElementById("ft-edit-connection-panel");
                 break;
-        }
+            case "ft-documents-panel":
+                showNinth = true;
+                nextPanel = this.shadowRoot.getElementById("ft-documents-panel");
+                break;
+            }
 
         if (!!currentPanel)
             currentPanel.exit();
@@ -450,7 +464,8 @@ export class FtConnect extends FtClient {
         this._setPanelShown("ft-connecting-panel", showFifth);
         this._setPanelShown("ft-success-panel", showSixth);
         this._setPanelShown("ft-connections-panel", showSeventh);
-        this._setPanelShown("ft-edit-connection-panel", showEigth);
+        this._setPanelShown("ft-edit-connection-panel", showEighth);
+        this._setPanelShown("ft-documents-panel", showNinth);
 
         this._selectedPanelName = nextPanelName;
     }

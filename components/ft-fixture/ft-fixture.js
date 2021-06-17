@@ -27,7 +27,7 @@ import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
 import { Workflow } from '../ft-connect/ft-connect.js'
-import '../ft-view-documents/ft-view-documents.js'
+import '../ft-documents-panel/ft-documents-panel.js'
 
 
 export class FtFixture extends FtHttpMixin(LitElement) {
@@ -404,10 +404,11 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             </ft-connect>
                         </div>
 
-                        <div id="ft-view-documents-wrapper">
-                            <div id="ft-view-documents-wrapper-label" class="code">&lt;ft-view-documents&gt;</div>
+                        <div id="ft-documents-wrapper">
+                            <div id="ft-documents-wrapper-label" class="code">&lt;ft-connect workflow="documents"&gt;</div>
 
-                            <ft-view-documents id="ft-view-documents" class="screen"
+                            <ft-connect id="ft-documents-panel" class="screen"
+                                workflow="${Workflow.DOCUMENTS}"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -415,8 +416,9 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 userAccountId="${this.userAccountId}"
                                 userAccessToken="${this.userAccessToken}"
                                 isLive="${this.isLive}"
+                                fakeInstitutions="true"
                             >
-                            </ft-view-documents>
+                            </ft-connect>
                         </div>
 
                     </div>
@@ -433,9 +435,9 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <div id="dotted-ft-connect-manage"></div>
                         </div>
                         
-                        <div id="dotted-ft-view-documents-wrapper">
-                            <div id="dotted-ft-view-documents-wrapper-label" class="code">&lt;ft-view-documents&gt;</div>
-                            <div id="dotted-ft-view-documents"></div>
+                        <div id="dotted-ft-documents-wrapper">
+                            <div id="dotted-ft-documents-wrapper-label" class="code">&lt;ft-connect workflow="documents"&gt;</div>
+                            <div id="dotted-ft-documents"></div>
                         </div>
 
                     </div>
@@ -596,14 +598,14 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     }
                                     #ft-connect-manage {
                                     }
-                                #ft-view-documents-wrapper {
+                                #ft-documents-wrapper {
                                     margin-left: 50px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #ft-view-documents-wrapper-label {
+                                    #ft-documents-wrapper-label {
                                     }
                                     #ft-view-documents {
                                     }
@@ -654,16 +656,16 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                         justify-content: flex-start;
                                         align-items: center;
                                     }
-                                #dotted-ft-view-documents-wrapper {
+                                #dotted-ft-documents-wrapper {
                                     margin-left: 50px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #dotted-ft-view-documents-wrapper-label {
+                                    #dotted-ft-documents-wrapper-label {
                                         }
-                                    #dotted-ft-view-documents {
+                                    #dotted-ft-documents {
                                         width: 400px;
                                         height: 650px;
                                         border-style:dashed;
