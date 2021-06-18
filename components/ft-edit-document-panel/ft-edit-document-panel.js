@@ -51,25 +51,12 @@ export class FtEditDocumentPanel extends LitElement {
                 </mwc-icon-button>
             </div>
 
-            <div id="disconnect-box" part="disconnect-box">
-                <div id="disconnect-text" part="disconnect-text">
-        
-                    <div id="disconnect-title" part="disconnect-title">
-                        Disconnect this institution 
-                    </div>
-                    <div id="disconnect-explanation" part="disconnect-explanation">
-                        Stop sharing information
-                    </div>
-                
-                </div>
-                
-                <mwc-icon-button id="disconnect-button" part="disconnect-button"
-                    icon="chevron_right"
-                    @click=${this._onDisconnectButtonClicked}
-                >
-                </mwc-icon-button>
-
-            </div>
+            <mwc-button id="delete-button" part="delete-button"
+                unelevated
+                label="Delete"
+                @click=${this._onDeleteButtonClicked}
+            >
+            </mwc-button>
 
         </div>
         `;
@@ -104,36 +91,16 @@ export class FtEditDocumentPanel extends LitElement {
                         margin-left: 5px;
                         margin-top: 4px;
                     }
-                #disconnect-box {
+                #delete-button {
                     margin-left: 24px;
-                    margin-right: 10px;
-                    height: 64px;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: flex-start;
-                    align-items: center;
+                    margin-right: 24px;
+                    --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                    --mdc-theme-on-primary: white;
+                    --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                    --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                    --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                    --mdc-typography-button-text-transform: none;
                 }
-                    #disconnect-text {
-                        flex: 1;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: stretch;
-                    }
-                        #disconnect-title {
-                            color: ${unsafeCSS(light.Color.Error300)};
-                            font-size: ${unsafeCSS(light.FontSize.Body)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                            line-height: ${unsafeCSS(light.LineHeight.Body)}px;
-                        }
-                        #disconnect-explanation {
-                            margin-top: 6px;
-                            color: ${unsafeCSS(light.Color.Error300)};
-                            font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
-                            line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
-                        }
-                    #disconnect-button {
-                        }
         `
         ];
     }
@@ -149,7 +116,7 @@ export class FtEditDocumentPanel extends LitElement {
         this.dispatchEvent(newEvent);
     }
 
-    _onDisconnectButtonClicked() {
+    _onDeleteButtonClicked() {
         const newEvent = new CustomEvent('delete-document-button-clicked', { detail: this.document, bubbles: true, composed: true });
         this.dispatchEvent(newEvent);
     }

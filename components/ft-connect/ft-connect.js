@@ -420,8 +420,13 @@ export class FtConnect extends FtClient {
             
             case "delete-document-button-clicked":
                 {
-                    var dialog = this.shadowRoot.getElementById("delete-document-confirm-dialog");
-                    dialog.open = true;
+                    const document = detail;
+                    this.deleteDocument(document);
+                    this._goToPanel("ft-documents-panel");
+                    // {
+                    //     var dialog = this.shadowRoot.getElementById("delete-document-confirm-dialog");
+                    //     dialog.open = true;
+                    // }
                 }
                 return true;
         }

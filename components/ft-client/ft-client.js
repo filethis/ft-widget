@@ -198,7 +198,7 @@ export class FtClient extends FtHttpMixin(LitElement)
             }.bind(this));
     }
 
-    deleteDocumentCommand(document)
+    deleteDocument(document)
     {
         this._onDeleteDocument(document)
             .catch(function (reason) {
