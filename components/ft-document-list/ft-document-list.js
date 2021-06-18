@@ -51,9 +51,7 @@ export class FtDocumentList extends LitElement {
                  @selected="${this._onDocumentSelectedInList}"
            >
                 ${!this.documents ? '' : this.documents.map(document => html`
-                <mwc-list-item 
-                    noninteractive
-                >
+                <mwc-list-item>
                     <ft-document-list-item
                         document=${JSON.stringify(document)}
                     >
@@ -83,8 +81,10 @@ export class FtDocumentList extends LitElement {
                     overscroll-behavior: contain;
                 }
                     mwc-list {
+                        --mdc-ripple-color: transparent;
                     }
                         mwc-list-item {
+                            cursor: default;
                             width: 376px;
                             height: 130px;
                             --mdc-list-side-padding: 0;

@@ -27,6 +27,7 @@ import '../ft-challenge-panel/ft-challenge-panel.js'
 import '../ft-connections-panel/ft-connections-panel.js'
 import '../ft-edit-connection-panel/ft-edit-connection-panel.js'
 import '../ft-documents-panel/ft-documents-panel.js'
+import '../ft-edit-document-panel/ft-edit-document-panel.js'
 import { FtClient } from '../ft-client/ft-client.js';
 
 export const Workflow = {
@@ -42,6 +43,7 @@ export class FtConnect extends FtClient {
             _selectedConnection: { type: Object },
             _selectedConnectionInstitution: { type: Object },
             _selectedInstitution: { type: Object },
+            _selectedDocument: { type: Object },
             _selectedPanelName: { type: String },
             _panelUnderModal: { type: String }
         };
@@ -54,10 +56,9 @@ export class FtConnect extends FtClient {
         this._selectedConnection = null;
         this._selectedConnectionInstitution = null;  // Same as next one?
         this._selectedInstitution = null;
+        this._selectedDocument = null;
         this._selectedPanelName = null;
         this._panelUnderModal = null;
-
-        this.addEventListener('connection-list-item-edit-button-clicked', this._transitionByCustomEvent);
     }
 
     render() {
@@ -122,8 +123,16 @@ export class FtConnect extends FtClient {
 
             <ft-documents-panel id="ft-documents-panel" part="ft-documents-panel"
                 documents=${JSON.stringify(this.documents)}
+                @document-list-item-edit-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-documents-panel>
+
+            <ft-edit-document-panel id="ft-edit-document-panel" part="ft-edit-document-panel"
+                document=${JSON.stringify(this._selectedDocument)}
+                @delete-document-button-clicked="${this._transitionByCustomEvent}"
+                @edit-document-back-button-clicked="${this._transitionByCustomEvent}"
+            >
+            </ft-edit-document-panel>
 
         </div>
 
@@ -176,6 +185,9 @@ export class FtConnect extends FtClient {
                         display: none;
                     }
                     #ft-documents-panel {
+                        display: none;
+                    }
+                    #ft-edit-document-panel {
                         display: none;
                     }
         `
@@ -275,7 +287,7 @@ export class FtConnect extends FtClient {
                 break;
 
             case Workflow.DOCUMENTS:
-                this._transitionForDelivery(trigger, detail);
+                this._transitionForDocument(trigger, detail);
                 break;
             }
     }
@@ -291,12 +303,14 @@ export class FtConnect extends FtClient {
             case "edit-connection-back-button-clicked":
                 this._goToPanel("ft-connections-panel");
                 return true;
-            
+                
             case "delete-connection-button-clicked":
-                var dialog = this.shadowRoot.getElementById("delete-connection-confirm-dialog");
-                dialog.open = true;
+                {
+                    var dialog = this.shadowRoot.getElementById("delete-connection-confirm-dialog");
+                    dialog.open = true;
+                }
                 return true;
-            
+                
             case "connection-list-item-edit-button-clicked":
                 this._selectedConnection = detail;
                 this._selectedConnectionInstitution = this._findInstitutionForConnection(this._selectedConnection);
@@ -304,10 +318,12 @@ export class FtConnect extends FtClient {
                 return true;
             
             case "connection-list-item-fix-button-clicked":
-                const connection = detail;
-                this.challenge = this._findChallengeForConnection(connection);
+                {
+                    const connection = detail;
+                    this.challenge = this._findChallengeForConnection(connection);
+                }
                 return true;
-
+    
             case "delete-connection-confirmed":
                 this.deleteConnection(this._selectedConnection);
                 this._goToPanel("ft-connections-panel");
@@ -390,7 +406,25 @@ export class FtConnect extends FtClient {
         return false;
     }
 
-    _transitionForDelivery(trigger, detail) {
+    _transitionForDocument(trigger, detail) {
+        switch (trigger)
+        {
+            case "edit-document-back-button-clicked":
+                this._goToPanel("ft-documents-panel");
+                return true;
+
+            case "document-list-item-edit-button-clicked":
+                this._selectedDocument = detail;
+                this._goToPanel("ft-edit-document-panel");
+                return true;
+            
+            case "delete-document-button-clicked":
+                {
+                    var dialog = this.shadowRoot.getElementById("delete-document-confirm-dialog");
+                    dialog.open = true;
+                }
+                return true;
+        }
     }
 
     _goToPanel(nextPanelName)
@@ -410,6 +444,7 @@ export class FtConnect extends FtClient {
         var showSeventh = false;
         var showEighth = false;
         var showNinth = false;
+        var showTenth = false;
 
         let nextPanel;
         
@@ -451,7 +486,11 @@ export class FtConnect extends FtClient {
                 showNinth = true;
                 nextPanel = this.shadowRoot.getElementById("ft-documents-panel");
                 break;
-            }
+            case "ft-edit-document-panel":
+                showTenth = true;
+                nextPanel = this.shadowRoot.getElementById("ft-edit-document-panel");
+                break;
+        }
 
         if (!!currentPanel)
             currentPanel.exit();
@@ -466,6 +505,7 @@ export class FtConnect extends FtClient {
         this._setPanelShown("ft-connections-panel", showSeventh);
         this._setPanelShown("ft-edit-connection-panel", showEighth);
         this._setPanelShown("ft-documents-panel", showNinth);
+        this._setPanelShown("ft-edit-document-panel", showTenth);
 
         this._selectedPanelName = nextPanelName;
     }

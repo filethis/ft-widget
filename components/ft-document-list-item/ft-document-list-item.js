@@ -68,6 +68,12 @@ export class FtDocumentListItem extends LitElement {
                 </div>
             </div>
 
+            <mwc-icon-button id="edit-button" part="edit-button"
+                    icon="chevron_right"
+                    @click=${this._onEditButtonClicked}
+                >
+            </mwc-icon-button>
+
         </div>
         `;
     }
@@ -131,6 +137,9 @@ export class FtDocumentListItem extends LitElement {
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                             }
+                        #edit-button {
+                            margin-left: 5px;
+                        }
         `
         ];
     }
@@ -149,6 +158,13 @@ export class FtDocumentListItem extends LitElement {
 
     _onDocumentChanged() {
         this._message = this.document.deliveredDate;
+    }
+
+    _onEditButtonClicked() {
+        this.shadowRoot.getElementById("edit-button").blur();
+        
+        const event = new CustomEvent('document-list-item-edit-button-clicked', { detail: this.document, bubbles: true, composed: true });
+        this.dispatchEvent(event);
     }
 
     _loadFakeDocument() {
