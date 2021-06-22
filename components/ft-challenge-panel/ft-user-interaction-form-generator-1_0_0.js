@@ -36,7 +36,6 @@ InteractionFormGenerator_1_0_0.prototype.clear = function()
 {
     // Clean up from the last time we used the root view
     this.rootView.removeEventListener('keyup', this.onKeyUp.bind(this));
-    this.rootView.removeEventListener('paper-radio-group-changed', this.onPaperRadioGroupChanged.bind(this));
     this.rootView.removeEventListener('change', this.onChange.bind(this));
 
     if (this.deferButton)
@@ -76,7 +75,6 @@ InteractionFormGenerator_1_0_0.prototype.begin = function()
 
     // Add listener to all user-input changes so we can validate the form and enable the "OK" button
     this.rootView.addEventListener('keyup', this.onKeyUp.bind(this));
-    this.rootView.addEventListener('paper-radio-group-changed', this.onPaperRadioGroupChanged.bind(this));
     this.rootView.addEventListener('change', this.onChange.bind(this));
 
     this.rootView.style.display = "flex";
@@ -184,7 +182,7 @@ InteractionFormGenerator_1_0_0.prototype._generateRadiobuttonChoices = function(
     groupLabel.style.marginTop = "9px";
 
     // Group
-    var group = document.createElement('paper-radio-group');
+    var group = document.createElement('div');
     group.id = "choice-group";
     container.appendChild(group);
     this.widgetMap[id] = group;
@@ -203,13 +201,15 @@ InteractionFormGenerator_1_0_0.prototype._generateRadiobuttonChoices = function(
 
         // Radiobutton
         var radiobutton = document.createElement('mwc-radio');
-        formfield.appendChild(radiobutton);
+        group.appendChild(radiobutton);
         radiobutton.id = choice.id;
-        radiobutton.name = choice.id;
+        radiobutton.name = id;
 
         // If a default choice was specified and this is it, select this radiobutton
         if (defaultChoiceId && radiobutton.id == defaultChoiceId)
-            group.select(choice.id);
+            radiobutton.styles.selected = true;
+
+        radiobutton.style.selected = true;
 
         this.widgetMap[choice.id] = radiobutton;
     }
@@ -244,11 +244,6 @@ InteractionFormGenerator_1_0_0.prototype._generateMenuChoices = function(id, lab
 };
 
 InteractionFormGenerator_1_0_0.prototype.onKeyUp = function()
-{
-    this.onUserInput();
-};
-
-InteractionFormGenerator_1_0_0.prototype.onPaperRadioGroupChanged = function()
 {
     this.onUserInput();
 };

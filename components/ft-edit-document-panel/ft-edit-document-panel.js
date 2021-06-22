@@ -51,6 +51,42 @@ export class FtEditDocumentPanel extends LitElement {
                 </mwc-icon-button>
             </div>
 
+            <div id="name-group" class="property">
+                <div class="property-name">
+                    Name:
+                </div>
+                <div class="property-value">
+                   ${!this.document ? '' : this.document.name}
+                </div>
+            </div>
+
+            <div id="pages-group" class="property">
+                <div class="property-name">
+                    Pages:
+                </div>
+                <div class="property-value">
+                   ${!this.document ? '' : this.document.pageCount}
+                </div>
+            </div>
+
+            <div id="size-group" class="property">
+                <div class="property-name">
+                    Size:
+                </div>
+                <div class="property-value">
+                   ${!this.document ? '' : this.document.size}
+                </div>
+            </div>
+
+            <div id="delivered-group" class="property">
+                <div class="property-name">
+                    Delivered:
+                </div>
+                <div class="property-value">
+                   ${!this.document ? '' : this.document.deliveredDate}
+                </div>
+            </div>
+
             <mwc-button id="delete-button" part="delete-button"
                 unelevated
                 label="Delete"
@@ -92,6 +128,7 @@ export class FtEditDocumentPanel extends LitElement {
                         margin-top: 4px;
                     }
                 #delete-button {
+                    margin-top: 24px;
                     margin-left: 24px;
                     margin-right: 24px;
                     --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
@@ -101,6 +138,22 @@ export class FtEditDocumentPanel extends LitElement {
                     --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                     --mdc-typography-button-text-transform: none;
                 }
+            .property {
+                margin-top: 12px;
+                margin-left: 24px;
+                margin-right: 24px;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: stretch;
+            }
+                .property-name {
+                    font-weight: bold;
+                }
+                .property-value {
+                    margin-left: 10px;
+                }
+
         `
         ];
     }

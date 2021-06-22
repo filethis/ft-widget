@@ -61,10 +61,6 @@ export class FtDocumentListItem extends LitElement {
                         ${!this.document ? '' : this.document.name}
                     </div>
             
-                    <div id="message" part="message">
-                        ${this._message}
-                    </div>
-            
                 </div>
             </div>
 
@@ -127,13 +123,6 @@ export class FtDocumentListItem extends LitElement {
                                 font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
                                 line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                                 white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                            }
-                            #message {
-                                font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                                line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                                color: ${unsafeCSS(light.Color.Neutral700)};
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                             }
