@@ -268,7 +268,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
                             </mwc-dialog>
 
-                            <mwc-dialog id="account-code-dialog" @closed="${this._onAccountCodeDialogClosed}">
+                            <mwc-dialog id="account-code-dialog" class="code-dialog">
                                 <ft-code
                                     resourceHeading="User Account"
                                     operationName = "create"
@@ -366,7 +366,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
                             </mwc-dialog>
 
-                            <mwc-dialog id="token-code-dialog" @closed="${this._onTokenCodeDialogClosed}">
+                            <mwc-dialog id="token-code-dialog" class="code-dialog">
                                 <ft-code
                                     resourceHeading="User Access Token"
                                     operationName = "create"
@@ -758,6 +758,10 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                 margin-top: 9px;
                 border: 1px solid #DDD;
                 padding: 4px;
+            }
+            .code-dialog {
+                --mdc-dialog-max-width: 1000px;
+                --mdc-dialog-max-height: 1000px;
             }
             `
         ];

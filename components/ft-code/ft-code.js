@@ -17,6 +17,10 @@ limitations under the License.
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
+import '@material/mwc-select';
+import '@material/mwc-button';
+import '../ft-labeled-icon-button/ft-labeled-icon-button.js';
+import "juicy-ace-editor-es6";
 
 
 export class FtCode extends LitElement {
@@ -203,11 +207,76 @@ export class FtCode extends LitElement {
 
     render() {
         return html`
-            <div id="temp">
-                <div>
+
+            <!-- Header -->
+            <div id="header">
+                <div id="heading">
                     Your Back End Code — ${this.resourceHeading}
                 </div>
             </div>
+
+            <!-- Menus -->
+            <div id="menus">
+
+                <!-- Operation Menu -->
+                <mwc-select id="operation"
+                    label="Operation"
+                    @selected="${this._operationItemSelected}"
+                >
+                    ${!this._operations ? '' : this._operations.map(operation => html`
+                        <mwc-list-item value="${operation.name}">
+                            ${operation.label}
+                        </mwc-list-item>
+                    `)}
+                </mwc-select>
+
+                <div id="using">
+                    using
+                </div>
+
+                <!-- Language and Library Menu -->
+                <mwc-select id="language-and-library"
+                    label="Language and Library"
+                    @selected="${this._languageAndLibraries}"
+                >
+                    ${!this._operations ? '' : this._operations.map(languageAndLibrary => html`
+                        <mwc-list-item value="${languageAndLibrary.name}">
+                            ${languageAndLibrary.label}
+                        </mwc-list-item>
+                    `)}
+                </mwc-select>
+
+                <div id="menus-spacer"></div>
+
+                <!-- Copy code button -->
+                <ft-labeled-icon-button id="copy-code-button"
+                    icon="content_copy"
+                    label="Copy"
+                    @click="${this._onCopyCodeButtonClicked}"
+                >
+                </ft-labeled-icon-button>
+
+            </div>
+
+            <!-- Code -->
+            <juicy-ace-editor id="code"
+                readonly=""
+                theme="ace/theme/chrome"
+                mode="ace/mode/html"
+                fontsize="14px"
+                softtabs=""
+                value="${this.code}"
+                tabsize="4"
+            >
+            </juicy-ace-editor>
+
+            <div id="code-spacer"></div>
+
+            <!-- Substitute fixture values checkbox -->
+            <paper-checkbox checked="{{_substituteFixtureValues}}">
+                Substitute fixture values into code (Warning: Contains secrets)
+            </paper-checkbox>
+
         `;
     }
 
@@ -216,7 +285,8 @@ export class FtCode extends LitElement {
             css`
             :host {
                 display: block;
-                width: 100%; height: 100%;
+                width: 765px;
+                height: 710px;
                 overflow: hidden;
                 font-family: ${unsafeCSS(light.Font.Regular)};
                 display: flex;
@@ -224,6 +294,46 @@ export class FtCode extends LitElement {
                 justify-content: flex-start;
                 align-items: stretch;
             }
+                #header {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: stretch;
+                }
+                    #heading {
+                        font-size: 14pt
+                    }
+                #menus {
+                    margin-top: 10px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: stretch;
+                }
+                    #operation {
+                        width: 80px;
+                    }
+                    #using {
+                        padding-left:15px;
+                        padding-top: 18px;
+                        padding-right: 17px;
+                        font-size: 13pt
+                    }
+                    #language-and-library {
+                        width:230px;
+                    }
+                    #menus-spacer {
+                        flex: 1;
+                    }
+                    #copy-code-button {
+                    }
+                #code-spacer {
+                    height:12px;
+                }
+                #code {
+                    margin-top:12px;
+                    border: 1px solid #DDD;
+                }
         `
         ];
     }
@@ -233,11 +343,11 @@ export class FtCode extends LitElement {
         if (changedProperties.has("operationName") ||
             changedProperties.has("_operations"))
         {
-            this._onOperationsInitialized();
+            this._onOperationChanged();
         }
         if (changedProperties.has("_languageAndLibraries"))
         {
-            this._onLanguageAndLibraryInitialized();
+            this._onLanguageAndLibraryChanged();
         }
         if (changedProperties.has("_operation") ||
             changedProperties.has("resourceName") ||
@@ -250,7 +360,7 @@ export class FtCode extends LitElement {
 
     // Operation
 
-    _onOperationsInitialized()
+    _onOperationChanged()
     {
         this._handleOperationNameChanged();
     }
@@ -269,7 +379,7 @@ export class FtCode extends LitElement {
 
     // Language and library
 
-    _onLanguageAndLibraryInitialized()
+    _onLanguageAndLibraryChanged()
     {
         this._handleLanguageAndLibraryNameChanged();
     }
@@ -333,7 +443,7 @@ export class FtCode extends LitElement {
                 var editorInternal = this.$.code.editor;
                 editorInternal.selection.selectFileStart();
             }.bind(this))
-            .catch(function(error)
+            .catch(function()
             {
                 console.log("Could not load local code template file: " + url);
             }.bind(this));
