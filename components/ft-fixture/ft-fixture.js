@@ -21,6 +21,7 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import '@material/mwc-textfield';
 import '@material/mwc-button';
 import '@material/mwc-dialog';
+import '@material/mwc-select';
 import { light } from "../../mx-design-tokens/index.js";
 import { FtHttpMixin } from '../ft-http-mixin/ft-http-mixin.js';
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
@@ -358,6 +359,14 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
                     <div id="instance-title">Instance</div>
 
+                    <div id="header-spacer"></div>
+
+                    <mwc-select id="workflow" label="Workflow">
+                        <mwc-list-item value="0">Add Connections</mwc-list-item>
+                        <mwc-list-item value="1">Manage Connections</mwc-list-item>
+                        <mwc-list-item value="2">Support</mwc-list-item>
+                    </mwc-select>
+
                     <ft-labeled-icon-button id="power-button"
                         icon="power_settings_new"
                         label="Power"
@@ -558,8 +567,15 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             align-items: center;
                         }
                             #instance-title {
-                                flex: 1;
                                 font-size: 16pt;
+                            }
+                            #header-spacer {
+                                flex: 1;
+                            }
+                            #workflow {
+                                margin-left: 24px;
+                                margin-right: 24px;
+                                width: 225px;
                             }
                             #power-button {
                                 margin-left:30px;
