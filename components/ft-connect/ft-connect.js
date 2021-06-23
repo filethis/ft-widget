@@ -33,7 +33,7 @@ import { FtClient } from '../ft-client/ft-client.js';
 export const Workflow = {
     ADD: "add",
     MANAGE: "manage",
-    DOCUMENTS: "documents"
+    SUPPORT: "support"
 };
 export class FtConnect extends FtClient {
 
@@ -224,7 +224,7 @@ export class FtConnect extends FtClient {
                 this._goToPanel("ft-connections-panel");
             break;
 
-            case Workflow.DOCUMENTS:
+            case Workflow.SUPPORT:
                 this._goToPanel("ft-documents-panel");
             break;
         }
@@ -286,7 +286,7 @@ export class FtConnect extends FtClient {
                 this._transitionForManageConnections(trigger, detail);
                 break;
 
-            case Workflow.DOCUMENTS:
+            case Workflow.SUPPORT:
                 this._transitionForDocument(trigger, detail);
                 break;
             }

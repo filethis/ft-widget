@@ -19,6 +19,7 @@ import '@material/mwc-tab-bar';
 import '@material/mwc-tab';
 import './components/ft-fixture/ft-fixture.js';
 import { light } from "./mx-design-tokens/index.js";
+import { Workflow } from './components/ft-connect/ft-connect.js'
 
 
 export class FtWidget extends LitElement {
@@ -77,7 +78,9 @@ export class FtWidget extends LitElement {
                     Start
                 </div>
 
-                <ft-fixture id="fixture-panel">
+                <ft-fixture id="fixture-panel"
+                    workflow=${Workflow.ADD}
+                >
                 </ft-fixture>
 
             </div>
@@ -116,6 +119,7 @@ export class FtWidget extends LitElement {
                     mwc-tab-bar {
                         margin-left: 50px;
                         width: 400px;
+                        --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
                     }
                         mwc-tab {
                         }

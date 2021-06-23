@@ -55,6 +55,8 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             _userAccessTokenPanelOpen: { type: Object },
 
             isLive: { type: Object },
+
+            workflow: { type: String },
         };
     }
 
@@ -81,6 +83,8 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         this._userAccessTokenPanelOpen = ("true" == localStorage.getItem("userAccessTokenPanelOpen"));
     
         this.isLive = false;
+    
+        this.workflow = Workflow.ADD;
     }
 
     firstUpdated() {
@@ -359,13 +363,16 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
                     <div id="instance-title">Instance</div>
 
-                    <div id="header-spacer"></div>
-
-                    <mwc-select id="workflow" label="Workflow">
-                        <mwc-list-item value="0">Add Connections</mwc-list-item>
-                        <mwc-list-item value="1">Manage Connections</mwc-list-item>
-                        <mwc-list-item value="2">Support</mwc-list-item>
+                    <mwc-select id="workflow"
+                        label="Workflow"
+                        @selected="${this._workflowItemSelected}"
+                    >
+                        <mwc-list-item value="add">Add Connections</mwc-list-item>
+                        <mwc-list-item value="manage">Manage Connections</mwc-list-item>
+                        <mwc-list-item value="support">Support</mwc-list-item>
                     </mwc-select>
+
+                    <div id="header-spacer"></div>
 
                     <ft-labeled-icon-button id="power-button"
                         icon="power_settings_new"
@@ -413,11 +420,11 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             </ft-connect>
                         </div>
 
-                        <div id="ft-documents-wrapper">
-                            <div id="ft-documents-wrapper-label" class="code">&lt;ft-connect workflow="documents"&gt;</div>
+                        <div id="ft-support-wrapper">
+                            <div id="ft-support-wrapper-label" class="code">&lt;ft-connect workflow="support"&gt;</div>
 
                             <ft-connect id="ft-documents-panel" class="screen"
-                                workflow="${Workflow.DOCUMENTS}"
+                                workflow="${Workflow.SUPPORT}"
                                 server="${this.server}"
                                 apiPath="${this.apiPath}"
                                 apiKey="${this.apiKey}"
@@ -444,9 +451,9 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             <div id="dotted-ft-connect-manage"></div>
                         </div>
                         
-                        <div id="dotted-ft-documents-wrapper">
-                            <div id="dotted-ft-documents-wrapper-label" class="code">&lt;ft-connect workflow="documents"&gt;</div>
-                            <div id="dotted-ft-documents"></div>
+                        <div id="dotted-ft-support-wrapper">
+                            <div id="dotted-ft-support-wrapper-label" class="code">&lt;ft-connect workflow="support"&gt;</div>
+                            <div id="dotted-ft-support"></div>
                         </div>
 
                     </div>
@@ -569,13 +576,14 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             #instance-title {
                                 font-size: 16pt;
                             }
-                            #header-spacer {
-                                flex: 1;
-                            }
                             #workflow {
-                                margin-left: 24px;
+                                margin-left: 48px;
                                 margin-right: 24px;
                                 width: 225px;
+                                --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
+                            }
+                            #header-spacer {
+                                flex: 1;
                             }
                             #power-button {
                                 margin-left:30px;
@@ -603,8 +611,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     }
                                     #ft-connect-add {
                                     }
-                                    #ft-connect-manage-wrapper {
-                                    margin-left: 50px;
+                                #ft-connect-manage-wrapper {
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
@@ -614,14 +621,13 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                     }
                                     #ft-connect-manage {
                                     }
-                                #ft-documents-wrapper {
-                                    margin-left: 50px;
+                                #ft-support-wrapper {
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #ft-documents-wrapper-label {
+                                    #ft-support-wrapper-label {
                                     }
                                     #ft-view-documents {
                                     }
@@ -653,7 +659,6 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                         align-items: center;
                                     }
                                 #dotted-ft-connect-manage-wrapper {
-                                    margin-left: 50px;
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
@@ -672,16 +677,15 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                         justify-content: flex-start;
                                         align-items: center;
                                     }
-                                #dotted-ft-documents-wrapper {
-                                    margin-left: 50px;
+                                #dotted-ft-support-wrapper {
                                     display: flex;
                                     flex-direction: column;
                                     justify-content: flex-start;
                                     align-items: center;
                                 }
-                                    #dotted-ft-documents-wrapper-label {
+                                    #dotted-ft-support-wrapper-label {
                                         }
-                                    #dotted-ft-documents {
+                                    #dotted-ft-support {
                                         width: 400px;
                                         height: 650px;
                                         border-style:dashed;
@@ -933,7 +937,48 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
         if (changedProperties.has('isLive'))
             this._handleIsLiveChanged();
+        
+        if (changedProperties.has('workflow'))
+            this._handleWorkflowChanged();
     }
+
+    _workflowItemSelected() {
+        const workflowElement = this.shadowRoot.getElementById("workflow");
+        const selectedItemElement = workflowElement.selected;
+        selectedItemElement.blur();
+        const workflow = selectedItemElement.value;
+        if (this.workflow != workflow)
+            this.workflow = workflow
+    }
+
+    _handleWorkflowChanged() {
+        var showAddWorkflow = false;
+        var showManageWorkflow = false;
+        var showSupportWorkflow = false;
+        switch (this.workflow)
+        {
+            case Workflow.ADD:
+                showAddWorkflow = true;
+                break;
+            case Workflow.MANAGE:
+                showManageWorkflow = true;
+                break;
+            case Workflow.SUPPORT:
+                showSupportWorkflow = true;
+                break;
+        }
+        this._setElementShown("ft-connect-add-wrapper", showAddWorkflow);
+        this._setElementShown("ft-connect-manage-wrapper", showManageWorkflow);
+        this._setElementShown("ft-support-wrapper", showSupportWorkflow);
+
+        this._setElementShown("dotted-ft-connect-add-wrapper", showAddWorkflow);
+        this._setElementShown("dotted-ft-connect-manage-wrapper", showManageWorkflow);
+        this._setElementShown("dotted-ft-support-wrapper", showSupportWorkflow);
+
+        const workflowElement = this.shadowRoot.getElementById("workflow");
+        if (workflowElement.value != this.workflow)
+            workflowElement.value = this.workflow;
+}
 
     _handleIsLiveChanged() {
         var showLivePanel = false;
@@ -942,8 +987,8 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             showLivePanel = true;
         else
             showDeadPanel = true;
-        this._setPanelShown("live", showLivePanel);
-        this._setPanelShown("dead", showDeadPanel);
+        this._setElementShown("live", showLivePanel);
+        this._setElementShown("dead", showDeadPanel);
 
         // Change the icon color of the power button
         var iconLabel;
@@ -963,8 +1008,8 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         button.style.setProperty("--ft-labeled-icon-button-icon-color", iconColor);
     }
 
-    _setPanelShown(panelId, show) {
-        var panel = this.shadowRoot.getElementById(panelId)
+    _setElementShown(id, show) {
+        var panel = this.shadowRoot.getElementById(id)
         if (show)
             panel.style.display = "flex";
         else
