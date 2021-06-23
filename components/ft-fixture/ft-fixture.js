@@ -29,6 +29,7 @@ import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
 import { Workflow } from '../ft-connect/ft-connect.js'
 import '../ft-documents-panel/ft-documents-panel.js'
+import '../ft-code/ft-code.js'
 
 
 export class FtFixture extends FtHttpMixin(LitElement) {
@@ -233,12 +234,12 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             >
                             </ft-labeled-icon-button>
 
-                            <!-- <ft-labeled-icon-button id="account-code-button"
+                            <ft-labeled-icon-button id="account-code-button"
                                 icon="code" 
                                 label="Code"
-                                @click="${this.xxx}"
+                                @click="${this._onAccountCodeButtonClicked}"
                             >
-                            </ft-labeled-icon-button> -->
+                            </ft-labeled-icon-button>
 
                             <ft-labeled-icon-button id="account-delete-button"
                                 icon="remove"
@@ -265,6 +266,19 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 <div>Are you sure you want to create a new user account?</div>
                                 <mwc-button slot="primaryAction" dialogAction="confirmed">Create Account</mwc-button>
                                 <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
+                            </mwc-dialog>
+
+                            <mwc-dialog id="account-code-dialog" @closed="${this._onAccountCodeDialogClosed}">
+                                <ft-code
+                                    resourceHeading="User Account"
+                                    operationName = "create"
+                                    resourceName = "account"
+                                    languageAndLibraryName = "python-requests"
+                                    partnerAccountId = "123"
+                                    expiresIn = "123"
+                                >
+                                </ft-code>
+                                <mwc-button slot="primaryAction" dialogAction="done">Done</mwc-button>
                             </mwc-dialog>
 
                         </div>
@@ -317,12 +331,12 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                             >
                             </ft-labeled-icon-button>
                             
-                            <!-- <ft-labeled-icon-button id="user-access-token-code-button"
-                                                            icon="code" 
-                                                            label="Code"
-                                                            @click="${this.xxx}"
-                                                        >
-                                                        </ft-labeled-icon-button> -->
+                            <ft-labeled-icon-button id="user-access-token-code-button"
+                                icon="code" 
+                                label="Code"
+                                @click="${this._onUserAccessTokenCodeButtonClicked}"
+                            >
+                            </ft-labeled-icon-button>
                             
                             <ft-labeled-icon-button id="user-access-token-delete-button"
                                 icon="remove"
@@ -350,6 +364,19 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                                 <div>Do you want do proceed?.</div>
                                 <mwc-button slot="primaryAction" dialogAction="confirmed">Create Token</mwc-button>
                                 <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
+                            </mwc-dialog>
+
+                            <mwc-dialog id="token-code-dialog" @closed="${this._onTokenCodeDialogClosed}">
+                                <ft-code
+                                    resourceHeading="User Access Token"
+                                    operationName = "create"
+                                    resourceName = "token"
+                                    languageAndLibraryName = "python-requests"
+                                    partnerAccountId = "123"
+                                    expiresIn = "123"
+                                >
+                                </ft-code>
+                                <mwc-button slot="primaryAction" dialogAction="done">Done</mwc-button>
                             </mwc-dialog>
 
                         </div>
@@ -483,7 +510,7 @@ export class FtFixture extends FtHttpMixin(LitElement) {
                         border-right: 2px solid #DDD;
                     }
                         #sidebar {
-                            width: 410px;
+                            width: 450px;
                         }
                             #server-panel {
                             }
@@ -736,6 +763,44 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         ];
     }
 
+    updated(changedProperties)
+    {
+        if (changedProperties.has('_isOpen'))
+            localStorage.setItem('isOpen', this._isOpen);
+
+        if (changedProperties.has('server'))
+            localStorage.setItem('server', this.server);
+        if (changedProperties.has('_serverPanelOpen'))
+            localStorage.setItem('serverPanelOpen', this._serverPanelOpen);
+
+        if (changedProperties.has('apiKey'))
+            localStorage.setItem('apiKey', this.apiKey);
+        if (changedProperties.has('apiSecret'))
+            localStorage.setItem('apiSecret', this.apiSecret);
+        if (changedProperties.has('_apiCredentialsPanelOpen'))
+            localStorage.setItem('apiCredentialsPanelOpen', this._apiCredentialsPanelOpen);
+
+        if (changedProperties.has('userAccountId'))
+            localStorage.setItem('userAccountId', this.userAccountId);
+        if (changedProperties.has('_userAccountPanelOpen'))
+            localStorage.setItem('userAccountPanelOpen', this._userAccountPanelOpen);
+
+        if (changedProperties.has('userAccessTokenId'))
+            localStorage.setItem('userAccessTokenId', this.userAccessTokenId);
+        if (changedProperties.has('userAccessTimeout'))
+            localStorage.setItem('userAccessTimeout', this.userAccessTimeout);
+        if (changedProperties.has('userAccessToken'))
+            localStorage.setItem('userAccessToken', this.userAccessToken);
+        if (changedProperties.has('_userAccessTokenPanelOpen'))
+            localStorage.setItem('userAccessTokenPanelOpen', this._userAccessTokenPanelOpen);
+
+        if (changedProperties.has('isLive'))
+            this._handleIsLiveChanged();
+        
+        if (changedProperties.has('workflow'))
+            this._handleWorkflowChanged();
+    }
+
     _onPowerButtonClicked() {
         this.isLive = !this.isLive;
     }
@@ -822,6 +887,18 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             );
     }
 
+    _onAccountCodeButtonClicked()
+    {
+        var dialog = this.shadowRoot.querySelector("#account-code-dialog");
+        dialog.open = true;
+    }
+
+    _onUserAccessTokenCodeButtonClicked()
+    {
+        var dialog = this.shadowRoot.querySelector("#token-code-dialog");
+        dialog.open = true;
+    }
+
     _makeTest(url, options, anchorSelector, tooltipSelector, successText, failureText)
     {
         this.httpGet(url, options)
@@ -902,44 +979,6 @@ export class FtFixture extends FtHttpMixin(LitElement) {
         const fieldValue = field.value;
         if (this[propertyName] != fieldValue)
             this[propertyName] = fieldValue;
-    }
-
-    updated(changedProperties)
-    {
-        if (changedProperties.has('_isOpen'))
-            localStorage.setItem('isOpen', this._isOpen);
-
-        if (changedProperties.has('server'))
-            localStorage.setItem('server', this.server);
-        if (changedProperties.has('_serverPanelOpen'))
-            localStorage.setItem('serverPanelOpen', this._serverPanelOpen);
-
-        if (changedProperties.has('apiKey'))
-            localStorage.setItem('apiKey', this.apiKey);
-        if (changedProperties.has('apiSecret'))
-            localStorage.setItem('apiSecret', this.apiSecret);
-        if (changedProperties.has('_apiCredentialsPanelOpen'))
-            localStorage.setItem('apiCredentialsPanelOpen', this._apiCredentialsPanelOpen);
-
-        if (changedProperties.has('userAccountId'))
-            localStorage.setItem('userAccountId', this.userAccountId);
-        if (changedProperties.has('_userAccountPanelOpen'))
-            localStorage.setItem('userAccountPanelOpen', this._userAccountPanelOpen);
-
-        if (changedProperties.has('userAccessTokenId'))
-            localStorage.setItem('userAccessTokenId', this.userAccessTokenId);
-        if (changedProperties.has('userAccessTimeout'))
-            localStorage.setItem('userAccessTimeout', this.userAccessTimeout);
-        if (changedProperties.has('userAccessToken'))
-            localStorage.setItem('userAccessToken', this.userAccessToken);
-        if (changedProperties.has('_userAccessTokenPanelOpen'))
-            localStorage.setItem('userAccessTokenPanelOpen', this._userAccessTokenPanelOpen);
-
-        if (changedProperties.has('isLive'))
-            this._handleIsLiveChanged();
-        
-        if (changedProperties.has('workflow'))
-            this._handleWorkflowChanged();
     }
 
     _workflowItemSelected() {
