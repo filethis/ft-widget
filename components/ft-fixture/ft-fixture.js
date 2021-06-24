@@ -24,6 +24,7 @@ import '@material/mwc-dialog';
 import '@material/mwc-select';
 import { light } from "../../mx-design-tokens/index.js";
 import { FtHttpMixin } from '../ft-http-mixin/ft-http-mixin.js';
+import { FtClipboardMixin } from  '../ft-clipboard-mixin/ft-clipboard-mixin.js';
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js'
 import '../ft-form-panel/ft-form-panel.js'
 import '../ft-accordion-item/ft-accordion-item.js'
@@ -32,7 +33,7 @@ import '../ft-documents-panel/ft-documents-panel.js'
 import '../ft-code/ft-code.js'
 
 
-export class FtFixture extends FtHttpMixin(LitElement) {
+export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
 
     static get properties() {
         return {
@@ -762,6 +763,12 @@ export class FtFixture extends FtHttpMixin(LitElement) {
             .code-dialog {
                 --mdc-dialog-max-width: 1000px;
                 --mdc-dialog-max-height: 1000px;
+                --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
+                --mdc-theme-on-primary: white;
+                --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)}px;
+                --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
+                --mdc-typography-button-text-transform: none;
             }
             `
         ];
@@ -1068,11 +1075,11 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
     _onCopyUserAccountIdButtonClicked()
     {
-        this._copyTextToClipboard(this.userAccountId);
+        this.copyTextToClipboard(this.userAccountId);
     }
 
     _onCopyUserAccessTokenButtonClicked() {
-        this._copyTextToClipboard(this.userAccessToken);
+        this.copyTextToClipboard(this.userAccessToken);
     }
 
     _onCreateAccountButtonClicked(event)
@@ -1372,49 +1379,6 @@ export class FtFixture extends FtHttpMixin(LitElement) {
 
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
-    }
-
-    _copyTextToClipboard(text)
-    {
-        // Create a parentless textarea element
-        var textarea = document.createElement('textarea');
-
-        // Configure it such that it has very little chance of being visible to the user
-        textarea.style.position = 'fixed';
-        textarea.style.top = 0;
-        textarea.style.left = 0;
-        textarea.style.padding = 0;
-        textarea.style.border = 'none';
-        textarea.style.outline = 'none';
-        textarea.style.boxShadow = 'none';
-        textarea.style.background = 'transparent';
-        textarea.style.width = '2em';  // Setting to 1px or 1em uses negative values in some browsers
-        textarea.style.height = '2em';
-
-        // Inject the given text into it
-        textarea.value = text;
-
-        // Temporarily give it a parent.
-        // Using "document" does not work if we are in a posed <paper-dialog>, so we use the shadow root.
-        // We are assuming that we *have* a shadow root, but that is a safe assumption because we use this
-        // behavior in the context of our FileThis elements.
-        this.shadowRoot.appendChild(textarea);
-
-        try {
-            // Select all of the text
-            textarea.select();
-
-            // Execute the copy command
-            var result = document.execCommand('copy');
-            if (!result || result === "unsuccessful")
-                console.log("ft-clipboard-behavior: Copy failed.");
-        }
-        catch (err) {
-            console.log("ft-clipboard-behavior: Copy failed with thrown error.");
-        }
-
-        // Remove element from its temporary parent
-        this.shadowRoot.removeChild(textarea);
     }
 
     _handleCaughtError(reason)

@@ -20,10 +20,11 @@ import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-select';
 import '@material/mwc-button';
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js';
+import { FtClipboardMixin } from  '../ft-clipboard-mixin/ft-clipboard-mixin.js';
 import "juicy-ace-editor-es6";
 
 
-export class FtCode extends LitElement {
+export class FtCode extends FtClipboardMixin(LitElement) {
 
     static get properties() {
         return {
@@ -311,7 +312,8 @@ export class FtCode extends LitElement {
                     align-items: stretch;
                 }
                     #operation {
-                        width: 80px;
+                        width: 140px;
+                        --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
                     }
                     #using {
                         padding-left:15px;
@@ -321,11 +323,14 @@ export class FtCode extends LitElement {
                     }
                     #language-and-library {
                         width:230px;
+                        --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
                     }
                     #menus-spacer {
                         flex: 1;
                     }
                     #copy-code-button {
+                        width: 100px;
+                        height: 100px;
                     }
                 #code-spacer {
                     height:12px;
