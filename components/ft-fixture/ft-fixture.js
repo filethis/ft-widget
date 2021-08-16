@@ -31,7 +31,13 @@ import '../ft-accordion-item/ft-accordion-item.js'
 import { Workflow } from '../ft-connect/ft-connect.js'
 import '../ft-documents-panel/ft-documents-panel.js'
 import '../ft-code/ft-code.js'
+import "juicy-ace-editor-es6";
 
+
+const View = {
+    RENDERED: "rendered",
+    CODE: "code"
+};
 
 export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
 
@@ -58,6 +64,10 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
 
             isLive: { type: Object },
 
+            _view: { type: String },
+
+            _code: { type: String },
+
             workflow: { type: String },
         };
     }
@@ -65,6 +75,31 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
     constructor() {
         super();
 
+        // this._isOpen = ("true" == localStorage.getItem("isOpen"));
+
+        // this.server = localStorage.getItem("server") || "https://filethis.com";
+        // this._serverPanelOpen = ("true" == localStorage.getItem("serverPanelOpen"));
+
+        // this.apiPath = "/api/v1";
+
+        // this.apiKey = localStorage.getItem("apiKey") || "";
+        // this.apiSecret = localStorage.getItem("apiSecret") || "";
+        // this._apiCredentialsPanelOpen = ("true" == localStorage.getItem("apiCredentialsPanelOpen"));
+
+        // this.userAccountId = localStorage.getItem("userAccountId") || "";
+        // this._userAccountPanelOpen = ("true" == localStorage.getItem("userAccountPanelOpen"));
+
+        // this.userAccessTimeout = localStorage.getItem("userAccessTimeout") || 120;  // Two hours
+        // this.userAccessTokenId = localStorage.getItem("userAccessTokenId") || "";
+        // this.userAccessToken = localStorage.getItem("userAccessToken") || "";
+        // this._userAccessTokenPanelOpen = ("true" == localStorage.getItem("userAccessTokenPanelOpen"));
+    
+        this.isLive = false;
+    
+        this._view = View.RENDERED;
+
+        this._code = "";
+    
         this._isOpen = ("true" == localStorage.getItem("isOpen"));
 
         this.server = localStorage.getItem("server") || "https://filethis.com";
@@ -83,16 +118,16 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
         this.userAccessTokenId = localStorage.getItem("userAccessTokenId") || "";
         this.userAccessToken = localStorage.getItem("userAccessToken") || "";
         this._userAccessTokenPanelOpen = ("true" == localStorage.getItem("userAccessTokenPanelOpen"));
-    
-        this.isLive = false;
-    
+
         this.workflow = Workflow.ADD;
     }
 
     firstUpdated() {
 
         // TODO: Find a way to get events when the text input fields change instead of polling like this
-        setInterval(this._checkForNewInput.bind(this), 1000)
+        setInterval(this._checkForNewInput.bind(this), 1000);
+
+        this._updateCode();
     }
 
     render() {
@@ -148,6 +183,7 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                             </ft-labeled-icon-button>
 
                             <mwc-dialog id="server-default-confirm-dialog"
+                                scrimClickAction=""
                                 @closed="${this._onServerDefaultConfirmDialog}"
                             >
                                 <div>Are you sure you want to restore the default FileThis server?</div>
@@ -249,7 +285,11 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                             >
                             </ft-labeled-icon-button>
 
-                            <mwc-dialog id="account-delete-confirm-dialog" @closed="${this._onAccountDeleteConfirmDialog}">
+                            <mwc-dialog
+                                id="account-delete-confirm-dialog"
+                                scrimClickAction=""
+                                @closed="${this._onAccountDeleteConfirmDialog}"
+                            >
                                 <div>Are you sure you want to delete the user account?</div>
                                 <div>This will also delete the current user access token, if it exists.</div>
                                 <mwc-button slot="primaryAction" dialogAction="confirmed">Delete User Account</mwc-button>
@@ -263,13 +303,21 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                             >
                             </ft-labeled-icon-button>
 
-                            <mwc-dialog id="account-create-confirm-dialog" @closed="${this._onAccountCreateConfirmDialog}">
+                            <mwc-dialog
+                                id="account-create-confirm-dialog"
+                                scrimClickAction=""
+                                @closed="${this._onAccountCreateConfirmDialog}"
+                            >
                                 <div>Are you sure you want to create a new user account?</div>
                                 <mwc-button slot="primaryAction" dialogAction="confirmed">Create Account</mwc-button>
                                 <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
                             </mwc-dialog>
 
-                            <mwc-dialog id="account-code-dialog" class="code-dialog">
+                            <mwc-dialog
+                                id="account-code-dialog"
+                                class="code-dialog"
+                                scrimClickAction=""
+                            >
                                 <ft-code
                                     resourceHeading="User Account"
                                     operationName = "create"
@@ -353,21 +401,33 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                             >
                             </ft-labeled-icon-button>
 
-                            <mwc-dialog id="token-delete-confirm-dialog" @closed="${this._onTokenDeleteConfirmDialog}">
+                            <mwc-dialog
+                                id="token-delete-confirm-dialog"
+                                scrimClickAction=""
+                                @closed="${this._onTokenDeleteConfirmDialog}"
+                            >
                                 <div>Creating a new user access token will first delete the current one, if it exists.</div>
                                 <div>Do you want do proceed?.</div>
                                 <mwc-button slot="primaryAction" dialogAction="confirmed">Delete Token</mwc-button>
                                 <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
                             </mwc-dialog>
 
-                            <mwc-dialog id="token-create-confirm-dialog" @closed="${this._onTokenCreateConfirmDialog}">
+                            <mwc-dialog
+                                id="token-create-confirm-dialog"
+                                scrimClickAction=""
+                                @closed="${this._onTokenCreateConfirmDialog}"
+                            >
                                 <div>Creating a new user access token will first delete the current one, if it exists.</div>
                                 <div>Do you want do proceed?.</div>
                                 <mwc-button slot="primaryAction" dialogAction="confirmed">Create Token</mwc-button>
                                 <mwc-button slot="secondaryAction" dialogAction="canceled">Cancel</mwc-button>
                             </mwc-dialog>
 
-                            <mwc-dialog id="token-code-dialog" class="code-dialog">
+                            <mwc-dialog
+                                id="token-code-dialog"
+                                class="code-dialog"
+                                scrimClickAction=""
+                            >
                                 <ft-code
                                     resourceHeading="User Access Token"
                                     operationName = "create"
@@ -402,6 +462,22 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
 
                     <div id="header-spacer"></div>
 
+                    <ft-labeled-icon-button id="code-button"
+                        icon="power_settings_new"
+                        label="Code"
+                        @click="${this._onCodeButtonClicked}">
+                    </ft-labeled-icon-button>
+
+                    <div id="or-label">or</div>
+
+                    <ft-labeled-icon-button id="render-button"
+                        icon="power_settings_new"
+                        label="Render"
+                        @click="${this._onRenderButtonClicked}">
+                    </ft-labeled-icon-button>
+
+                    <div id="button-spacer"></div>
+
                     <ft-labeled-icon-button id="power-button"
                         icon="power_settings_new"
                         label="Power"
@@ -414,56 +490,83 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
 
                     <div id="live">
 
-                        <div id="ft-connect-add-wrapper">
-                            <div id="ft-connect-add-wrapper-label" class="code">&lt;ft-connect workflow="add"&gt;</div>
+                        <div id="render">
+                            <div id="ft-connect-add-wrapper">
+                                <div id="ft-connect-add-wrapper-label" class="code">&lt;ft-connect workflow="add"&gt;</div>
 
-                            <ft-connect id="ft-connect-add" class="screen"
-                                workflow="${Workflow.ADD}"
-                                server="${this.server}"
-                                apiPath="${this.apiPath}"
-                                apiKey="${this.apiKey}"
-                                apiSecret="${this.apiSecret}"
-                                userAccountId="${this.userAccountId}"
-                                userAccessToken="${this.userAccessToken}"
-                                isLive="${this.isLive}"
-                                fakeInstitutions="true"
-                            >
-                            </ft-connect>
+                                <ft-connect id="ft-connect-add" class="screen"
+                                    workflow="${Workflow.ADD}"
+                                    server="${this.server}"
+                                    apiPath="${this.apiPath}"
+                                    apiKey="${this.apiKey}"
+                                    apiSecret="${this.apiSecret}"
+                                    userAccountId="${this.userAccountId}"
+                                    userAccessToken="${this.userAccessToken}"
+                                    isLive="${this.isLive}"
+                                    fakeInstitutions="true"
+                                >
+                                </ft-connect>
+                            </div>
+
+                            <div id="ft-connect-manage-wrapper">
+                                <div id="ft-connect-manage-wrapper-label" class="code">&lt;ft-connect workflow="manage"&gt;</div>
+
+                                <ft-connect id="ft-connect-manage" class="screen"
+                                    workflow="${Workflow.MANAGE}"
+                                    server="${this.server}"
+                                    apiPath="${this.apiPath}"
+                                    apiKey="${this.apiKey}"
+                                    apiSecret="${this.apiSecret}"
+                                    userAccountId="${this.userAccountId}"
+                                    userAccessToken="${this.userAccessToken}"
+                                    isLive="${this.isLive}"
+                                    fakeInstitutions="true"
+                                >
+                                </ft-connect>
+                            </div>
+
+                            <div id="ft-support-wrapper">
+                                <div id="ft-support-wrapper-label" class="code">&lt;ft-connect workflow="support"&gt;</div>
+
+                                <ft-connect id="ft-documents-panel" class="screen"
+                                    workflow="${Workflow.SUPPORT}"
+                                    server="${this.server}"
+                                    apiPath="${this.apiPath}"
+                                    userAccountId="${this.userAccountId}"
+                                    userAccessToken="${this.userAccessToken}"
+                                    isLive="${this.isLive}"
+                                    fakeInstitutions="true"
+                                >
+                                </ft-connect>
+                            </div>
                         </div>
 
-                        <div id="ft-connect-manage-wrapper">
-                            <div id="ft-connect-manage-wrapper-label" class="code">&lt;ft-connect workflow="manage"&gt;</div>
+                        <!-- Fix loading of modes and themes. This is the console error message:
+                            Unable to infer path to ace from script src, use ace.config.set('basePath', 'path') to enable
+                            dynamic loading of modes and themes or with webpack use ace/webpack-resolver
+                            reportErrorIfPathIsNotConfigured @ ace.js:3794
+                        -->
+                        <juicy-ace-editor id="code"
+                            fontsize="16px"
+                            softtabs="true"
+                            theme="ace/theme/chrome"
+                            mode="ace/mode/html"
+                            tabsize="4"
+                            value="Testing"
+                            mode="ace/mode/html"
+                        >
+                        </juicy-ace-editor>
 
-                            <ft-connect id="ft-connect-manage" class="screen"
-                                workflow="${Workflow.MANAGE}"
-                                server="${this.server}"
-                                apiPath="${this.apiPath}"
-                                apiKey="${this.apiKey}"
-                                apiSecret="${this.apiSecret}"
-                                userAccountId="${this.userAccountId}"
-                                userAccessToken="${this.userAccessToken}"
-                                isLive="${this.isLive}"
-                                fakeInstitutions="true"
-                            >
-                            </ft-connect>
-                        </div>
-
-                        <div id="ft-support-wrapper">
-                            <div id="ft-support-wrapper-label" class="code">&lt;ft-connect workflow="support"&gt;</div>
-
-                            <ft-connect id="ft-documents-panel" class="screen"
-                                workflow="${Workflow.SUPPORT}"
-                                server="${this.server}"
-                                apiPath="${this.apiPath}"
-                                apiKey="${this.apiKey}"
-                                apiSecret="${this.apiSecret}"
-                                userAccountId="${this.userAccountId}"
-                                userAccessToken="${this.userAccessToken}"
-                                isLive="${this.isLive}"
-                                fakeInstitutions="true"
-                            >
-                            </ft-connect>
-                        </div>
+                        <!-- <juicy-ace-editor id="code"
+                            readonly=""
+                            theme="ace/theme/chrome"
+                            mode="ace/mode/html"
+                            fontsize="14px"
+                            softtabs=""
+                            value="${this.code}"
+                            tabsize="4"
+                        >
+                        </juicy-ace-editor> -->
 
                     </div>
 
@@ -606,15 +709,29 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                             }
                             #workflow {
                                 margin-left: 48px;
-                                margin-right: 24px;
                                 width: 225px;
                                 --mdc-theme-primary: ${unsafeCSS(light.Color.Primary300)};
                             }
                             #header-spacer {
                                 flex: 1;
                             }
+                            #code-button {
+                                margin-left: 48px;
+                            }
+                            #or-label {
+                                margin-left: 12px;
+                            }
+                            #render-button {
+                                margin-left: 12px;
+                            }
+                            #button-spacer {
+                                margin-left: 48px;
+                                width: 2px;
+                                height: 42px;
+                                border-left: 1px solid #DDD;
+                            }
                             #power-button {
-                                margin-left:30px;
+                                margin-left:48px;
                                 margin-right: 16px;
                                 margin-top: 3px;
                             }
@@ -627,38 +744,48 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                                 display: none;
                                 flex-direction: row;
                                 justify-content: center;
-                                align-items: center;
+                                align-items: stretch;
                             }
-                                #ft-connect-add-wrapper {
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: flex-start;
+                                #render {
+                                    flex-direction: row;
+                                    justify-content: center;
                                     align-items: center;
                                 }
-                                    #ft-connect-add-wrapper-label {
+                                    #ft-connect-add-wrapper {
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: flex-start;
+                                        align-items: center;
                                     }
-                                    #ft-connect-add {
+                                        #ft-connect-add-wrapper-label {
+                                        }
+                                        #ft-connect-add {
+                                        }
+                                    #ft-connect-manage-wrapper {
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: flex-start;
+                                        align-items: center;
                                     }
-                                #ft-connect-manage-wrapper {
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: flex-start;
-                                    align-items: center;
+                                        #ft-connect-manage-label {
+                                        }
+                                        #ft-connect-manage {
+                                        }
+                                    #ft-support-wrapper {
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: flex-start;
+                                        align-items: center;
+                                    }
+                                        #ft-support-wrapper-label {
+                                        }
+                                        #ft-view-documents {
+                                        }
+                                #code {
+                                    flex: 1;
+                                    margin-top:12px;
+                                    border: 1px solid #DDD;
                                 }
-                                    #ft-connect-manage-label {
-                                    }
-                                    #ft-connect-manage {
-                                    }
-                                #ft-support-wrapper {
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: flex-start;
-                                    align-items: center;
-                                }
-                                    #ft-support-wrapper-label {
-                                    }
-                                    #ft-view-documents {
-                                    }
                             #dead {
                                 width:100%;
                                 height: 100%;
@@ -805,11 +932,25 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
         if (changedProperties.has('_userAccessTokenPanelOpen'))
             localStorage.setItem('userAccessTokenPanelOpen', this._userAccessTokenPanelOpen);
 
+        if (changedProperties.has('_view'))
+            this._handleViewChanged();
+
         if (changedProperties.has('isLive'))
-            this._handleIsLiveChanged();
+           this._handleIsLiveChanged();
+    
+        if (changedProperties.has('_code'))
+            this._handleCodeChanged();
         
         if (changedProperties.has('workflow'))
             this._handleWorkflowChanged();
+    }
+
+    _onCodeButtonClicked() {
+        this._view = View.CODE;
+    }
+
+    _onRenderButtonClicked() {
+        this._view = View.RENDERED;
     }
 
     _onPowerButtonClicked() {
@@ -1028,7 +1169,28 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
         const workflowElement = this.shadowRoot.getElementById("workflow");
         if (workflowElement.value != this.workflow)
             workflowElement.value = this.workflow;
-}
+    }
+
+    _handleViewChanged() {
+        var showRendered = false;
+        var showCode = false;
+        switch (this._view)
+        {
+            case View.CODE:
+                showCode = true;
+                break;
+            case View.RENDERED:
+                showRendered = true
+                break;
+        }
+        this._setElementShown("render", showRendered);
+        this._setElementShown("code", showCode);
+    }
+
+    _handleCodeChanged() {
+        var codeElement = this.shadowRoot.getElementById("code");
+        codeElement.value = this._code;
+    }
 
     _handleIsLiveChanged() {
         var showLivePanel = false;
@@ -1039,6 +1201,11 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
             showDeadPanel = true;
         this._setElementShown("live", showLivePanel);
         this._setElementShown("dead", showDeadPanel);
+
+        this._setElementShown("code-button", showLivePanel);
+        this._setElementShown("or-label", showLivePanel);
+        this._setElementShown("render-button", showLivePanel);
+        this._setElementShown("button-spacer", showLivePanel);
 
         // Change the icon color of the power button
         var iconLabel;
@@ -1485,7 +1652,46 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
             error.errorObject = errorObject;
         return error;
     }
+
+    _updateCode() {
+        this._code = this._makeSubstitutionsInto(CodeTemplate);
+    }
+
+    _makeSubstitutionsInto(template)
+    {
+        // TODO: Find a more efficient way to do this
+
+        var code = template;
+        code = code.replace(/{{WORKFLOW}}/g, this.workflow);
+        code = code.replace(/{{SERVER}}/g, this.server);
+        code = code.replace(/{{ACCOUNT_ID}}/g, this.userAccountId);
+        // code = code.replace(/{{PARTNER_ACCOUNT_ID}}/g, this.partnerAccountId);
+        code = code.replace(/{{USER_ACCESS_TOKEN}}/g, this.userAccessToken);
+        return code;
+    }
 }
+
+const CodeTemplate = '\
+<!doctype html>\n\
+<html lang="en">\n\
+    \n\
+    <head>\n\
+        <meta charset="utf-8">\n\
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">\n\
+        \n\
+        <script type="module" src="https://connect.filethis.com/ft-connect-wizard/3.0.2/ft-connect-wizard.js"></script>\n\
+    </head>\n\
+    \n\
+    <body>\n\
+        <ft-connect\n\
+            workflow="{{WORKFLOW}}"\n\
+            userAccountId="{{ACCOUNT_ID}}"\n\
+            userAccessToken="{{USER_ACCESS_TOKEN}}">\n\
+        </ft-connect>\n\
+    </body>\n\
+    \n\
+</html>\n\
+';
 
 window.customElements.define('ft-fixture', FtFixture);
 

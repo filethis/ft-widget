@@ -82,13 +82,14 @@ export class FtClient extends FtHttpMixin(LitElement)
         super();
 
         // Reactive property initialization
-        this.isLive = false;
+        this.isLive = true;
         this.server = "https://filethis.com";
         this.apiPath = "/api/v1";
         this.userAccountId = "";
         this.account = null;
         this.institutions = [];
-        this.selectedFilterId = null;
+        // this.selectedFilterId = null;
+        this.selectedFilterId = "banking";
         this.interactionRequests = [];
         this.haveNewChallenge = false;
         this.newChallenges = [];

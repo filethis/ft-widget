@@ -184,8 +184,11 @@ InteractionFormGenerator_1_0_0.prototype._generateRadiobuttonChoices = function(
     // Group
     var group = document.createElement('div');
     group.id = "choice-group";
-    container.appendChild(group);
+    group.style.display = "flex";
+    group.style.flexFlow = "row wrap";
+    group.style.alignItems = "center";
     this.widgetMap[id] = group;
+    container.appendChild(group);
 
     // Choices in group
     var choicesCount = choices.length;
@@ -193,7 +196,7 @@ InteractionFormGenerator_1_0_0.prototype._generateRadiobuttonChoices = function(
     {
         var choice = choices[choicesIndex];
 
-        // Formfield parent for radiobutton
+        // Formfield radiobutton
         var formfield = document.createElement('mwc-formfield');
         formfield.label = choice.label;
         formfield.style.marginLeft = "16px";
@@ -201,9 +204,10 @@ InteractionFormGenerator_1_0_0.prototype._generateRadiobuttonChoices = function(
 
         // Radiobutton
         var radiobutton = document.createElement('mwc-radio');
-        group.appendChild(radiobutton);
+        radiobutton.style.setProperty("--mdc-theme-secondary", light.Color.Primary300);
         radiobutton.id = choice.id;
         radiobutton.name = id;
+        group.appendChild(radiobutton);
 
         // If a default choice was specified and this is it, select this radiobutton
         if (defaultChoiceId && radiobutton.id == defaultChoiceId)
@@ -243,26 +247,33 @@ InteractionFormGenerator_1_0_0.prototype._generateMenuChoices = function(id, lab
     }
 };
 
-InteractionFormGenerator_1_0_0.prototype.onKeyUp = function()
+InteractionFormGenerator_1_0_0.prototype.onKeyUp = function(event)
 {
-    this.onUserInput();
+    this.onUserInput(event);
 };
 
-InteractionFormGenerator_1_0_0.prototype.onChange = function()
+InteractionFormGenerator_1_0_0.prototype.onChange = function(event)
 {
-    this.onUserInput();
+    this.onUserInput(event);
 };
 
-InteractionFormGenerator_1_0_0.prototype.onUserInput = function()
+InteractionFormGenerator_1_0_0.prototype.onUserInput = function(event)
 {
     // Suppress when we are compiling
     if (this.generating)
         return;
 
+    // Blur radiobuttons
+    const srcElement = event.srcElement;
+    if (!!srcElement && !!srcElement.localName && srcElement.localName == "mwc-radio")
+    {
+        srcElement.blur();
+    }
+
     this.validate();
 
-    var event = new CustomEvent('entered-data-changed');
-    this.rootView.dispatchEvent(event);
+    var customEvent = new CustomEvent('entered-data-changed');
+    this.rootView.dispatchEvent(customEvent);
 };
 
 InteractionFormGenerator_1_0_0.prototype.validate = function()

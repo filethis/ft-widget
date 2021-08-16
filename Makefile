@@ -4,7 +4,7 @@ NAME=ft-widget
 
 CDN_DISTRIBUTION_ID=EJ2RMYD38WUXM
 PUBLICATION_DOMAIN=connect.filethis.com
-VERSION=1.0.14
+VERSION=1.0.14# NOTE: Must change in ./ft-widget.js
 AWS_VAULT_PROFILE=filethis
 
 
@@ -52,6 +52,10 @@ dist-invalidate:  ## Invalidate distributable on CDN
 		then echo "Cannot invalidate distribution. Define CDN_DISTRIBUTION_ID"; \
 		else aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/*"; \
 	fi
+
+dist-url:  ## Print the distributed app URL
+	@echo https://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/index.html;
+
 
 
 # Documentation

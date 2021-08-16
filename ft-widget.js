@@ -70,6 +70,10 @@ export class FtWidget extends LitElement {
                     <mwc-tab label="Fixture"></mwc-tab>
                 </mwc-tab-bar>
 
+                <div id="header-spacer"></div>
+
+                <div id="version">Version 1.0.14</div>
+
             </div>
 
             <div id="content">
@@ -123,6 +127,15 @@ export class FtWidget extends LitElement {
                     }
                         mwc-tab {
                         }
+                    #header-spacer {
+                        flex: 1;
+                    }
+                    #version {
+                        margin-right: 30px;
+                        font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
+                        line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
+                        color: ${unsafeCSS(light.Color.Neutral600)};
+                    }
                 #content {
                     flex: 1;
                 }

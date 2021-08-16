@@ -19,6 +19,8 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { light } from "../../mx-design-tokens/index.js";
 import '@material/mwc-select';
 import '@material/mwc-button';
+import '@material/mwc-checkbox';
+import '@material/mwc-formfield';
 import '../ft-labeled-icon-button/ft-labeled-icon-button.js';
 import { FtClipboardMixin } from  '../ft-clipboard-mixin/ft-clipboard-mixin.js';
 import "juicy-ace-editor-es6";
@@ -209,11 +211,9 @@ export class FtCode extends FtClipboardMixin(LitElement) {
     render() {
         return html`
 
-            <!-- Header -->
-            <div id="header">
-                <div id="heading">
-                    Your Back End Code — ${this.resourceHeading}
-                </div>
+            <!-- Heading -->
+            <div id="heading">
+                Your Back End Code — ${this.resourceHeading}
             </div>
 
             <!-- Menus -->
@@ -222,6 +222,7 @@ export class FtCode extends FtClipboardMixin(LitElement) {
                 <!-- Operation Menu -->
                 <mwc-select id="operation"
                     label="Operation"
+                    value="${this.operationName}"
                     @selected="${this._operationItemSelected}"
                 >
                     ${!this._operations ? '' : this._operations.map(operation => html`
@@ -238,9 +239,10 @@ export class FtCode extends FtClipboardMixin(LitElement) {
                 <!-- Language and Library Menu -->
                 <mwc-select id="language-and-library"
                     label="Language and Library"
-                    @selected="${this._languageAndLibraries}"
+                    value="${this.languageAndLibraryName}"
+                    @selected="${this._languageAndLibrariesItemSelected}"
                 >
-                    ${!this._operations ? '' : this._operations.map(languageAndLibrary => html`
+                    ${!this._languageAndLibraries ? '' : this._languageAndLibraries.map(languageAndLibrary => html`
                         <mwc-list-item value="${languageAndLibrary.name}">
                             ${languageAndLibrary.label}
                         </mwc-list-item>
@@ -274,9 +276,16 @@ export class FtCode extends FtClipboardMixin(LitElement) {
             <div id="code-spacer"></div>
 
             <!-- Substitute fixture values checkbox -->
-            <paper-checkbox checked="{{_substituteFixtureValues}}">
-                Substitute fixture values into code (Warning: Contains secrets)
-            </paper-checkbox>
+            <mwc-formfield
+                id="substitute-checkbox-formfield"
+                label="Substitute fixture values into code (Warning: Contains secrets)"
+            >
+                <mwc-checkbox
+                    id="substitute-checkbox"
+                    @change="${this._onSubstituteCheckboxChanged}"
+                >
+                </mwc-checkbox>
+            </mwc-formfield>
 
         `;
     }
@@ -295,17 +304,12 @@ export class FtCode extends FtClipboardMixin(LitElement) {
                 justify-content: flex-start;
                 align-items: stretch;
             }
-                #header {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: stretch;
+                #heading {
+                    color: ${unsafeCSS(light.Color.Neutral900)};
+                    font-size: 14pt
                 }
-                    #heading {
-                        font-size: 14pt
-                    }
                 #menus {
-                    margin-top: 10px;
+                    margin-top: 20px;
                     display: flex;
                     flex-direction: row;
                     justify-content: center;
@@ -329,13 +333,12 @@ export class FtCode extends FtClipboardMixin(LitElement) {
                         flex: 1;
                     }
                     #copy-code-button {
-                        width: 100px;
-                        height: 100px;
                     }
                 #code-spacer {
                     height:12px;
                 }
                 #code {
+                    flex: 1;
                     margin-top:12px;
                     border: 1px solid #DDD;
                 }
@@ -361,9 +364,16 @@ export class FtCode extends FtClipboardMixin(LitElement) {
         {
             this._onRequestChanged();
         }
+        if (changedProperties.has("_substituteFixtureValues"))
+            this.onSubstituteFixtureValuesChanged();
     }
 
     // Operation
+
+    _operationItemSelected(event) {
+        const detail = event.detail;
+        const operationIndex = detail.index;
+    }
 
     _onOperationChanged()
     {
@@ -384,9 +394,27 @@ export class FtCode extends FtClipboardMixin(LitElement) {
 
     // Language and library
 
+    _languageAndLibrariesItemSelected(event) {
+        const detail = event.detail;
+        const languageAndLibraryIndex = detail.index;
+    }
+
     _onLanguageAndLibraryChanged()
     {
-        this._handleLanguageAndLibraryNameChanged();
+        if (!this._languageAndLibrary)
+            return;
+
+        this._handleLanguageAndLibraryChanged();
+    }
+
+    _handleLanguageAndLibraryChanged(toLanguageAndLibrary)
+    {
+        // Set the code editor mode
+        var language = this._languageAndLibrary.language;
+        var mode = "ace/mode/" + language;
+        var editorInternal = this.$.code.editor;
+        var session = editorInternal.getSession();
+        session.setMode(mode);
     }
 
     _onLanguageAndLibraryNameChanged()
@@ -399,19 +427,6 @@ export class FtCode extends FtClipboardMixin(LitElement) {
     _handleLanguageAndLibraryNameChanged()
     {
         this._languageAndLibrary = this._findLanguageAndLibraryNamed(this.languageAndLibraryName);
-    }
-
-    _onLanguageAndLibraryChanged(toLanguageAndLibrary)
-    {
-        if (!this._languageAndLibrary)
-            return;
-
-        // Set the code editor mode
-        var language = toLanguageAndLibrary.language;
-        var mode = "ace/mode/" + language;
-        var editorInternal = this.$.code.editor;
-        var session = editorInternal.getSession();
-        session.setMode(mode);
     }
 
     // Request
@@ -452,6 +467,22 @@ export class FtCode extends FtClipboardMixin(LitElement) {
             {
                 console.log("Could not load local code template file: " + url);
             }.bind(this));
+    }
+
+    // Substitute
+
+    onSubstituteFixtureValuesChanged()
+    {
+        const checkboxElement = this.shadowRoot.getElementById("substitute-checkbox");
+        checkboxElement.checked = this._substituteFixtureValues;
+    }
+
+    _onSubstituteCheckboxChanged() {
+        const checkboxElement = this.shadowRoot.getElementById("substitute-checkbox");
+        checkboxElement.blur();
+        const checked = checkboxElement.checked;
+        if (this._substituteFixtureValues != checked)
+            this._substituteFixtureValues = checked;
     }
 
     _onCopyCodeButtonClicked()

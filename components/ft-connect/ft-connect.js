@@ -136,7 +136,9 @@ export class FtConnect extends FtClient {
 
         </div>
 
-        <mwc-dialog id="delete-connection-confirm-dialog"
+        <mwc-dialog
+            id="delete-connection-confirm-dialog"
+            scrimClickAction=""
             @closed="${this._transitionByDialogCloseEvent}"
         >
             <div>Are you sure you want to delete this connection?</div>
@@ -386,13 +388,12 @@ export class FtConnect extends FtClient {
                 return true;
             
             case "challenge-posed":
-                this._panelUnderModal = this._selectedPanelName;
                 this._goToPanel("ft-challenge-panel");
                 return true;
 
             case "challenge-back-button-clicked":
                 this.posedChallenge();
-                this._goToPanel(this._panelUnderModal);
+                this._goToPanel(base);
                 return true;
 
             case "challenge-submit-button-clicked":
@@ -401,7 +402,7 @@ export class FtConnect extends FtClient {
                     const challengeElement = this.shadowRoot.getElementById("ft-challenge-panel");
                     this.submitInteractionResponse(challengeElement.request, challengeElement.response);
                 }
-                this._goToPanel(this._panelUnderModal);
+                this._goToPanel(base);
         }
         return false;
     }
