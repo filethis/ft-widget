@@ -42,7 +42,7 @@ export class FtAddConnectionsPanel extends LitElement {
 
         <div id="wrapper" part="wrapper">
         
-            <img id="illustration" part="illustration" src="./components/ft-add-connections-panel/assets/illustration.png" />
+            <img id="illustration" part="illustration" src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/illustration.png" />
         
             <div id="title" part="title">
                 Connect your account
@@ -65,7 +65,7 @@ export class FtAddConnectionsPanel extends LitElement {
             </div>
         
             <img id="lock" part="lock"
-                src="./components/ft-add-connections-panel/assets/lock.png"
+                src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/lock.png"
             />
         
             <div id="protected" part="protected" class="body">
@@ -88,7 +88,7 @@ export class FtAddConnectionsPanel extends LitElement {
                     Data access powered by
                 </div>
                 <img id="logo" part="logo"
-                    src="./components/ft-add-connections-panel/assets/mx-logo.png"
+                    src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/mx-logo.png"
                 />
             </div>
         

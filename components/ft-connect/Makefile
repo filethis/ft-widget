@@ -1,4 +1,5 @@
 NAME=ft-connect
 
-include ../common/common.make
+include ../../common.make
+include ../common.make
 

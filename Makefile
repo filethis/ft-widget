@@ -2,10 +2,12 @@ SHELL := /bin/bash
 
 NAME=ft-widget
 
-CDN_DISTRIBUTION_ID=EJ2RMYD38WUXM
-PUBLICATION_DOMAIN=connect.filethis.com
-VERSION=1.0.14# NOTE: Must change in ./ft-widget.js
-AWS_VAULT_PROFILE=filethis
+export AWS_ACCESS_KEY_ID=XXXX
+export AWS_SECRET_ACCESS_KEY=XXXX
+export AWS_DEFAULT_REGION=us-west-2
+
+
+include common.make
 
 
 # Package dependency management

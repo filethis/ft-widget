@@ -25,7 +25,7 @@ export class FtPrivateAndSecure extends LitElement {
 
         <div id="wrapper" part="wrapper">
             <div id="lock-and-private" part="lock-and-private">
-                <img id="lock" part="lock" src="./components/ft-add-connections-panel/assets/lock.png" />
+                <img id="lock" part="lock" src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/lock.png" />
                 <div id="private" part="private">
                     Private and secure
                 </div>

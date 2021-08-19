@@ -271,12 +271,12 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                             >
                             </ft-labeled-icon-button>
 
-                            <ft-labeled-icon-button id="account-code-button"
+                            <!-- <ft-labeled-icon-button id="account-code-button"
                                 icon="code" 
                                 label="Code"
                                 @click="${this._onAccountCodeButtonClicked}"
                             >
-                            </ft-labeled-icon-button>
+                            </ft-labeled-icon-button> -->
 
                             <ft-labeled-icon-button id="account-delete-button"
                                 icon="remove"
@@ -380,12 +380,12 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                             >
                             </ft-labeled-icon-button>
                             
-                            <ft-labeled-icon-button id="user-access-token-code-button"
+                            <!-- <ft-labeled-icon-button id="user-access-token-code-button"
                                 icon="code" 
                                 label="Code"
                                 @click="${this._onUserAccessTokenCodeButtonClicked}"
                             >
-                            </ft-labeled-icon-button>
+                            </ft-labeled-icon-button> -->
                             
                             <ft-labeled-icon-button id="user-access-token-delete-button"
                                 icon="remove"
@@ -463,7 +463,7 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                     <div id="header-spacer"></div>
 
                     <ft-labeled-icon-button id="code-button"
-                        icon="power_settings_new"
+                        icon="code"
                         label="Code"
                         @click="${this._onCodeButtonClicked}">
                     </ft-labeled-icon-button>
@@ -471,7 +471,7 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                     <div id="or-label">or</div>
 
                     <ft-labeled-icon-button id="render-button"
-                        icon="power_settings_new"
+                        icon="web"
                         label="Render"
                         @click="${this._onRenderButtonClicked}">
                     </ft-labeled-icon-button>
@@ -498,8 +498,6 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                                     workflow="${Workflow.ADD}"
                                     server="${this.server}"
                                     apiPath="${this.apiPath}"
-                                    apiKey="${this.apiKey}"
-                                    apiSecret="${this.apiSecret}"
                                     userAccountId="${this.userAccountId}"
                                     userAccessToken="${this.userAccessToken}"
                                     isLive="${this.isLive}"
@@ -515,8 +513,6 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                                     workflow="${Workflow.MANAGE}"
                                     server="${this.server}"
                                     apiPath="${this.apiPath}"
-                                    apiKey="${this.apiKey}"
-                                    apiSecret="${this.apiSecret}"
                                     userAccountId="${this.userAccountId}"
                                     userAccessToken="${this.userAccessToken}"
                                     isLive="${this.isLive}"
@@ -1679,11 +1675,13 @@ const CodeTemplate = '\
         <meta charset="utf-8">\n\
         <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">\n\
         \n\
-        <script type="module" src="https://connect.filethis.com/ft-connect-wizard/3.0.2/ft-connect-wizard.js"></script>\n\
+        <script type="module" src="https://connect.filethis.com/ft-connect/1.0.15/component/ft-connect.js"></script>\n\
+        <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">\n\
     </head>\n\
     \n\
     <body>\n\
         <ft-connect\n\
+            style="border: solid 1px gray;"\n\
             workflow="{{WORKFLOW}}"\n\
             userAccountId="{{ACCOUNT_ID}}"\n\
             userAccessToken="{{USER_ACCESS_TOKEN}}">\n\
