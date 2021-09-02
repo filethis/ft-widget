@@ -10,7 +10,7 @@ export AWS_DEFAULT_REGION=us-west-2
 include common.make
 
 
-# Package dependency management
+# Package dependency managementdisallow-zircon-ruff
 
 npm-install:  ## Install all packages
 	@npm install
@@ -34,6 +34,13 @@ serve:  ## Serve the application locally for development work
 	--app-index index.html \
 	--watch;
 
+serve-pasted:  ## Serve index file copied out of SDK and pasted into test-index.html
+	@open -a "Google Chrome" http://localhost:8000/pasted-index.html; \
+	npx web-dev-server \
+	--node-resolve \
+	--app-index pasted-index.html \
+	--watch;
+
 
 # Production 
 
@@ -55,12 +62,17 @@ dist-serve-old:
 dist-deploy:  ## Deploy distributable to CDN
 	@aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/app/${VERSION}/; \
 	aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/app/latest/; \
-	make dist-invalidate; \
+	make dist-invalidate-latest; \
 	make dist-url;
 
-dist-invalidate:  ## Invalidate distributable on CDN
-	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/${VERSION}/*"; \
-	aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/latest/*";
+dist-invalidate-latest:  ## Invalidate latest app distributable on CDN
+	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/latest/*";
+
+dist-invalidate-versioned:  ## Invalidate versioned app distributable on CDN
+	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/${VERSION}/*";
+
+dist-invalidate-all:  ## Invalidate all versions of app distributable on CDN
+	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/*";
 
 dist-url:  ## Print the distributed app URL
 	@echo https://${PUBLICATION_DOMAIN}/${NAME}/app/${VERSION}/index.html; \

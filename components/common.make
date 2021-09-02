@@ -29,14 +29,19 @@ dist-build:  ## Build the component distributable
 	@npx rollup  --config ./rollup.config.js
 
 dist-deploy:  ## Deploy component distributable to CDN
-	@aws s3 sync ./dist/component s3://${PUBLICATION_DOMAIN}/${NAME}/component/${VERSION}/;
-	aws s3 sync ./dist/component s3://${PUBLICATION_DOMAIN}/${NAME}/component/${VERSION}/;
-	make dist-invalidate; \
+	@aws s3 sync ./dist/component s3://${PUBLICATION_DOMAIN}/${NAME}/component/${VERSION}/; \
+	aws s3 sync ./dist/component s3://${PUBLICATION_DOMAIN}/${NAME}/component/latest/;
+	make dist-invalidate-latest; \
 	make dist-url;
 
-dist-invalidate:  ## Invalidate component distributable on CDN
-	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/component/${VERSION}/*"; \
-	aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/component/latest/*";
+dist-invalidate-latest:  ## Invalidate latest component distributable on CDN
+	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/component/latest/*";
+
+dist-invalidate-versioned:  ## Invalidate versioned component distributable on CDN
+	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/component/${VERSION}/*";
+
+dist-invalidate-all:  ## Invalidate all versions of component distributable on CDN
+	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/component/*";
 
 dist-url:  ## Print the distributed app URL
 	@echo https://${PUBLICATION_DOMAIN}/${NAME}/component/${VERSION}/${NAME}.js; \

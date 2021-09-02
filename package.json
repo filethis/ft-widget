@@ -1,6 +1,6 @@
 {
   "name": "ft-widget",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "A kitchen-sink demo of the FileThis ft-widget components",
   "main": "ft-widget.js",
   "module": "ft-widget.js",

@@ -3,5 +3,7 @@
 node_modules/
 dist/
 
+pasted-index.html
+
 # only generated for size check
 ft-widgets.bundled.js

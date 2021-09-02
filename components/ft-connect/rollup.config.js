@@ -9,7 +9,9 @@ export default {
   input: 'ft-connect.js',
 
   output: {
-    dir: 'dist/component',
+    file: 'dist/component/ft-connect.js',
+    format: 'iife',
+    name: 'FtConnect'
   },
 
   plugins: [
