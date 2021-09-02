@@ -66,21 +66,21 @@ export class FtWidget extends LitElement {
                 <mwc-tab-bar id="tab-bar"
                     activeIndex=${this._selectedTabIndex}
                 >
-                    <mwc-tab label="Start"></mwc-tab>
+                    <!-- <mwc-tab label="Start"></mwc-tab> -->
                     <mwc-tab label="Fixture"></mwc-tab>
                 </mwc-tab-bar>
 
                 <div id="header-spacer"></div>
 
-                <div id="version">Version 1.0.15</div>
+                <div id="version">Version 1.0.17</div>
 
             </div>
 
             <div id="content">
 
-                <div id="start-panel">
+                <!-- <div id="start-panel">
                     Start
-                </div>
+                </div> -->
 
                 <ft-fixture id="fixture-panel"
                     workflow=${Workflow.ADD}

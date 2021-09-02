@@ -1675,7 +1675,7 @@ const CodeTemplate = '\
         <meta charset="utf-8">\n\
         <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">\n\
         \n\
-        <script type="module" src="https://connect.filethis.com/ft-connect/1.0.15/component/ft-connect.js"></script>\n\
+        <script type="module" src="https://connect.filethis.com/ft-connect/component/latest/ft-connect.js"></script>\n\
         <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">\n\
     </head>\n\
     \n\

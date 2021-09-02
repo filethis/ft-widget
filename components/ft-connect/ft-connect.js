@@ -40,9 +40,8 @@ export class FtConnect extends FtClient {
     static get properties() {
         return {
             workflow: { type: String },
-            _selectedConnection: { type: Object },
-            _selectedConnectionInstitution: { type: Object },
             _selectedInstitution: { type: Object },
+            _selectedConnection: { type: Object },
             _selectedDocument: { type: Object },
             _selectedPanelName: { type: String },
             _panelUnderModal: { type: String }
@@ -53,9 +52,8 @@ export class FtConnect extends FtClient {
         super();
 
         this.workflow = Workflow.ADD;
-        this._selectedConnection = null;
-        this._selectedConnectionInstitution = null;  // Same as next one?
         this._selectedInstitution = null;
+        this._selectedConnection = null;
         this._selectedDocument = null;
         this._selectedPanelName = null;
         this._panelUnderModal = null;
@@ -87,6 +85,7 @@ export class FtConnect extends FtClient {
 
             <ft-connecting-panel id="ft-connecting-panel" part="ft-connecting-panel"
                 institution=${JSON.stringify(this._selectedInstitution)}
+                connection=${JSON.stringify(this._selectedConnection)}
                 @connecting-another-button-clicked="${this._transitionByCustomEvent}"
                 @connecting-done-button-clicked="${this._transitionByCustomEvent}"
             >
@@ -94,6 +93,7 @@ export class FtConnect extends FtClient {
 
             <ft-success-panel id="ft-success-panel" part="ft-success-panel"
                 institution=${JSON.stringify(this._selectedInstitution)}
+                connection=${JSON.stringify(this._selectedConnection)}
                 @success-continue-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-success-panel>
@@ -114,8 +114,8 @@ export class FtConnect extends FtClient {
             </ft-connections-panel>
 
             <ft-edit-connection-panel id="ft-edit-connection-panel" part="ft-edit-connection-panel"
+                institution=${JSON.stringify(this._selectedInstitution)}
                 connection=${JSON.stringify(this._selectedConnection)}
-                institution=${JSON.stringify(this._selectedConnectionInstitution)}
                 @delete-connection-button-clicked="${this._transitionByCustomEvent}"
                 @edit-connection-back-button-clicked="${this._transitionByCustomEvent}"
             >
@@ -205,14 +205,46 @@ export class FtConnect extends FtClient {
             this._onChallengeChanged();
         if (changedProperties.has('connections'))
             this._onConnectionsChanged();
+        if (changedProperties.has('_selectedConnection'))
+            this._onSelectedConnectionChanged();
     }
 
     _onConnectionsChanged() {
+
+        // Update the contents of the selected connection, if there is one
+        if (this._selectedConnection != null)
+        {
+            const selectedConnectionId = this._selectedConnection.id;
+            const connection = this._findConnectionWithId(selectedConnectionId);
+
+            // NOTE: It's not clear why assigning to this variable does not trigger an update.
+            // The contents may not have changed (the state starting out as "waiting" and being that
+            // for some entries here, skipping "complete"), but I didn't think that Lit was that
+            // smart —that it would do a deep comparison of objects. Guess it does.
+            this._selectedConnection = null;
+            this._selectedConnection = connection;
+        }
+    }
+
+    _onSelectedConnectionChanged() {
         if (this._selectedPanelName == "ft-connecting-panel")
         {
-            // This causes NPE
-            // const selectedConnectionId = this._selectedConnection.id;
+            if (this._selectedConnectionIsDone())
+                this._goToPanel("ft-success-panel");
         }
+    }
+
+    _selectedConnectionIsDone() {
+        const connection = this._selectedConnection;
+        if (connection == null)
+            return false;
+        switch (connection.state)
+        {
+            case "created":
+            case "connecting":
+                return false;
+        }
+        return true;
     }
 
     _onWorkflowChanged() {
@@ -315,7 +347,7 @@ export class FtConnect extends FtClient {
                 
             case "connection-list-item-edit-button-clicked":
                 this._selectedConnection = detail;
-                this._selectedConnectionInstitution = this._findInstitutionForConnection(this._selectedConnection);
+                this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
                 this._goToPanel("ft-edit-connection-panel");
                 return true;
             
@@ -370,9 +402,16 @@ export class FtConnect extends FtClient {
                     const username = enterCredentialsElement.getUsername();
                     const password = enterCredentialsElement.getPassword();
                     const institution = this._selectedInstitution;
-                    this._createdConnectionId = this.createConnection(username, password, institution);
+        
+                    this._createConnection(username, password, institution)
+                    .then(function (connectionId) {
+                        return this._getConnection(connectionId);
+                    }.bind(this))
+                    .then(function (connection) {
+                        this._selectedConnection = connection;
+                        this._goToPanel("ft-connecting-panel");
+                    }.bind(this));
                 }
-                this._goToPanel("ft-connecting-panel");
                 return true;
 
             case "connecting-another-button-clicked":

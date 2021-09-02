@@ -88,8 +88,7 @@ export class FtClient extends FtHttpMixin(LitElement)
         this.userAccountId = "";
         this.account = null;
         this.institutions = [];
-        // this.selectedFilterId = null;
-        this.selectedFilterId = "banking";
+        this.selectedFilterId = null;
         this.interactionRequests = [];
         this.haveNewChallenge = false;
         this.newChallenges = [];
@@ -184,12 +183,6 @@ export class FtClient extends FtHttpMixin(LitElement)
 
 
     // User action event handling --------------------------------------------------------------------------
-
-    createConnection(username, password, institution)
-    {
-        const createdConnectionId = this._createConnection(username, password, institution);
-        return createdConnectionId;
-    }
 
     deleteConnection(connection)
     {

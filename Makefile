@@ -28,10 +28,11 @@ npm-prune-dry-run:
 # Development
 
 serve:  ## Serve the application locally for development work
-	@npx web-dev-server \
+	@open -a "Google Chrome" http://localhost:8000/index.html; \
+	npx web-dev-server \
 	--node-resolve \
-	--watch \
-	--open index.html
+	--app-index index.html \
+	--watch;
 
 
 # Production 
@@ -43,43 +44,31 @@ dist-build:  ## Build the distributable
 	@npx rollup --config
 
 dist-serve:  ## Serve the distributable locally
+	@open -a "Google Chrome" http://localhost:8000/dist/index.html; \
+	npx web-dev-server \
+		--app-index dist/index.html \
+		--watch;
+
+dist-serve-old:
 	@npx web-dev-server --app-index dist/index.html --open
 
 dist-deploy:  ## Deploy distributable to CDN
-	@aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/; \
-	echo https://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/index.html;
+	@aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/app/${VERSION}/; \
+	aws s3 sync ./dist s3://${PUBLICATION_DOMAIN}/${NAME}/app/latest/; \
+	make dist-invalidate; \
+	make dist-url;
 
 dist-invalidate:  ## Invalidate distributable on CDN
-	@if [ -z "${CDN_DISTRIBUTION_ID}" ]; \
-		then echo "Cannot invalidate distribution. Define CDN_DISTRIBUTION_ID"; \
-		else aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/*"; \
-	fi
+	@aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/${VERSION}/*"; \
+	aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/app/latest/*";
 
 dist-url:  ## Print the distributed app URL
-	@echo https://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/app/index.html;
+	@echo https://${PUBLICATION_DOMAIN}/${NAME}/app/${VERSION}/index.html; \
+	echo https://${PUBLICATION_DOMAIN}/${NAME}/app/latest/index.html;
 
+dist-open:  ## Open the distributed app URL in a browser
+	@open -a "Google Chrome" https://${PUBLICATION_DOMAIN}/${NAME}/app/${VERSION}/index.html;
 
-
-# Documentation
-
-doc-clean:  ## Clean documentation app
-	@rm -rf ./doc;
-
-doc-build:  ## Build documentation app
-	@echo doc-build
-
-doc-serve:  ## Serve documentation app
-	@echo doc-serve
-
-doc-deploy:  ## Deploy documentation app to CDN
-	@aws-vault exec ${AWS_VAULT_PROFILE} -- aws s3 sync ./doc s3://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/doc/; \
-	echo https://${PUBLICATION_DOMAIN}/${NAME}/${VERSION}/doc/index.html;
-
-doc-invalidate:  ## Invalidate documentation app on CDN
-	@if [ -z "${CDN_DISTRIBUTION_ID}" ]; \
-		then echo "Cannot invalidate distribution. Define CDN_DISTRIBUTION_ID"; \
-		else aws-vault exec ${AWS_VAULT_PROFILE} -- aws cloudfront create-invalidation --distribution-id ${CDN_DISTRIBUTION_ID} --paths "/${NAME}/doc/*"; \
-	fi
 
 # Help
 
