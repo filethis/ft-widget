@@ -2,11 +2,6 @@ SHELL := /bin/bash
 
 NAME=ft-widget
 
-export AWS_ACCESS_KEY_ID=XXXX
-export AWS_SECRET_ACCESS_KEY=XXXX
-export AWS_DEFAULT_REGION=us-west-2
-
-
 include common.make
 
 

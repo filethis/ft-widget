@@ -1,10 +1,5 @@
 SHELL := /bin/bash
 
-export AWS_ACCESS_KEY_ID=AKIAJP3TORFRST6MH75Q
-export AWS_SECRET_ACCESS_KEY=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
-export AWS_DEFAULT_REGION=us-west-2
-
-
 serve-dev:  ## Start serving project and open in browser with live update
 	@open -a "Google Chrome" http://localhost:8000/components/${NAME}/dev/index.html; \
 	npx web-dev-server \
