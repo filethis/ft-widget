@@ -206,7 +206,7 @@ export class FtConnect extends FtClient {
         if (changedProperties.has('connections'))
             this._onConnectionsChanged();
         if (changedProperties.has('_selectedConnection'))
-            this._onSelectedConnectionChanged();
+            this._onSelectedConnectionChanged(changedProperties);
     }
 
     _onConnectionsChanged() {
@@ -217,19 +217,18 @@ export class FtConnect extends FtClient {
             const selectedConnectionId = this._selectedConnection.id;
             const connection = this._findConnectionWithId(selectedConnectionId);
 
-            // NOTE: It's not clear why assigning to this variable does not trigger an update.
-            // The contents may not have changed (the state starting out as "waiting" and being that
-            // for some entries here, skipping "complete"), but I didn't think that Lit was that
-            // smart —that it would do a deep comparison of objects. Guess it does.
-            this._selectedConnection = null;
-            this._selectedConnection = connection;
+            // NOTE: It's important to copy by value, not reference, here
+            this._selectedConnection = Object.assign({}, connection);
         }
     }
 
-    _onSelectedConnectionChanged() {
+    _onSelectedConnectionChanged(changedProperties) {
         if (this._selectedPanelName == "ft-connecting-panel")
         {
-            if (this._selectedConnectionIsDone())
+            const wasValidated = this._connectionWasValidated(changedProperties);
+            const isDone = this._selectedConnectionIsDone();
+
+            if (wasValidated || isDone)
                 this._goToPanel("ft-success-panel");
         }
     }
@@ -238,13 +237,33 @@ export class FtConnect extends FtClient {
         const connection = this._selectedConnection;
         if (connection == null)
             return false;
+                
         switch (connection.state)
         {
             case "created":
             case "connecting":
                 return false;
+            default:
+                return true;
         }
-        return true;
+    }
+
+    _connectionWasValidated(changedProperties)
+    {
+        const oldConnection = changedProperties.get("_selectedConnection");
+        if (oldConnection == null)
+            return false;
+
+        const oldValidation = oldConnection.validation;
+        const newValidation = this._selectedConnection.validation;
+        
+        if (oldValidation == "done")
+            return false;
+        
+        if (newValidation == "done")
+            return true;
+        
+        return false;
     }
 
     _onWorkflowChanged() {
