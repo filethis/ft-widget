@@ -17,6 +17,7 @@ limitations under the License.
 
 import { html, css, unsafeCSS } from 'lit';
 import '@material/mwc-button';
+import '@material/mwc-icon-button';
 import { light } from "../../mx-design-tokens/index.js";
 import '../ft-add-connections-panel/ft-add-connections-panel.js'
 import '../ft-institutions-panel/ft-institutions-panel.js'
@@ -40,6 +41,7 @@ export class FtConnect extends FtClient {
     static get properties() {
         return {
             workflow: { type: String },
+            showCloseButton: { type: Object },
             _selectedInstitution: { type: Object },
             _selectedConnection: { type: Object },
             _selectedDocument: { type: Object },
@@ -52,6 +54,7 @@ export class FtConnect extends FtClient {
         super();
 
         this.workflow = Workflow.ADD;
+        this.showCloseButton = false;
         this._selectedInstitution = null;
         this._selectedConnection = null;
         this._selectedDocument = null;
@@ -63,6 +66,12 @@ export class FtConnect extends FtClient {
         return html`
 
         <div id="wrapper" part="wrapper">
+
+            <mwc-icon-button id="close-button" part="close-button"
+                    icon="clear"
+                    @click=${this._onCloseButtonClicked}
+                >
+            </mwc-icon-button>
 
             <ft-add-connections-panel id="ft-add-connections-panel" part="ft-add-connections-panel"
                 @connect-continue-button-clicked="${this._transitionByCustomEvent}"
@@ -162,6 +171,12 @@ export class FtConnect extends FtClient {
                     position: relative;
                     width: 100%; height: 100%;
                 }
+                    #close-button {
+                        display: none;
+                        z-index: 999;
+                        position: absolute;
+                        right: 5px; top: 5px;
+                    }
                     #ft-add-connections-panel {
                         display: none;
                     }
@@ -196,11 +211,21 @@ export class FtConnect extends FtClient {
         ];
     }
 
+    _onCloseButtonClicked()
+    {
+        this.shadowRoot.getElementById("close-button").blur();
+
+        const event = new CustomEvent('close-button-clicked', { bubbles: true, composed: true });
+        this.dispatchEvent(event);
+    }
+
     updated(changedProperties) {
         super.updated?.(changedProperties);
 
         if (changedProperties.has('workflow'))
             this._onWorkflowChanged();
+        if (changedProperties.has('showCloseButton'))
+            this._onShowCloseButtonChanged();
         if (changedProperties.has('challenge'))
             this._onChallengeChanged();
         if (changedProperties.has('connections'))
@@ -264,6 +289,14 @@ export class FtConnect extends FtClient {
             return true;
         
         return false;
+    }
+
+    _onShowCloseButtonChanged() {
+        var button = this.shadowRoot.getElementById("close-button")
+        if (this.showCloseButton)
+            button.style.display = "block";
+        else
+            button.style.display = "none";
     }
 
     _onWorkflowChanged() {
