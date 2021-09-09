@@ -47,21 +47,21 @@ export class FtConnectionsPanel extends LitElement {
         <div id="wrapper" part="wrapper">
         
             <div id="header" part="header">
-                <div id="title-and-add-button" part="title-and-add-button">
-                    <div id="title" part="title">
-                        Connections
+                <div id="title" part="title">
+                    Connections
+                </div>
+                <div id="subtitle" part="subtitle">
+                        Manage connected accounts
+                </div>
+                <div id="connection-count-and-add-button" part="connection-count-and-add-button">
+                    <div id="connection-count" part="connection-count">
+                        ${this._connectionCount} connected institutions
                     </div>
                     <mwc-icon-button id="add-button" part="add-button"
                         icon="add"
                         @click=${this._onAddButtonClicked}
                     >
                     </mwc-icon-button>
-                </div>
-                <div id="subtitle" part="subtitle">
-                    Manage connected accounts
-                </div>
-                <div id="connection-count" part="connection-count">
-                    ${this._connectionCount} connected institutions
                 </div>
             </div>
         
@@ -108,23 +108,16 @@ export class FtConnectionsPanel extends LitElement {
                         justify-content: flex-start;
                         align-items: stretch;
                     }
-                        #title-and-add-button {
-                            display: flex;
-                            flex-direction: row;
-                            justify-content: flex-start;
-                            align-items: center;
+                        #title {
+                            flex: 1;
+                            height: 40px;
+                            font-size: ${unsafeCSS(light.FontSize.H1)}px;
+                            font-weight: ${unsafeCSS(light.FontWeight.Bold)};
+                            line-height: ${unsafeCSS(light.LineHeight.H1)}px;
+                            text-align: left;
+                            color: ${unsafeCSS(light.Color.Neutral900)};
                         }
-                            #title {
-                                flex: 1;
-                                height: 40px;
-                                font-size: ${unsafeCSS(light.FontSize.H1)}px;
-                                font-weight: ${unsafeCSS(light.FontWeight.Bold)};
-                                line-height: ${unsafeCSS(light.LineHeight.H1)}px;
-                                text-align: left;
-                                color: ${unsafeCSS(light.Color.Neutral900)};
-                            }
-                            #add-button {
-                            }
+
                         #subtitle{
                             margin-top: 8px;
                             height: 24px;
@@ -133,14 +126,22 @@ export class FtConnectionsPanel extends LitElement {
                             font-weight: ${unsafeCSS(light.FontWeight.Normal)};
                             color: ${unsafeCSS(light.Color.Neutral900)};
                         }
-                        #connection-count {
-                            margin-top: 23px;
-                            height: 16px;
-                            font-size: ${unsafeCSS(light.FontSize.Small)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
-                            line-height: ${unsafeCSS(light.LineHeight.Small)}px;
-                            color: ${unsafeCSS(light.Color.Neutral900)};
+                        #connection-count-and-add-button {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: flex-start;
+                            align-items: center;
                         }
+                            #connection-count {
+                                height: 16px;
+                                flex: 1;
+                                font-size: ${unsafeCSS(light.FontSize.Small)}px;
+                                font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
+                                line-height: ${unsafeCSS(light.LineHeight.Small)}px;
+                                color: ${unsafeCSS(light.Color.Neutral900)};
+                            }
+                            #add-button {
+                            }
                     #ft-connection-list {
                         margin-left: 12px;
                         width: 376px;
