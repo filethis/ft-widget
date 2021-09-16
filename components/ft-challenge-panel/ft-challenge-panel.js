@@ -99,7 +99,7 @@ export class FtChallengePanel extends LitElement {
                 @click=${this._onContinueButtonClicked}>
             </mwc-button>
         
-            <div id="help-box" part="help-box">
+            <!-- <div id="help-box" part="help-box">
 
                 <div id="help-text" part="help-text">
                     Get help
@@ -111,7 +111,7 @@ export class FtChallengePanel extends LitElement {
                 >
                 </mwc-icon-button>
 
-            </div>
+            </div> -->
 
             <div id="bottom-divider" part="bottom-divider"></div>
         
@@ -178,7 +178,7 @@ export class FtChallengePanel extends LitElement {
                         --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                         --mdc-typography-button-text-transform: none;
                     }
-                    #help-box {
+                    /* #help-box {
                         margin-top:12px;
                         margin-left: 24px;
                         margin-right: 5px;
@@ -196,7 +196,7 @@ export class FtChallengePanel extends LitElement {
                         }
                         #help-button {
                             color: ${unsafeCSS(light.Color.Neutral700)};
-                        }
+                        } */
                     #bottom-divider {
                         height: 1px;
                         margin-left: 24px;

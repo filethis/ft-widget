@@ -49,21 +49,9 @@ export class FtAddConnectionsPanel extends LitElement {
             </div>
         
             <div id="explanation" part="explanation" class="body">
-                ${this.companyName} will have access to the information below unless you choose to disconnect:
+                ${this.companyName} will have access to your tax documents until you choose to disconnect.
             </div>
-        
-            <div id="bullet1" part="bullet1" class="bullet"></div>
-        
-            <div id="details" part="details" class="body">
-                Account details
-            </div>
-        
-            <div id="bullet2" part="bullet2" class="bullet"></div>
-        
-            <div id="balances" part="balances" class="body">
-                Account balances and transactions
-            </div>
-        
+                
             <img id="lock" part="lock"
                 src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/lock.png"
             />
