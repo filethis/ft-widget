@@ -67,6 +67,39 @@ export class FtConnect extends FtClient {
             <ft-add-connections-panel id="ft-add-connections-panel" part="ft-add-connections-panel"
                 @connect-continue-button-clicked="${this._transitionByCustomEvent}"
             >
+                <slot name="description" slot="description">
+                    <div id="description-body"  part="description-body">
+                        <div id="explanation" part="explanation" class="body">
+                                We will have access to your tax documents until you choose to disconnect.
+                        </div>
+                        
+                        <div id="details" part="details">
+                            <div id="details-bullet" part="details-bullet" class="bullet"></div>
+                        
+                            <div id="details-text" part="details-text" class="body">
+                                Account details
+                            </div>
+                        </div>
+                                
+                        <div id="balances" part="balances">
+                            <div id="balances-bullet" part="balances-bullet" class="bullet"></div>
+                        
+                            <div id="balances-text" part="balances-text" class="body">
+                                Account balances and transactions
+                            </div>
+                        </div>
+
+                        <div id="lock-and-protected" name="lock-and-protected">
+                            <img id="lock" part="lock"
+                                src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/lock.png"
+                            />
+                        
+                            <div id="protected" part="protected" class="body">
+                                Your information is protected securely.
+                            </div>
+                        </div>
+                    </div>
+                </slot>
             </ft-add-connections-panel>
 
             <ft-institutions-panel id="ft-institutions-panel" part="ft-institutions-panel"
@@ -165,6 +198,71 @@ export class FtConnect extends FtClient {
                     #ft-add-connections-panel {
                         display: none;
                     }
+                        #description-body {
+                            margin-left: 24px;
+                            margin-right: 24px;
+                            margin-top: 10px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            align-items: flex-start;
+                        }
+                            #explanation {
+                                height: 45px;
+                            }
+                            #details {
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: flex-start;
+                                align-items: center;
+                            }
+                                #details-bullet {
+                                    margin-left: 6px;
+                                    margin-top: 5px;
+                                    width: 4px;
+                                    height: 4px;
+                                }
+                                #details-text {
+                                    margin-left: 10px;
+                                    margin-top: 10px;
+                                    height: 20px;
+                                }
+                            #balances {
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: flex-start;
+                                align-items: center;
+                            }
+                                #balances-bullet {
+                                    margin-left: 6px;
+                                    margin-top: 5px;
+                                    width: 4px;
+                                    height: 4px;
+                                }
+                                #balances-text {
+                                    margin-left: 10px;
+                                    margin-top: 10px;
+                                    height: 20px;
+                                }
+                                #lock-and-protected {
+                                    margin-top: 10px;
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: flex-start;
+                                    align-items: center;
+                                }
+                                    #lock {
+                                        width: 16px;
+                                        height: 16px;
+                                    }
+                                    #protected {
+                                        margin-top: 5px;
+                                        margin-left: 5px;
+                                    }
+                            div.bullet {
+                                background: ${unsafeCSS(light.Color.Neutral900)};
+                                border-radius: 50%;
+                            }
                     #ft-institutions-panel {
                         display: none;
                     }
