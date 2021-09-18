@@ -29,6 +29,7 @@ export class FtInstitutionsPanel extends LitElement {
     static get properties() {
         return {
             institutions: { type: Array },
+            showBackButton: { type: Object },
             _searchPattern: { type: String },
             _haveSearchPattern: { type: Boolean },
             _institutionsFilteredAndSorted: { type: Array },
@@ -40,6 +41,7 @@ export class FtInstitutionsPanel extends LitElement {
         super();
 
         this.institutions = [];
+        this.showBackButton = true;
         this._searchPattern = "";
         this._haveSearchPattern = false;
         this._institutionsFilteredAndSorted = [];
@@ -197,10 +199,24 @@ export class FtInstitutionsPanel extends LitElement {
     }
 
     updated(changedProperties) {
+        if (changedProperties.has('showBackButton'))
+            this._onShowBackButtonChanged();
         if (changedProperties.has('_searchPattern'))
             this._updateFilteredInstitutionsDebounced();
         if (changedProperties.has('institutions'))
             this._updateFilteredInstitutions();
+    }
+
+    _onShowBackButtonChanged() {
+        this._setElementShown("back-button", this.showBackButton);
+    }
+
+    _setElementShown(panelId, show) {
+        var panel = this.shadowRoot.getElementById(panelId)
+        if (show)
+            panel.style.display = "block";
+        else
+            panel.style.display = "none";
     }
 
     _updateFilteredInstitutionsDebounced() {
