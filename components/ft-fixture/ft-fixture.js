@@ -69,6 +69,7 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
             _code: { type: String },
 
             workflow: { type: String },
+            configuration: { type: Object }
         };
     }
 
@@ -120,6 +121,8 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
         this._userAccessTokenPanelOpen = ("true" == localStorage.getItem("userAccessTokenPanelOpen"));
 
         this.workflow = Workflow.ADD;
+
+        // this.configuration = { "ft-connect": { "useAddPrompt": "false" } };
     }
 
     firstUpdated() {
@@ -502,6 +505,7 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                                     userAccessToken="${this.userAccessToken}"
                                     isLive="${this.isLive}"
                                     fakeInstitutions="true"
+                                    configuration=${JSON.stringify(this.configuration)}
                                 >
                                 </ft-connect>
                             </div>
@@ -517,6 +521,7 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                                     userAccessToken="${this.userAccessToken}"
                                     isLive="${this.isLive}"
                                     fakeInstitutions="true"
+                                    configuration=${JSON.stringify(this.configuration)}
                                 >
                                 </ft-connect>
                             </div>
@@ -532,6 +537,7 @@ export class FtFixture extends FtHttpMixin(FtClipboardMixin(LitElement)) {
                                     userAccessToken="${this.userAccessToken}"
                                     isLive="${this.isLive}"
                                     fakeInstitutions="true"
+                                    configuration=${JSON.stringify(this.configuration)}
                                 >
                                 </ft-connect>
                             </div>

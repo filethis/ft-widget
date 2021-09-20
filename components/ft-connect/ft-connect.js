@@ -41,12 +41,14 @@ export class FtConnect extends FtClient {
     static get properties() {
         return {
             workflow: { type: String },
+            configuration: { type: Object },
             showCloseButton: { type: Object },
             _selectedInstitution: { type: Object },
             _selectedConnection: { type: Object },
             _selectedDocument: { type: Object },
             _selectedPanelName: { type: String },
-            _panelUnderModal: { type: String }
+            _panelUnderModal: { type: String },
+            _useAddPrompt: { type: Boolean }
         };
     }
 
@@ -54,12 +56,14 @@ export class FtConnect extends FtClient {
         super();
 
         this.workflow = Workflow.ADD;
+        this.configuration = {};
         this.showCloseButton = false;
         this._selectedInstitution = null;
         this._selectedConnection = null;
         this._selectedDocument = null;
         this._selectedPanelName = null;
         this._panelUnderModal = null;
+        this._useAddPrompt = true;
     }
 
     render() {
@@ -75,7 +79,41 @@ export class FtConnect extends FtClient {
 
             <ft-add-connections-panel id="ft-add-connections-panel" part="ft-add-connections-panel"
                 @connect-continue-button-clicked="${this._transitionByCustomEvent}"
+                configuration=${JSON.stringify(this.configuration)}
             >
+                <slot name="description" slot="description">
+                    <div id="description-body"  part="description-body">
+                        <div id="explanation" part="explanation" class="body">
+                                We will have access to your tax documents until you choose to disconnect.
+                        </div>
+                        
+                        <div id="details" part="details">
+                            <div id="details-bullet" part="details-bullet" class="bullet"></div>
+                        
+                            <div id="details-text" part="details-text" class="body">
+                                Account details
+                            </div>
+                        </div>
+                                
+                        <div id="balances" part="balances">
+                            <div id="balances-bullet" part="balances-bullet" class="bullet"></div>
+                        
+                            <div id="balances-text" part="balances-text" class="body">
+                                Account balances and transactions
+                            </div>
+                        </div>
+
+                        <div id="lock-and-protected" name="lock-and-protected">
+                            <img id="lock" part="lock"
+                                src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/lock.png"
+                            />
+                        
+                            <div id="protected" part="protected" class="body">
+                                Your information is protected securely.
+                            </div>
+                        </div>
+                    </div>
+                </slot>
             </ft-add-connections-panel>
 
             <ft-institutions-panel id="ft-institutions-panel" part="ft-institutions-panel"
@@ -180,6 +218,71 @@ export class FtConnect extends FtClient {
                     #ft-add-connections-panel {
                         display: none;
                     }
+                        #description-body {
+                            margin-left: 24px;
+                            margin-right: 24px;
+                            margin-top: 10px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            align-items: flex-start;
+                        }
+                            #explanation {
+                                height: 45px;
+                            }
+                            #details {
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: flex-start;
+                                align-items: center;
+                            }
+                                #details-bullet {
+                                    margin-left: 6px;
+                                    margin-top: 5px;
+                                    width: 4px;
+                                    height: 4px;
+                                }
+                                #details-text {
+                                    margin-left: 10px;
+                                    margin-top: 10px;
+                                    height: 20px;
+                                }
+                            #balances {
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: flex-start;
+                                align-items: center;
+                            }
+                                #balances-bullet {
+                                    margin-left: 6px;
+                                    margin-top: 5px;
+                                    width: 4px;
+                                    height: 4px;
+                                }
+                                #balances-text {
+                                    margin-left: 10px;
+                                    margin-top: 10px;
+                                    height: 20px;
+                                }
+                                #lock-and-protected {
+                                    margin-top: 10px;
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: flex-start;
+                                    align-items: center;
+                                }
+                                    #lock {
+                                        width: 16px;
+                                        height: 16px;
+                                    }
+                                    #protected {
+                                        margin-top: 5px;
+                                        margin-left: 5px;
+                                    }
+                            div.bullet {
+                                background: ${unsafeCSS(light.Color.Neutral900)};
+                                border-radius: 50%;
+                            }
                     #ft-institutions-panel {
                         display: none;
                     }
@@ -224,6 +327,8 @@ export class FtConnect extends FtClient {
 
         if (changedProperties.has('workflow'))
             this._onWorkflowChanged();
+        if (changedProperties.has('configuration'))
+            this._onConfigurationChanged();
         if (changedProperties.has('showCloseButton'))
             this._onShowCloseButtonChanged();
         if (changedProperties.has('challenge'))
@@ -232,6 +337,33 @@ export class FtConnect extends FtClient {
             this._onConnectionsChanged();
         if (changedProperties.has('_selectedConnection'))
             this._onSelectedConnectionChanged(changedProperties);
+        if (changedProperties.has('_useAddPrompt'))
+            this._onUseAddPromptChanged();
+    }
+
+    _onConfigurationChanged() {
+        const configuration = this.configuration["ft-connect"];
+        if (configuration == null)
+            return;
+        const useAddPrompt =  configuration.useAddPrompt;
+        if (useAddPrompt != null)
+            this._useAddPrompt = (useAddPrompt == "true");
+    }
+
+    _onUseAddPromptChanged() {
+        if (this.workflow == Workflow.ADD) {
+            const institutionsPanel = this.shadowRoot.getElementById("ft-institutions-panel");
+            if (this._useAddPrompt)
+            {
+                this._goToPanel("ft-add-connections-panel");
+                institutionsPanel.showBackButton = true;
+            }
+            else
+            {
+                this._goToPanel("ft-institutions-panel");
+                institutionsPanel.showBackButton = false;
+            }
+        }
     }
 
     _onConnectionsChanged() {
@@ -303,8 +435,11 @@ export class FtConnect extends FtClient {
         switch (this.workflow)
         {
             case Workflow.ADD:
-                this._goToPanel("ft-add-connections-panel");
-            break;
+                if (this._useAddPrompt)
+                    this._goToPanel("ft-add-connections-panel");
+                else
+                    this._goToPanel("ft-institutions-panel");
+                break;
 
             case Workflow.MANAGE:
                 this._goToPanel("ft-connections-panel");
@@ -379,7 +514,13 @@ export class FtConnect extends FtClient {
     }
 
     _transitionForAddConnections(trigger, detail) {
-        if (this._transitionAdding(trigger, detail, "ft-add-connections-panel"))
+        var base;
+        if (this._useAddPrompt)
+            base = "ft-add-connections-panel";
+        else
+            base = "ft-institutions-panel";
+
+        if (this._transitionAdding(trigger, detail, base))
             return;
     }
 
@@ -593,21 +734,21 @@ export class FtConnect extends FtClient {
             currentPanel.exit();
         nextPanel.enter();
 
-        this._setPanelShown("ft-add-connections-panel", showFirst);
-        this._setPanelShown("ft-institutions-panel", showSecond);
-        this._setPanelShown("ft-credentials-panel", showThird);
-        this._setPanelShown("ft-challenge-panel", showFourth);
-        this._setPanelShown("ft-connecting-panel", showFifth);
-        this._setPanelShown("ft-success-panel", showSixth);
-        this._setPanelShown("ft-connections-panel", showSeventh);
-        this._setPanelShown("ft-edit-connection-panel", showEighth);
-        this._setPanelShown("ft-documents-panel", showNinth);
-        this._setPanelShown("ft-edit-document-panel", showTenth);
+        this._setElementShown("ft-add-connections-panel", showFirst);
+        this._setElementShown("ft-institutions-panel", showSecond);
+        this._setElementShown("ft-credentials-panel", showThird);
+        this._setElementShown("ft-challenge-panel", showFourth);
+        this._setElementShown("ft-connecting-panel", showFifth);
+        this._setElementShown("ft-success-panel", showSixth);
+        this._setElementShown("ft-connections-panel", showSeventh);
+        this._setElementShown("ft-edit-connection-panel", showEighth);
+        this._setElementShown("ft-documents-panel", showNinth);
+        this._setElementShown("ft-edit-document-panel", showTenth);
 
         this._selectedPanelName = nextPanelName;
     }
 
-    _setPanelShown(panelId, show) {
+    _setElementShown(panelId, show) {
         var panel = this.shadowRoot.getElementById(panelId)
         if (show)
             panel.style.display = "block";

@@ -25,7 +25,6 @@ export class FtAddConnectionsPanel extends LitElement {
 
     static get properties() {
         return {
-            companyName: { type: String },
             companyLogoUrl: { type: String }
        };
     }
@@ -33,7 +32,6 @@ export class FtAddConnectionsPanel extends LitElement {
     constructor() {
         super();
 
-        this.companyName = "We";
         this.companyLogoUrl = null;
     }
 
@@ -47,30 +45,9 @@ export class FtAddConnectionsPanel extends LitElement {
             <div id="title" part="title">
                 Connect your account
             </div>
-        
-            <div id="explanation" part="explanation" class="body">
-                ${this.companyName} will have access to the information below unless you choose to disconnect:
-            </div>
-        
-            <div id="bullet1" part="bullet1" class="bullet"></div>
-        
-            <div id="details" part="details" class="body">
-                Account details
-            </div>
-        
-            <div id="bullet2" part="bullet2" class="bullet"></div>
-        
-            <div id="balances" part="balances" class="body">
-                Account balances and transactions
-            </div>
-        
-            <img id="lock" part="lock"
-                src="https://connect.filethis.com/ft-add-connections-panel/1.0.14/component/assets/lock.png"
-            />
-        
-            <div id="protected" part="protected" class="body">
-                Your information is protected securely.
-            </div>
+
+            <slot id="description" name="description">
+            </slot>
         
             <div id="agree" part="agree">
                 By clicking Continue, you agree to the MX Privacy Policy.
@@ -115,96 +92,44 @@ export class FtAddConnectionsPanel extends LitElement {
                 #wrapper {
                     position:relative;
                     width: 100%; height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: center;
                 }
                     #illustration {
-                        position: absolute;
+                        margin-top: 64px;
                         width: 240px;
                         height: auto;
-                        left: calc(50% - 240px/2 - 1px);
-                        top: 64px;
                     }
                     #title {
-                        position: absolute;
+                        margin-left: 24px;
+                        margin-right: 24px;
                         height: 32px;
-                        left: 24px;
-                        right: 24px;
-                        top: 160px;
                         font-size: ${unsafeCSS(light.FontSize.H2)}px;
                         font-weight: ${unsafeCSS(light.FontWeight.Bold)};
                         line-height: ${unsafeCSS(light.LineHeight.H2)}px;
                         text-align: center;
                         color: ${unsafeCSS(light.Color.Neutral900)};
                     }
-                    #explanation {
-                        position: absolute;
-                        height: 48px;
-                        left: 24px;
-                        right: 24px;
-                        top: 208px;
-                    }
-                    #bullet1 {
-                        position: absolute;
-                        width: 4px;
-                        height: 4px;
-                        left: 30px;
-                        top: 274px;
-                    }
-                    #bullet2 {
-                        position: absolute;
-                        width: 4px;
-                        height: 4px;
-                        left: 30px;
-                        top: 298px;
-                    }
-                    div.bullet {
-                        background: ${unsafeCSS(light.Color.Neutral900)};
-                        border-radius: 50%;
-                    }
-                    #details {
-                        position: absolute;
-                        height: 24px;
-                        left: 48px;
-                        right: 24px;
-                        top: 264px;
-                    }
-                    #balances {
-                        position: absolute;
-                        height: 24px;
-                        left: 48px;
-                        right: 24px;
-                        top: 288px;
-                    }
-                    #lock {
-                        position: absolute;
-                        width: 16px;
-                        height: 16px;
-                        left: 24px;
-                        top: 328px;
-                    }
-                    #protected {
-                        position: absolute;
-                        height: 24px;
-                        left: 48px;
-                        right: 16px;
-                        top: 324px;
+                    #description {
                     }
                     #agree {
-                        position: absolute;
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        margin-top: 40px;
                         height: 16px;
-                        left: 24px;
-                        right: 24px;
-                        top: 404px;
                         text-align: center;
                         font-size: ${unsafeCSS(light.FontSize.XSmall)}px;
                         line-height: ${unsafeCSS(light.LineHeight.XSmall)}px;
                         color: ${unsafeCSS(light.Color.Neutral700)};
                     }
                     #button {
-                        position: absolute;
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        margin-top: 15px;
+                        align-self: stretch;
                         height: 44px;
-                        left: 24px;
-                        right: 24px;
-                        top: 436px;
                         --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
                         --mdc-theme-on-primary: white;
                         --mdc-typography-button-font-size: ${unsafeCSS(light.FontSize.Body)}px;
@@ -213,14 +138,15 @@ export class FtAddConnectionsPanel extends LitElement {
                         --mdc-typography-button-text-transform: none;
                     }
                     #powered-and-logo {
-                        position: absolute;
-                        width: 183px;
-                        height: 16px;
-                        left: calc(50% - 183px/2 - 0.5px);
-                        top: 496px;
+                        margin-top: 10px;
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        align-items: center;
                     }
                         #powered {
-                            position: absolute;
                             width: 154px;
                             height: 16px;
                             left: 0px;
@@ -230,7 +156,6 @@ export class FtAddConnectionsPanel extends LitElement {
                             color: ${unsafeCSS(light.Color.Neutral600)};
                         }
                         #logo {
-                            position: absolute;
                             width: 25px;
                             height: 12px;
                             right: 1px;
