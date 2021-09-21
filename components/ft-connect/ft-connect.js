@@ -26,6 +26,7 @@ import '../ft-connecting-panel/ft-connecting-panel.js'
 import '../ft-success-panel/ft-success-panel.js'
 import '../ft-challenge-panel/ft-challenge-panel.js'
 import '../ft-connections-panel/ft-connections-panel.js'
+import '../ft-confirmation-dialog-panel/ft-confirmation-dialog-panel.js'
 import '../ft-edit-connection-panel/ft-edit-connection-panel.js'
 import '../ft-documents-panel/ft-documents-panel.js'
 import '../ft-edit-document-panel/ft-edit-document-panel.js'
@@ -181,17 +182,18 @@ export class FtConnect extends FtClient {
             >
             </ft-edit-document-panel>
 
-        </div>
+            <ft-confirmation-dialog-panel
+                id="delete-connection-confirm-panel"
+                commitButtonLabel="Delete"
+                commitButtonEventType="delete-connection-confirmed"
+                cancelButtonEventType="delete-connection-canceled"
+                @delete-connection-confirmed="${this._transitionByCustomEvent}"
+                @delete-connection-canceled="${this._transitionByCustomEvent}"
+            >
+                <div slot="prompt">Are you sure you want to delete this connection?</div>
+            </ft-confirmation-dialog-panel>
 
-        <mwc-dialog
-            id="delete-connection-confirm-dialog"
-            scrimClickAction=""
-            @closed="${this._transitionByDialogCloseEvent}"
-        >
-            <div>Are you sure you want to delete this connection?</div>
-            <mwc-button slot="primaryAction" dialogAction="delete-connection-confirmed">Delete</mwc-button>
-            <mwc-button slot="secondaryAction" dialogAction="delete-connection-canceled">Cancel</mwc-button>
-        </mwc-dialog>
+        </div>
         `;
     }
     
@@ -342,12 +344,17 @@ export class FtConnect extends FtClient {
     }
 
     _onConfigurationChanged() {
-        const configuration = this.configuration["ft-connect"];
+        const configuration = this.configuration;
         if (configuration == null)
             return;
-        const useAddPrompt =  configuration.useAddPrompt;
-        if (useAddPrompt != null)
-            this._useAddPrompt = (useAddPrompt == "true");
+        const myConfiguration = configuration["ft-connect"];
+        if (myConfiguration == null)
+            return;
+        const useAddPrompt =  myConfiguration.useAddPrompt;
+        if (useAddPrompt == null)
+            return;
+        
+        this._useAddPrompt = (useAddPrompt == "true");
     }
 
     _onUseAddPromptChanged() {
@@ -484,12 +491,6 @@ export class FtConnect extends FtClient {
         this._goToPanel("ft-credentials-panel");
     }
 
-    _transitionByDialogCloseEvent(event) {
-        const trigger = event.detail.action;
-        const detail = event.detail;
-        this._transition(trigger, detail);
-    }
-
     _transitionByCustomEvent(event) {
         const trigger = event.type;
         const detail = event.detail;
@@ -532,10 +533,7 @@ export class FtConnect extends FtClient {
                 return true;
                 
             case "delete-connection-button-clicked":
-                {
-                    var dialog = this.shadowRoot.getElementById("delete-connection-confirm-dialog");
-                    dialog.open = true;
-                }
+                this._goToPanel("delete-connection-confirm-panel");
                 return true;
                 
             case "connection-list-item-edit-button-clicked":
@@ -556,7 +554,11 @@ export class FtConnect extends FtClient {
                 this._goToPanel("ft-connections-panel");
                 return true;
 
-            case "manage-connections-add-button-clicked":
+            case "delete-connection-canceled":
+                this._goToPanel("ft-edit-connection-panel");
+                return true;
+    
+                case "manage-connections-add-button-clicked":
                 this._goToPanel("ft-institutions-panel");
                 return true;
         }
@@ -683,6 +685,7 @@ export class FtConnect extends FtClient {
         var showEighth = false;
         var showNinth = false;
         var showTenth = false;
+        var showEleventh = false;
 
         let nextPanel;
         
@@ -728,7 +731,11 @@ export class FtConnect extends FtClient {
                 showTenth = true;
                 nextPanel = this.shadowRoot.getElementById("ft-edit-document-panel");
                 break;
-        }
+            case "delete-connection-confirm-panel":
+                showEleventh = true;
+                nextPanel = this.shadowRoot.getElementById("delete-connection-confirm-panel");
+                break;
+            }
 
         if (!!currentPanel)
             currentPanel.exit();
@@ -744,6 +751,7 @@ export class FtConnect extends FtClient {
         this._setElementShown("ft-edit-connection-panel", showEighth);
         this._setElementShown("ft-documents-panel", showNinth);
         this._setElementShown("ft-edit-document-panel", showTenth);
+        this._setElementShown("delete-connection-confirm-panel", showEleventh);
 
         this._selectedPanelName = nextPanelName;
     }
