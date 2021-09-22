@@ -1,4 +1,4 @@
-NAME=ft-enter-credentials
+NAME=ft-edit-connection-panel
 
-include ../common/common.make
+include ../common.make
 

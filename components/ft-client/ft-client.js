@@ -44,7 +44,7 @@ export class FtClient extends FtHttpMixin(LitElement)
             institutions: { type: Array },
 
             /** The id of the currently-selected filter. */
-            selectedFilterId: { type: String },
+            sourceFilterName: { type: String },
 
             /** The list of all the user's FileThis connection resources. */
             connections: { type: Array },
@@ -88,7 +88,7 @@ export class FtClient extends FtHttpMixin(LitElement)
         this.userAccountId = "";
         this.account = null;
         this.institutions = [];
-        this.selectedFilterId = null;
+        this.sourceFilterName = null;
         this.interactionRequests = [];
         this.haveNewChallenge = false;
         this.newChallenges = [];
@@ -138,8 +138,8 @@ export class FtClient extends FtHttpMixin(LitElement)
     {
         super.updated?.(changedProperties);
 
-        if (changedProperties.has('selectedFilterId'))
-            this._onSelectedFilterIdChanged();
+        if (changedProperties.has('sourceFilterName'))
+            this._onSourceFilterNameChanged();
         if (changedProperties.has('isLive'))
             this._onLiveChanged();
     }
@@ -176,7 +176,7 @@ export class FtClient extends FtHttpMixin(LitElement)
         this._processChangeNotifications();
     }
 
-    _onSelectedFilterIdChanged()
+    _onSourceFilterNameChanged()
     {
         this._getInstitutions();
     }
@@ -278,12 +278,12 @@ export class FtClient extends FtHttpMixin(LitElement)
 
         var url = this.server + this.apiPath +
             "/sources";
-        if (!!this.selectedFilterId)
-            url += "?filter=" + this.selectedFilterId;
+        if (!!this.sourceFilterName)
+            url += "?filter=" + this.sourceFilterName;
         var options = this._buildHttpOptions();
         return this.httpGet(url, options)
             .then(function (institutions) {
-                if (this.fakeInstitutions)  // && this.selectedFilterId === "all")
+                if (this.fakeInstitutions)  // && this.sourceFilterName === "all")
                     this._prependFakeInstitution(institutions);
                 this.institutions = institutions;
                 return institutions;

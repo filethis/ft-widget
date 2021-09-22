@@ -31,7 +31,8 @@ export class FtEditConnectionPanel extends LitElement {
     static get properties() {
         return {
             connection: { type: Object },
-            institution: { type: Object }
+            institution: { type: Object },
+            fake: { type: Object }
        };
     }
 
@@ -40,6 +41,7 @@ export class FtEditConnectionPanel extends LitElement {
 
         this.connection = null;
         this.institution = null;
+        this.fake = false;
     }
 
     render() {
@@ -229,6 +231,51 @@ export class FtEditConnectionPanel extends LitElement {
             win.focus();
         else
             alert("Please allow popups for this site");
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has("fake"))
+            this._onFakeChanged();
+    }
+
+    _onFakeChanged() {
+        if (this.fake)
+        {
+            this._loadFakeInstitution();
+            this._loadFakeConnection();
+        }
+    }
+
+    _loadFakeInstitution() {
+        var path = "/components/ft-edit-connection-panel/dev/fake-institution.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var institution = JSON.parse(request.responseText);
+                this.institution = institution;
+            }
+        }.bind(this);
+        request.send();
+    }
+
+    _loadFakeConnection() {
+        var path = "/components/ft-edit-connection-panel/dev/fake-connection.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var connection = JSON.parse(request.responseText);
+                this.connection = connection;
+            }
+        }.bind(this);
+        request.send();
     }
 
 }
