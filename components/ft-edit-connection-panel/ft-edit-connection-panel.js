@@ -25,6 +25,7 @@ import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '../ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
+import '../ft-challenge-panel/ft-challenge-panel.js';
 
 export class FtEditConnectionPanel extends LitElement {
 
@@ -60,7 +61,14 @@ export class FtEditConnectionPanel extends LitElement {
             <ft-institution-list-item id="institution" part="institution"
                 institution=${JSON.stringify(this.institution)}
             >
-            </ft-institution-list-item>
+            </ft-institution-list-item
+            >
+            <ft-challenge-panel
+                id="ft-challenge-panel"
+                part="ft-challenge-panel"
+                fake="true"
+            >
+            </ft-challenge-panel>
 
             <div id="site" part="site">
                 <div id="check-site" part="check-site">
@@ -112,7 +120,6 @@ export class FtEditConnectionPanel extends LitElement {
             }
             #wrapper {
                 position:relative;
-                width: 100%; height: 100%;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
@@ -129,10 +136,16 @@ export class FtEditConnectionPanel extends LitElement {
                         margin-left: 5px;
                         margin-top: 4px;
                     }
-                #institution {
+                    #institution {
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        height: 64px;
+                    }
+                #ft-challenge-panel {
                     margin-left: 24px;
                     margin-right: 24px;
-                    height: 64px;
+                    padding: 20px;
+                    border: solid 1px gray;
                 }
                 #site {
                     margin-left: 24px;

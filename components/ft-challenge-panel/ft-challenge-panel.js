@@ -75,20 +75,6 @@ export class FtChallengePanel extends LitElement {
 
         <div id="wrapper" part="wrapper">
                 
-            <div id="header" part="header">
-                <mwc-icon-button id="back-button" part="back-button"
-                    icon="arrow_back"
-                    @click=${this._onBackButtonClicked}
-                >
-                </mwc-icon-button>
-            </div>
-    
-            <ft-institution-list-item id="institution" part="institution"
-                institution=${JSON.stringify(this.institution)}
-                fake="${this.fake}"
-            >
-            </ft-institution-list-item>
-
             <div id="form-box" part="form-box">
                 <div id="form" part="form"></div>
             </div>
@@ -98,25 +84,6 @@ export class FtChallengePanel extends LitElement {
                 label="Continue"
                 @click=${this._onContinueButtonClicked}>
             </mwc-button>
-        
-            <!-- <div id="help-box" part="help-box">
-
-                <div id="help-text" part="help-text">
-                    Get help
-                </div>
-
-                <mwc-icon-button id="help-button" part="help-button"
-                    icon="chevron_right"
-                    @click=${this._onHelpButtonClicked}
-                >
-                </mwc-icon-button>
-
-            </div> -->
-
-            <div id="bottom-divider" part="bottom-divider"></div>
-        
-            <ft-private-and-secure id="private-and-secure" part="private-and-secure">
-            </ft-private-and-secure>
         
         </div>
         `;
@@ -128,8 +95,6 @@ export class FtChallengePanel extends LitElement {
             :host {
                 display: block;
                 overflow: hidden;
-                width: 400px;
-                height: 650px;
                 font-family: ${unsafeCSS(light.Font.Regular)};
             }
                 #wrapper {
@@ -140,36 +105,15 @@ export class FtChallengePanel extends LitElement {
                     justify-content: flex-start;
                     align-items: stretch;
                 }
-                    #header{
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: stretch;
-                        height: 56px;
-                    }
-                        #back-button{
-                            margin-left: 5px;
-                            margin-top: 4px;
-                        }
-                    #institution {
-                        margin-left: 24px;
-                        margin-right: 24px;
-                        height: 64px;
-                    }
                     #form-box {
-                        margin-right: 24px;
-                        margin-top: 20px;
                         max-height: 300px;
                         overflow-y: auto;
                         overflow-x: hidden;
                         overscroll-behavior: contain;
                     }
                         #form {
-                            margin-left: 24px;
                         }
                     #continue-button {
-                        margin-left: 24px;
-                        margin-right: 24px;
                         margin-top:20px;
                         --mdc-theme-primary: ${unsafeCSS(light.Color.Brand300)};
                         --mdc-theme-on-primary: white;
@@ -177,34 +121,6 @@ export class FtChallengePanel extends LitElement {
                         --mdc-typography-button-font-weight: ${unsafeCSS(light.FontWeight.Semibold)};
                         --mdc-typography-button-line-height: ${unsafeCSS(light.LineHeight.Body)}px;
                         --mdc-typography-button-text-transform: none;
-                    }
-                    /* #help-box {
-                        margin-top:12px;
-                        margin-left: 24px;
-                        margin-right: 5px;
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: flex-start;
-                        align-items: center;
-                    }
-                        #help-text {
-                            flex: 1;
-                            color: ${unsafeCSS(light.Color.Neutral700)};
-                            font-size: ${unsafeCSS(light.FontSize.Body)}px;
-                            font-weight: ${unsafeCSS(light.FontWeight.Regular)};
-                            line-height: ${unsafeCSS(light.LineHeight.Body)}px;
-                        }
-                        #help-button {
-                            color: ${unsafeCSS(light.Color.Neutral700)};
-                        } */
-                    #bottom-divider {
-                        height: 1px;
-                        margin-left: 24px;
-                        margin-right: 24px;
-                        border-top: 1px solid ${unsafeCSS(light.Color.Neutral300)};
-                }
-                    #private-and-secure {
-                        margin-top: 10px;
                     }
         `
         ];
@@ -315,12 +231,6 @@ export class FtChallengePanel extends LitElement {
         this.generateResponse();
 
         const event = new CustomEvent('challenge-submit-button-clicked', { detail: this.response, bubbles: true, composed: true });
-        this.dispatchEvent(event);
-    }
-
-    _onBackButtonClicked()
-    {
-        const event = new CustomEvent('challenge-back-button-clicked', { bubbles: true, composed: true });
         this.dispatchEvent(event);
     }
 
