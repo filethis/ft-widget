@@ -26,7 +26,7 @@ import '../ft-add-connections-panel/ft-add-connections-panel.js'
 import '../ft-select-your-institution/ft-select-your-institution.js'
 import '../ft-enter-credentials/ft-enter-credentials.js'
 import '../ft-connections-panel/ft-connections-panel.js'
-import '../ft-challenge-panel/ft-challenge-panel.js'
+import '../ft-challenge/ft-challenge.js'
 
 
 export class FtGallery extends LitElement {

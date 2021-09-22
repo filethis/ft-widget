@@ -1,4 +1,4 @@
-NAME=ft-challenge-panel
+NAME=ft-challenge
 
 include ../common.make
 

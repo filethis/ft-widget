@@ -24,7 +24,7 @@ import '../ft-institutions-panel/ft-institutions-panel.js'
 import '../ft-credentials-panel/ft-credentials-panel.js'
 import '../ft-connecting-panel/ft-connecting-panel.js'
 import '../ft-success-panel/ft-success-panel.js'
-import '../ft-challenge-panel/ft-challenge-panel.js'
+import '../ft-challenge/ft-challenge.js'
 import '../ft-connections-panel/ft-connections-panel.js'
 import '../ft-confirmation-dialog-panel/ft-confirmation-dialog-panel.js'
 import '../ft-edit-connection-panel/ft-edit-connection-panel.js'
@@ -146,12 +146,12 @@ export class FtConnect extends FtClient {
             >
             </ft-success-panel>
 
-            <ft-challenge-panel id="ft-challenge-panel" part="ft-challenge-panel"
+            <ft-challenge id="ft-challenge" part="ft-challenge"
                 request=${JSON.stringify(this.challenge)}
                 @challenge-back-button-clicked="${this._transitionByCustomEvent}"
                 @challenge-submit-button-clicked="${this._transitionByCustomEvent}"
             >
-            </ft-challenge-panel>
+            </ft-challenge>
 
             <ft-connections-panel id="ft-connections-panel" part="ft-connections-panel"
                 connections=${JSON.stringify(this.connections)}
@@ -297,7 +297,7 @@ export class FtConnect extends FtClient {
                     #ft-success-panel {
                         display: none;
                     }
-                    #ft-challenge-panel {
+                    #ft-challenge {
                         display: none;
                     }
                     #ft-connections-panel {
@@ -466,7 +466,7 @@ export class FtConnect extends FtClient {
         const connection = this._findConnectionWithId(connectionId);
         const institutionId = parseInt(connection.sourceId);
         const institution = this._findInstitutionWithId(institutionId);
-        var challengeElement = this.shadowRoot.getElementById("ft-challenge-panel");
+        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
         challengeElement.institution = institution;
 
         this._transition("challenge-posed");
@@ -622,7 +622,7 @@ export class FtConnect extends FtClient {
                 return true;
             
             case "challenge-posed":
-                this._goToPanel("ft-challenge-panel");
+                this._goToPanel("ft-challenge");
                 return true;
 
             case "challenge-back-button-clicked":
@@ -633,7 +633,7 @@ export class FtConnect extends FtClient {
             case "challenge-submit-button-clicked":
                 {
                     this.posedChallenge();
-                    const challengeElement = this.shadowRoot.getElementById("ft-challenge-panel");
+                    const challengeElement = this.shadowRoot.getElementById("ft-challenge");
                     this.submitInteractionResponse(challengeElement.request, challengeElement.response);
                 }
                 this._goToPanel(base);
@@ -703,9 +703,9 @@ export class FtConnect extends FtClient {
                 showThird = true;
                 nextPanel = this.shadowRoot.getElementById("ft-credentials-panel");
                 break;
-            case "ft-challenge-panel":
+            case "ft-challenge":
                 showFourth = true;
-                nextPanel = this.shadowRoot.getElementById("ft-challenge-panel");
+                nextPanel = this.shadowRoot.getElementById("ft-challenge");
                 break;
             case "ft-connecting-panel":
                 showFifth = true;
@@ -744,7 +744,7 @@ export class FtConnect extends FtClient {
         this._setElementShown("ft-add-connections-panel", showFirst);
         this._setElementShown("ft-institutions-panel", showSecond);
         this._setElementShown("ft-credentials-panel", showThird);
-        this._setElementShown("ft-challenge-panel", showFourth);
+        this._setElementShown("ft-challenge", showFourth);
         this._setElementShown("ft-connecting-panel", showFifth);
         this._setElementShown("ft-success-panel", showSixth);
         this._setElementShown("ft-connections-panel", showSeventh);

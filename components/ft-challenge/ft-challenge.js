@@ -36,7 +36,7 @@ import { InteractionRequestParser_2_0_0 } from './ft-user-interaction-request-pa
 import { InteractionResponseGenerator_1_0_0 } from './ft-user-interaction-response-generator-1_0_0.js';
 import { InteractionResponseGenerator_2_0_0 } from './ft-user-interaction-response-generator-2_0_0.js';
 
-export class FtChallengePanel extends LitElement {
+export class FtChallenge extends LitElement {
 
     static get properties() {
         return {
@@ -240,7 +240,7 @@ export class FtChallengePanel extends LitElement {
     }
 
     _loadFakeRequest() {
-        var path = "/components/ft-challenge-panel/dev/fake-request.json";
+        var path = "/components/ft-challenge/dev/fake-request.json";
 
         var request = new XMLHttpRequest();
         request.overrideMimeType("application/json");
@@ -257,5 +257,5 @@ export class FtChallengePanel extends LitElement {
 
 }
 
-window.customElements.define('ft-challenge-panel', FtChallengePanel);
+window.customElements.define('ft-challenge', FtChallenge);
 
