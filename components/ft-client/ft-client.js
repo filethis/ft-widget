@@ -144,7 +144,7 @@ export class FtClient extends FtHttpMixin(LitElement)
             this._onLiveChanged();
     }
 
-    posedChallenge() {
+    getNextChallenge() {
         if (!this.challenge)
             return;
         this._oldChallenges.add(this.challenge.id);

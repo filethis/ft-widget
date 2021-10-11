@@ -230,7 +230,11 @@ export class FtChallenge extends LitElement {
     {
         this.generateResponse();
 
-        const event = new CustomEvent('challenge-submit-button-clicked', { detail: this.response, bubbles: true, composed: true });
+        const payload = {
+            request: this.request,
+            response: this.response
+        }
+        const event = new CustomEvent('challenge-submit-button-clicked', { detail: payload, bubbles: true, composed: true });
         this.dispatchEvent(event);
     }
 

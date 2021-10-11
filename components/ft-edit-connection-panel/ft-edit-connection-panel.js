@@ -31,8 +31,9 @@ export class FtEditConnectionPanel extends LitElement {
 
     static get properties() {
         return {
-            connection: { type: Object },
             institution: { type: Object },
+            connection: { type: Object },
+            challenge: { type: Object },
             fake: { type: Object }
        };
     }
@@ -40,8 +41,9 @@ export class FtEditConnectionPanel extends LitElement {
     constructor() {
         super();
 
-        this.connection = null;
         this.institution = null;
+        this.connection = null;
+        this.challenge = null;
         this.fake = false;
     }
 
@@ -66,7 +68,6 @@ export class FtEditConnectionPanel extends LitElement {
             <ft-challenge
                 id="ft-challenge"
                 part="ft-challenge"
-                fake="true"
             >
             </ft-challenge>
 
@@ -249,6 +250,28 @@ export class FtEditConnectionPanel extends LitElement {
     updated(changedProperties) {
         if (changedProperties.has("fake"))
             this._onFakeChanged();
+        if (changedProperties.has("connection"))
+            this._onConnectionChanged();
+        if (changedProperties.has("challenge"))
+            this._onChallengeChanged();
+    }
+
+    _onConnectionChanged() {
+    }
+
+    _onChallengeChanged() {
+        const challenge = this.challenge;
+        const showChallenge = (challenge != null);
+        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
+        this._showOrHideElement(challengeElement, showChallenge, "block")
+        challengeElement.request = challenge;
+    }
+
+    _showOrHideElement(element, show, display) {
+        if (show)
+            element.style.display = display;
+        else
+            element.style.display = "none";
     }
 
     _onFakeChanged() {

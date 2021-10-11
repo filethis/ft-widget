@@ -24,7 +24,6 @@ import '../ft-institutions-panel/ft-institutions-panel.js'
 import '../ft-credentials-panel/ft-credentials-panel.js'
 import '../ft-connecting-panel/ft-connecting-panel.js'
 import '../ft-success-panel/ft-success-panel.js'
-import '../ft-challenge/ft-challenge.js'
 import '../ft-connections-panel/ft-connections-panel.js'
 import '../ft-confirmation-dialog-panel/ft-confirmation-dialog-panel.js'
 import '../ft-edit-connection-panel/ft-edit-connection-panel.js'
@@ -47,6 +46,7 @@ export class FtConnect extends FtClient {
             _selectedInstitution: { type: Object },
             _selectedConnection: { type: Object },
             _selectedDocument: { type: Object },
+            _selectedChallenge: { type: Object },
             _selectedPanelName: { type: String },
             _panelUnderModal: { type: String },
             _useAddPrompt: { type: Boolean }
@@ -62,6 +62,7 @@ export class FtConnect extends FtClient {
         this._selectedInstitution = null;
         this._selectedConnection = null;
         this._selectedDocument = null;
+        this._selectedChallenge = null;
         this._selectedPanelName = null;
         this._panelUnderModal = null;
         this._useAddPrompt = true;
@@ -146,13 +147,6 @@ export class FtConnect extends FtClient {
             >
             </ft-success-panel>
 
-            <ft-challenge id="ft-challenge" part="ft-challenge"
-                request=${JSON.stringify(this.challenge)}
-                @challenge-back-button-clicked="${this._transitionByCustomEvent}"
-                @challenge-submit-button-clicked="${this._transitionByCustomEvent}"
-            >
-            </ft-challenge>
-
             <ft-connections-panel id="ft-connections-panel" part="ft-connections-panel"
                 connections=${JSON.stringify(this.connections)}
                 @manage-connections-add-button-clicked="${this._transitionByCustomEvent}"
@@ -164,8 +158,10 @@ export class FtConnect extends FtClient {
             <ft-edit-connection-panel id="ft-edit-connection-panel" part="ft-edit-connection-panel"
                 institution=${JSON.stringify(this._selectedInstitution)}
                 connection=${JSON.stringify(this._selectedConnection)}
+                challenge=${JSON.stringify(this._selectedChallenge)}
                 @delete-connection-button-clicked="${this._transitionByCustomEvent}"
                 @edit-connection-back-button-clicked="${this._transitionByCustomEvent}"
+                @challenge-submit-button-clicked="${this._transitionByCustomEvent}"
             >
             </ft-edit-connection-panel>
 
@@ -295,9 +291,6 @@ export class FtConnect extends FtClient {
                         display: none;
                     }
                     #ft-success-panel {
-                        display: none;
-                    }
-                    #ft-challenge {
                         display: none;
                     }
                     #ft-connections-panel {
@@ -459,17 +452,19 @@ export class FtConnect extends FtClient {
     }
 
     _onChallengeChanged() {
-        if (!this.challenge)
+        const challenge = this.challenge;
+        if (!challenge)
             return;
 
         const connectionId = this.challenge.connectionId;
         const connection = this._findConnectionWithId(connectionId);
         const institutionId = parseInt(connection.sourceId);
         const institution = this._findInstitutionWithId(institutionId);
-        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
-        challengeElement.institution = institution;
+        var editConnectionElement = this.shadowRoot.getElementById("ft-edit-connection-panel");
+        editConnectionElement.institution = institution;
+        editConnectionElement.challenge = challenge;
 
-        this._transition("challenge-posed");
+        this._transition("new-challenge");
     }
 
     _findConnectionWithId(connectionId) {
@@ -537,18 +532,16 @@ export class FtConnect extends FtClient {
                 return true;
                 
             case "connection-list-item-edit-button-clicked":
-                this._selectedConnection = detail;
-                this._selectedInstitution = this._findInstitutionForConnection(this._selectedConnection);
-                this._goToPanel("ft-edit-connection-panel");
-                return true;
-            
             case "connection-list-item-fix-button-clicked":
                 {
                     const connection = detail;
-                    this.challenge = this._findChallengeForConnection(connection);
+                    this._selectedInstitution = this._findInstitutionForConnection(connection);
+                    this._selectedConnection = connection;
+                    this._selectedChallenge = this._findChallengeForConnection(connection);
+                    this._goToPanel("ft-edit-connection-panel");
                 }
                 return true;
-    
+            
             case "delete-connection-confirmed":
                 this.deleteConnection(this._selectedConnection);
                 this._goToPanel("ft-connections-panel");
@@ -621,20 +614,17 @@ export class FtConnect extends FtClient {
                 this._goToPanel(base);
                 return true;
             
-            case "challenge-posed":
-                this._goToPanel("ft-challenge");
-                return true;
-
-            case "challenge-back-button-clicked":
-                this.posedChallenge();
-                this._goToPanel(base);
+            case "new-challenge":
+                this._goToPanel("ft-edit-connection-panel");
                 return true;
 
             case "challenge-submit-button-clicked":
                 {
-                    this.posedChallenge();
-                    const challengeElement = this.shadowRoot.getElementById("ft-challenge");
-                    this.submitInteractionResponse(challengeElement.request, challengeElement.response);
+                    const request = detail.request;
+                    const response = detail.response;
+                    this.submitInteractionResponse(request, response);
+                    
+                    this.getNextChallenge();
                 }
                 this._goToPanel(base);
         }
@@ -678,7 +668,6 @@ export class FtConnect extends FtClient {
         var showFirst = false;
         var showSecond = false;
         var showThird = false;
-        var showFourth = false;
         var showFifth = false;
         var showSixth = false;
         var showSeventh = false;
@@ -702,10 +691,6 @@ export class FtConnect extends FtClient {
             case "ft-credentials-panel":
                 showThird = true;
                 nextPanel = this.shadowRoot.getElementById("ft-credentials-panel");
-                break;
-            case "ft-challenge":
-                showFourth = true;
-                nextPanel = this.shadowRoot.getElementById("ft-challenge");
                 break;
             case "ft-connecting-panel":
                 showFifth = true;
@@ -744,7 +729,6 @@ export class FtConnect extends FtClient {
         this._setElementShown("ft-add-connections-panel", showFirst);
         this._setElementShown("ft-institutions-panel", showSecond);
         this._setElementShown("ft-credentials-panel", showThird);
-        this._setElementShown("ft-challenge", showFourth);
         this._setElementShown("ft-connecting-panel", showFifth);
         this._setElementShown("ft-success-panel", showSixth);
         this._setElementShown("ft-connections-panel", showSeventh);
