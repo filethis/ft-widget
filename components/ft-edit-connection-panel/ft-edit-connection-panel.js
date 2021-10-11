@@ -25,21 +25,26 @@ import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '../ft-institution-list-item/ft-institution-list-item.js';
 import '../ft-private-and-secure/ft-private-and-secure.js';
+import '../ft-challenge/ft-challenge.js';
 
 export class FtEditConnectionPanel extends LitElement {
 
     static get properties() {
         return {
+            institution: { type: Object },
             connection: { type: Object },
-            institution: { type: Object }
+            challenge: { type: Object },
+            fake: { type: Object }
        };
     }
 
     constructor() {
         super();
 
-        this.connection = null;
         this.institution = null;
+        this.connection = null;
+        this.challenge = null;
+        this.fake = false;
     }
 
     render() {
@@ -58,7 +63,13 @@ export class FtEditConnectionPanel extends LitElement {
             <ft-institution-list-item id="institution" part="institution"
                 institution=${JSON.stringify(this.institution)}
             >
-            </ft-institution-list-item>
+            </ft-institution-list-item
+            >
+            <ft-challenge
+                id="ft-challenge"
+                part="ft-challenge"
+            >
+            </ft-challenge>
 
             <div id="site" part="site">
                 <div id="check-site" part="check-site">
@@ -110,7 +121,6 @@ export class FtEditConnectionPanel extends LitElement {
             }
             #wrapper {
                 position:relative;
-                width: 100%; height: 100%;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
@@ -127,10 +137,16 @@ export class FtEditConnectionPanel extends LitElement {
                         margin-left: 5px;
                         margin-top: 4px;
                     }
-                #institution {
+                    #institution {
+                        margin-left: 24px;
+                        margin-right: 24px;
+                        height: 64px;
+                    }
+                #ft-challenge {
                     margin-left: 24px;
                     margin-right: 24px;
-                    height: 64px;
+                    padding: 20px;
+                    border: solid 1px gray;
                 }
                 #site {
                     margin-left: 24px;
@@ -229,6 +245,73 @@ export class FtEditConnectionPanel extends LitElement {
             win.focus();
         else
             alert("Please allow popups for this site");
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has("fake"))
+            this._onFakeChanged();
+        if (changedProperties.has("connection"))
+            this._onConnectionChanged();
+        if (changedProperties.has("challenge"))
+            this._onChallengeChanged();
+    }
+
+    _onConnectionChanged() {
+    }
+
+    _onChallengeChanged() {
+        const challenge = this.challenge;
+        const showChallenge = (challenge != null);
+        var challengeElement = this.shadowRoot.getElementById("ft-challenge");
+        this._showOrHideElement(challengeElement, showChallenge, "block")
+        challengeElement.request = challenge;
+    }
+
+    _showOrHideElement(element, show, display) {
+        if (show)
+            element.style.display = display;
+        else
+            element.style.display = "none";
+    }
+
+    _onFakeChanged() {
+        if (this.fake)
+        {
+            this._loadFakeInstitution();
+            this._loadFakeConnection();
+        }
+    }
+
+    _loadFakeInstitution() {
+        var path = "/components/ft-edit-connection-panel/dev/fake-institution.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var institution = JSON.parse(request.responseText);
+                this.institution = institution;
+            }
+        }.bind(this);
+        request.send();
+    }
+
+    _loadFakeConnection() {
+        var path = "/components/ft-edit-connection-panel/dev/fake-connection.json";
+
+        var request = new XMLHttpRequest();
+        request.overrideMimeType("application/json");
+        request.open('GET', path, true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 &&
+                request.status === 200) {
+                var connection = JSON.parse(request.responseText);
+                this.connection = connection;
+            }
+        }.bind(this);
+        request.send();
     }
 
 }

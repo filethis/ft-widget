@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <title>&lt;ft-edit-connection&gt; Demo</title>
-    <script type="module" src="../ft-edit-connection.js"></script>
+    <script type="module" src="../ft-edit-connection-panel.js"></script>
     <script type="module" src="../../ft-dev/ft-dev.js"></script>
     <!-- TODO: Find a way to load the icons inside the components -->
     <!-- https://google.github.io/material-design-icons/#getting-icons -->
@@ -23,7 +23,12 @@
 
 <body>
     <ft-dev>
-        <ft-edit-connection id="ft-edit-connection"></ft-edit-connection>
+        <ft-edit-connection-panel
+            id="ft-edit-connection-panel"
+            fake="true"
+            style="border: solid 1px gray;"
+        >
+    </ft-edit-connection-panel>
     </ft-dev>
 </body>
 
