@@ -72,7 +72,7 @@ export class FtWidget extends LitElement {
 
                 <div id="header-spacer"></div>
 
-                <div id="version">Version 1.0.24</div>
+                <div id="version">Version 1.0.25</div>
 
             </div>
 
